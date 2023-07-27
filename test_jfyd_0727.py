@@ -17,6 +17,8 @@ def validateTitle(self, title):
 def group_rows(self, row):
     return '_'.join(row.astype(str))
 
+def test_push():
+    pass
 
 def replace_1(self, x):
     if 1 in x.values:
