@@ -1388,8 +1388,8 @@
       <property name="lineWidth">
        <number>1</number>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_4" stretch="2,2,2,2,1">
-       <item>
+      <layout class="QGridLayout" name="gridLayout_14">
+       <item row="0" column="0">
         <widget class="QFrame" name="frame_6">
          <property name="styleSheet">
           <string notr="true"/>
@@ -1482,7 +1482,7 @@
          </layout>
         </widget>
        </item>
-       <item>
+       <item row="1" column="0">
         <widget class="QFrame" name="frame_7">
          <property name="styleSheet">
           <string notr="true"/>
@@ -1641,7 +1641,7 @@
          </layout>
         </widget>
        </item>
-       <item>
+       <item row="2" column="0">
         <widget class="QFrame" name="frame_8">
          <property name="styleSheet">
           <string notr="true"/>
@@ -1797,7 +1797,7 @@
          </layout>
         </widget>
        </item>
-       <item>
+       <item row="3" column="0">
         <widget class="QFrame" name="frame_9">
          <property name="styleSheet">
           <string notr="true"/>
@@ -1890,7 +1890,7 @@
          </layout>
         </widget>
        </item>
-       <item>
+       <item row="4" column="0">
         <widget class="QFrame" name="frame_2">
          <property name="frameShape">
           <enum>QFrame::StyledPanel</enum>
@@ -1898,8 +1898,8 @@
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
-          <item>
+         <layout class="QGridLayout" name="gridLayout_13">
+          <item row="0" column="0" colspan="2">
            <widget class="QCheckBox" name="checkBox">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -1934,12 +1934,47 @@
              <string notr="true">font: 18pt;</string>
             </property>
             <property name="text">
-             <string>导出理论RT</string>
+             <string>Replace measured RT with theoretical RT</string>
             </property>
            </widget>
           </item>
-          <item>
+          <item row="1" column="1">
+           <widget class="QPushButton" name="pushButton_15">
+            <property name="minimumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
            <widget class="QCheckBox" name="checkBox_2">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -1964,7 +1999,7 @@
              <string notr="true">font: 18pt;</string>
             </property>
             <property name="text">
-             <string>替换希腊字母格式</string>
+             <string>Standardize Greek letter formats</string>
             </property>
            </widget>
           </item>
@@ -1996,8 +2031,8 @@
    <slot>open_file3()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>260</x>
-     <y>384</y>
+     <x>306</x>
+     <y>369</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2012,8 +2047,8 @@
    <slot>run()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>533</x>
-     <y>831</y>
+     <x>548</x>
+     <y>801</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2028,8 +2063,8 @@
    <slot>check2(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>340</x>
-     <y>709</y>
+     <x>369</x>
+     <y>679</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2044,8 +2079,8 @@
    <slot>check1(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>171</x>
-     <y>675</y>
+     <x>200</x>
+     <y>645</y>
     </hint>
     <hint type="destinationlabel">
      <x>7</x>
@@ -2060,8 +2095,8 @@
    <slot>save()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>321</x>
-     <y>533</y>
+     <x>398</x>
+     <y>511</y>
     </hint>
     <hint type="destinationlabel">
      <x>827</x>
@@ -2076,8 +2111,8 @@
    <slot>chooseRTmin()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>618</x>
-     <y>158</y>
+     <x>754</x>
+     <y>171</y>
     </hint>
     <hint type="destinationlabel">
      <x>487</x>
@@ -2108,8 +2143,8 @@
    <slot>chooseRIalertmin()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>618</x>
-     <y>512</y>
+     <x>753</x>
+     <y>498</y>
     </hint>
     <hint type="destinationlabel">
      <x>636</x>
@@ -2124,8 +2159,8 @@
    <slot>chooseRIalertmax()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>831</x>
-     <y>512</y>
+     <x>907</x>
+     <y>498</y>
     </hint>
     <hint type="destinationlabel">
      <x>968</x>
@@ -2140,8 +2175,8 @@
    <slot>chooseRIerror()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>521</x>
-     <y>685</y>
+     <x>680</x>
+     <y>670</y>
     </hint>
     <hint type="destinationlabel">
      <x>950</x>
@@ -2156,8 +2191,8 @@
    <slot>choose_ri_window()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>853</x>
-     <y>679</y>
+     <x>898</x>
+     <y>670</y>
     </hint>
     <hint type="destinationlabel">
      <x>968</x>
@@ -2172,8 +2207,8 @@
    <slot>chooseRImin()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>618</x>
-     <y>341</y>
+     <x>754</x>
+     <y>335</y>
     </hint>
     <hint type="destinationlabel">
      <x>910</x>
@@ -2188,8 +2223,8 @@
    <slot>chooseRImax()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>831</x>
-     <y>341</y>
+     <x>908</x>
+     <y>335</y>
     </hint>
     <hint type="destinationlabel">
      <x>968</x>
@@ -2204,8 +2239,8 @@
    <slot>open_file2()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>260</x>
-     <y>235</y>
+     <x>306</x>
+     <y>228</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2220,8 +2255,8 @@
    <slot>rtdemo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>310</x>
-     <y>213</y>
+     <x>464</x>
+     <y>225</y>
     </hint>
     <hint type="destinationlabel">
      <x>294</x>
@@ -2236,8 +2271,8 @@
    <slot>tooltip1()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>288</x>
-     <y>216</y>
+     <x>355</x>
+     <y>220</y>
     </hint>
     <hint type="destinationlabel">
      <x>268</x>
@@ -2252,7 +2287,7 @@
    <slot>ridemo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>315</x>
+     <x>464</x>
      <y>366</y>
     </hint>
     <hint type="destinationlabel">
@@ -2268,8 +2303,8 @@
    <slot>tooltip2()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>280</x>
-     <y>369</y>
+     <x>355</x>
+     <y>361</y>
     </hint>
     <hint type="destinationlabel">
      <x>259</x>
@@ -2284,8 +2319,8 @@
    <slot>tooltip3()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>744</x>
-     <y>81</y>
+     <x>841</x>
+     <y>93</y>
     </hint>
     <hint type="destinationlabel">
      <x>739</x>
@@ -2300,8 +2335,8 @@
    <slot>tooltip4()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>727</x>
-     <y>251</y>
+     <x>825</x>
+     <y>257</y>
     </hint>
     <hint type="destinationlabel">
      <x>1018</x>
@@ -2316,8 +2351,8 @@
    <slot>tooltip5()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>756</x>
-     <y>431</y>
+     <x>850</x>
+     <y>420</y>
     </hint>
     <hint type="destinationlabel">
      <x>1004</x>
@@ -2332,8 +2367,8 @@
    <slot>tooltip6()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>605</x>
-     <y>620</y>
+     <x>703</x>
+     <y>602</y>
     </hint>
     <hint type="destinationlabel">
      <x>1029</x>
@@ -2348,8 +2383,8 @@
    <slot>tooltip7()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>898</x>
-     <y>610</y>
+     <x>951</x>
+     <y>602</y>
     </hint>
     <hint type="destinationlabel">
      <x>1028</x>
@@ -2370,6 +2405,22 @@
     <hint type="destinationlabel">
      <x>1</x>
      <y>63</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_15</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>tooltip8()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>488</x>
+     <y>670</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>320</x>
+     <y>854</y>
     </hint>
    </hints>
   </connection>
@@ -2399,5 +2450,6 @@
   <slot>tooltip5()</slot>
   <slot>tooltip6()</slot>
   <slot>tooltip7()</slot>
+  <slot>tooltip8()</slot>
  </slots>
 </ui>

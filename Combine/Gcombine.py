@@ -124,7 +124,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWin
 
     def check2(self, bool):
         '''
-            是否替换拉丁文
+            是否替换拉丁文i
         '''
         self.check_latin = bool
 
@@ -224,45 +224,49 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWin
         QMessageBox.about(
             None,
             'Help',
-            'ssssss')
+            'Import a list of compounds and their RT        ')
 
     def tooltip2(self):
         QMessageBox.about(
             None,
             'Help',
-            'ssssss')
+            'Import RI calibration data     ')
 
     def tooltip3(self):
         QMessageBox.about(
             None,
             'Help',
-            'ssssss')
+            'Enter the allowed minimum and maximum RT       ')
 
     def tooltip4(self):
         QMessageBox.about(
             None,
             'Help',
-            'ssssss')
+            'Enter the allowed minimum and maximum RI. default: 0 to 3000       ')
 
     def tooltip5(self):
         QMessageBox.about(
             None,
             'Help',
-            'ssssss')
+            'Enter the RI range, in which compounds with user-defined differences between the measured RI and the library RI will be marked. default: 600 to 2000       ')
 
     def tooltip6(self):
         QMessageBox.about(
             None,
             'Help',
-            'ssssss')
+            'Compound will be marked if the difference between the measured RI and the database RI exceeds this threshold. default: 100     ')
 
     def tooltip7(self):
         QMessageBox.about(
             None,
             'Help',
-            'ssssss')
+            'The larger this value, the larger the RI error threshold when the RI is larger. Setting it to 0 disables this feature. default: 5      ')
 
-
+    def tooltip8(self):
+        QMessageBox.about(
+            None,
+            'Help',
+            'e. g. “.beta.” to “beta”       ')
 
 
     def run(self):
