@@ -224,7 +224,7 @@
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
-         <layout class="QHBoxLayout" name="horizontalLayout">
+         <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,1">
           <item>
            <widget class="QFrame" name="frame_7">
             <property name="sizePolicy">
@@ -533,7 +533,7 @@
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="1,1">
           <item>
            <widget class="QFrame" name="frame_21">
             <property name="sizePolicy">
@@ -673,222 +673,6 @@
            </widget>
           </item>
           <item>
-           <widget class="QFrame" name="frame_22">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Raised</enum>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_21">
-             <property name="leftMargin">
-              <number>9</number>
-             </property>
-             <property name="topMargin">
-              <number>9</number>
-             </property>
-             <property name="rightMargin">
-              <number>9</number>
-             </property>
-             <property name="bottomMargin">
-              <number>9</number>
-             </property>
-             <property name="spacing">
-              <number>6</number>
-             </property>
-             <item row="0" column="0">
-              <widget class="QWidget" name="widget_6" native="true">
-               <layout class="QHBoxLayout" name="horizontalLayout_11">
-                <item>
-                 <widget class="QLabel" name="label_20">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>16777215</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <pointsize>18</pointsize>
-                    <weight>50</weight>
-                    <italic>false</italic>
-                    <bold>false</bold>
-                   </font>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">font: 18pt;</string>
-                  </property>
-                  <property name="text">
-                   <string>solvent delay</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pushButton_16">
-                  <property name="minimumSize">
-                   <size>
-                    <width>20</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>20</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>20</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-             <item row="1" column="0" alignment="Qt::AlignHCenter">
-              <widget class="QDoubleSpinBox" name="doubleSpinBox_7">
-               <property name="minimumSize">
-                <size>
-                 <width>100</width>
-                 <height>30</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>100</width>
-                 <height>30</height>
-                </size>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">font: 16pt;</string>
-               </property>
-               <property name="prefix">
-                <string notr="true"/>
-               </property>
-               <property name="suffix">
-                <string/>
-               </property>
-               <property name="maximum">
-                <double>9999.000000000000000</double>
-               </property>
-               <property name="singleStep">
-                <double>0.050000000000000</double>
-               </property>
-               <property name="value">
-                <double>0.000000000000000</double>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QFrame" name="frame_14">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_14">
-          <item row="0" column="0" colspan="2" alignment="Qt::AlignHCenter">
-           <widget class="QLabel" name="label_9">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>18</pointsize>
-              <weight>50</weight>
-              <italic>false</italic>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">font: 18pt;</string>
-            </property>
-            <property name="text">
-             <string>离子参数选择</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
            <widget class="QFrame" name="frame_16">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -1035,7 +819,146 @@
             </layout>
            </widget>
           </item>
-          <item row="1" column="1">
+         </layout>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QFrame" name="frame_14">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="1,1">
+          <item>
+           <widget class="QFrame" name="frame_22">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_14">
+             <item row="0" column="0">
+              <widget class="QWidget" name="widget_6" native="true">
+               <layout class="QHBoxLayout" name="horizontalLayout_11">
+                <item>
+                 <widget class="QLabel" name="label_20">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>50</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>50</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>18</pointsize>
+                    <weight>50</weight>
+                    <italic>false</italic>
+                    <bold>false</bold>
+                   </font>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">font: 18pt;</string>
+                  </property>
+                  <property name="text">
+                   <string>solvent delay</string>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item row="1" column="0" alignment="Qt::AlignHCenter">
+              <widget class="QDoubleSpinBox" name="doubleSpinBox_7">
+               <property name="minimumSize">
+                <size>
+                 <width>100</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>100</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">font: 16pt;</string>
+               </property>
+               <property name="prefix">
+                <string notr="true"/>
+               </property>
+               <property name="suffix">
+                <string/>
+               </property>
+               <property name="maximum">
+                <double>9999.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.050000000000000</double>
+               </property>
+               <property name="value">
+                <double>0.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
            <widget class="QFrame" name="frame_15">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -1077,13 +1000,41 @@
              <property name="spacing">
               <number>6</number>
              </property>
+             <item row="1" column="0" alignment="Qt::AlignHCenter">
+              <widget class="QSpinBox" name="spinBox_6">
+               <property name="minimumSize">
+                <size>
+                 <width>100</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>100</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">font: 16pt;</string>
+               </property>
+               <property name="suffix">
+                <string>%</string>
+               </property>
+               <property name="maximum">
+                <number>100</number>
+               </property>
+               <property name="value">
+                <number>7</number>
+               </property>
+              </widget>
+             </item>
              <item row="0" column="0">
               <widget class="QWidget" name="widget_8" native="true">
                <layout class="QHBoxLayout" name="horizontalLayout_13">
                 <item>
                  <widget class="QLabel" name="label_19">
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
@@ -1151,34 +1102,6 @@
                </layout>
               </widget>
              </item>
-             <item row="1" column="0" alignment="Qt::AlignHCenter">
-              <widget class="QSpinBox" name="spinBox_6">
-               <property name="minimumSize">
-                <size>
-                 <width>100</width>
-                 <height>30</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>100</width>
-                 <height>30</height>
-                </size>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">font: 16pt;</string>
-               </property>
-               <property name="suffix">
-                <string>%</string>
-               </property>
-               <property name="maximum">
-                <number>100</number>
-               </property>
-               <property name="value">
-                <number>7</number>
-               </property>
-              </widget>
-             </item>
             </layout>
            </widget>
           </item>
@@ -1193,8 +1116,8 @@
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
-         <layout class="QGridLayout" name="gridLayout_19">
-          <item row="0" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,1">
+          <item>
            <widget class="QFrame" name="frame_18">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -1341,7 +1264,7 @@
             </layout>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item>
            <widget class="QFrame" name="frame_19">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -1956,8 +1879,17 @@
           <enum>QFrame::Raised</enum>
          </property>
          <layout class="QGridLayout" name="gridLayout_9">
-          <item row="0" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+          <property name="horizontalSpacing">
+           <number>0</number>
+          </property>
+          <item row="0" column="0">
            <widget class="QCheckBox" name="checkBox_2">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="maximumSize">
              <size>
               <width>16777215</width>
@@ -1983,6 +1915,35 @@
             </property>
             <property name="tristate">
              <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QPushButton" name="pushButton_16">
+            <property name="minimumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
             </property>
            </widget>
           </item>
@@ -2488,7 +2449,7 @@
    <slot>open2()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>270</x>
+     <x>266</x>
      <y>285</y>
     </hint>
     <hint type="destinationlabel">
@@ -2504,7 +2465,7 @@
    <slot>open3()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>317</x>
+     <x>311</x>
      <y>519</y>
     </hint>
     <hint type="destinationlabel">
@@ -2520,7 +2481,7 @@
    <slot>save()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>355</x>
+     <x>350</x>
      <y>659</y>
     </hint>
     <hint type="destinationlabel">
@@ -2552,8 +2513,8 @@
    <slot>ionmax()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>786</x>
-     <y>795</y>
+     <x>793</x>
+     <y>786</y>
     </hint>
     <hint type="destinationlabel">
      <x>365</x>
@@ -2568,8 +2529,8 @@
    <slot>ionnum()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>594</x>
-     <y>795</y>
+     <x>793</x>
+     <y>626</y>
     </hint>
     <hint type="destinationlabel">
      <x>639</x>
@@ -2616,7 +2577,7 @@
    <slot>isanjielun()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1198</x>
+     <x>1173</x>
      <y>753</y>
     </hint>
     <hint type="destinationlabel">
@@ -2648,8 +2609,8 @@
    <slot>maxrt()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>613</x>
-     <y>332</y>
+     <x>612</x>
+     <y>321</y>
     </hint>
     <hint type="destinationlabel">
      <x>498</x>
@@ -2664,8 +2625,8 @@
    <slot>rtwindow()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>805</x>
-     <y>332</y>
+     <x>814</x>
+     <y>321</y>
     </hint>
     <hint type="destinationlabel">
      <x>374</x>
@@ -2744,8 +2705,8 @@
    <slot>get_prefer_mz_threshold()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>593</x>
-     <y>487</y>
+     <x>591</x>
+     <y>473</y>
     </hint>
     <hint type="destinationlabel">
      <x>395</x>
@@ -2760,8 +2721,8 @@
    <slot>get_similarity_threshold()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>785</x>
-     <y>487</y>
+     <x>793</x>
+     <y>473</y>
     </hint>
     <hint type="destinationlabel">
      <x>675</x>
@@ -2776,8 +2737,8 @@
    <slot>get_fr_factor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>588</x>
-     <y>632</y>
+     <x>591</x>
+     <y>626</y>
     </hint>
     <hint type="destinationlabel">
      <x>504</x>
@@ -2792,8 +2753,8 @@
    <slot>get_solvent_delay()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>780</x>
-     <y>641</y>
+     <x>591</x>
+     <y>786</y>
     </hint>
     <hint type="destinationlabel">
      <x>792</x>
@@ -2904,8 +2865,8 @@
    <slot>tooltip5()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>609</x>
-     <y>414</y>
+     <x>620</x>
+     <y>412</y>
     </hint>
     <hint type="destinationlabel">
      <x>523</x>
@@ -2946,30 +2907,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_16</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>tooltip8()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>817</x>
-     <y>560</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>867</x>
-     <y>974</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>pushButton_17</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
    <slot>tooltip9()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>613</x>
-     <y>736</y>
+     <x>818</x>
+     <y>564</y>
     </hint>
     <hint type="destinationlabel">
      <x>468</x>
@@ -2984,8 +2929,8 @@
    <slot>tooltip10()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>813</x>
-     <y>728</y>
+     <x>822</x>
+     <y>721</y>
     </hint>
     <hint type="destinationlabel">
      <x>897</x>
@@ -3054,6 +2999,22 @@
     <hint type="destinationlabel">
      <x>1401</x>
      <y>611</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_16</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>tooltip8()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1222</x>
+     <y>745</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1540</x>
+     <y>726</y>
     </hint>
    </hints>
   </connection>
