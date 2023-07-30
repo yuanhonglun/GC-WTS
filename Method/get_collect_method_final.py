@@ -1047,12 +1047,14 @@ class GetMethod():
 
             timeSegments = etree.SubElement(root, "timeSegments")
 
+            index_n = 0
             for i in group_list:
 
                 timeSegment = etree.SubElement(timeSegments, "timeSegment")
 
                 index = etree.SubElement(timeSegment, "index")
-                index.text = str(int(i))
+                index_n += 1
+                index.text = str(int(index_n))
 
                 startTime = etree.SubElement(timeSegment, "startTime")
                 startTime.text = "{:.4f}".format(df.index[df["group_id"] == i][0])
