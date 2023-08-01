@@ -13,10 +13,12 @@ from dataanalysis import Ui_MainWindow
 import sys
 from qt_material import apply_stylesheet
 from pyecharts.charts import Bar, Line, Grid
+
+
 from pyecharts import options as opts
 from Wizard import GoWizard
 from core0723 import DataAnalysis
-
+import images_rc
 
 class WorkerThread(QThread):
     finished = pyqtSignal(int)
@@ -146,7 +148,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
 
         peak_group_df_tmp = peak_group_df_tmp[peak_group_df_tmp["ion_num"] >= ion_num]
         peak_group_df_tmp = peak_group_df_tmp.reset_index(drop=True)
-        peak_group_df_tmp["rt"] = round(pd.Series(peak_group_df_tmp.rt), 2).to_list()
+        #peak_group_df_tmp["rt"] = round(pd.Series(peak_group_df_tmp.rt), 2).to_list()
+        peak_group_df_tmp["rt"] = np.round(peak_group_df_tmp["rt"], decimals=2).to_list()
         # print("peak_group_df_tmp", peak_group_df_tmp)
         qualitative_and_quantitative_analysis_result_tmp["rt"] = round(
             pd.Series(qualitative_and_quantitative_analysis_result_tmp.index), 2).to_list()

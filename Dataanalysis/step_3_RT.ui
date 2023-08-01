@@ -622,35 +622,6 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="2">
-          <widget class="QPushButton" name="pushButton_10">
-           <property name="minimumSize">
-            <size>
-             <width>20</width>
-             <height>20</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>20</width>
-             <height>20</height>
-            </size>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset>
-             <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>20</width>
-             <height>20</height>
-            </size>
-           </property>
-          </widget>
-         </item>
          <item row="1" column="0">
           <widget class="QLabel" name="label_2">
            <property name="sizePolicy">
@@ -1207,22 +1178,6 @@
  </widget>
  <resources/>
  <connections>
-  <connection>
-   <sender>pushButton_10</sender>
-   <signal>clicked()</signal>
-   <receiver>Form</receiver>
-   <slot>slot1()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>499</x>
-     <y>212</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>427</x>
-     <y>-46</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>pushButton_11</sender>
    <signal>clicked()</signal>

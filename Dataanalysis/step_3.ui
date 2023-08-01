@@ -665,7 +665,104 @@
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pushButton_8</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>slot1()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>634</x>
+     <y>173</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>971</x>
+     <y>196</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_9</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>slot2()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>632</x>
+     <y>231</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>866</x>
+     <y>236</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_10</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>slot3()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>639</x>
+     <y>305</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>900</x>
+     <y>307</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_11</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>slot4()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>641</x>
+     <y>368</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>913</x>
+     <y>373</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_12</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>slot5()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>642</x>
+     <y>430</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>929</x>
+     <y>442</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_13</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>slot6()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>636</x>
+     <y>489</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>844</x>
+     <y>513</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
  <slots>
   <slot>slot1()</slot>
   <slot>slot2()</slot>

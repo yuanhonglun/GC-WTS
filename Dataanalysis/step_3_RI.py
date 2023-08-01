@@ -96,16 +96,6 @@ class Ui_Form_RI(object):
         self.spinBox_2.setProperty("value", 100)
         self.spinBox_2.setObjectName("spinBox_2")
         self.gridLayout_5.addWidget(self.spinBox_2, 0, 1, 1, 1)
-        self.pushButton_11 = QtWidgets.QPushButton(self.frame_4)
-        self.pushButton_11.setMinimumSize(QtCore.QSize(20, 20))
-        self.pushButton_11.setMaximumSize(QtCore.QSize(20, 20))
-        self.pushButton_11.setText("")
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("C:/Users/86724/Desktop/R-C.jpg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_11.setIcon(icon)
-        self.pushButton_11.setIconSize(QtCore.QSize(20, 20))
-        self.pushButton_11.setObjectName("pushButton_11")
-        self.gridLayout_5.addWidget(self.pushButton_11, 0, 2, 1, 1)
         self.label_14 = QtWidgets.QLabel(self.frame_4)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -135,6 +125,8 @@ class Ui_Form_RI(object):
         self.pushButton_12.setMinimumSize(QtCore.QSize(20, 20))
         self.pushButton_12.setMaximumSize(QtCore.QSize(20, 20))
         self.pushButton_12.setText("")
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/R-C.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_12.setIcon(icon)
         self.pushButton_12.setIconSize(QtCore.QSize(20, 20))
         self.pushButton_12.setObjectName("pushButton_12")
@@ -602,14 +594,6 @@ class Ui_Form_RI(object):
         self.doubleSpinBox_13.setProperty("value", 0.01)
         self.doubleSpinBox_13.setObjectName("doubleSpinBox_13")
         self.gridLayout_4.addWidget(self.doubleSpinBox_13, 6, 1, 1, 1)
-        self.pushButton_16 = QtWidgets.QPushButton(self.frame_5)
-        self.pushButton_16.setMinimumSize(QtCore.QSize(20, 20))
-        self.pushButton_16.setMaximumSize(QtCore.QSize(20, 20))
-        self.pushButton_16.setText("")
-        self.pushButton_16.setIcon(icon)
-        self.pushButton_16.setIconSize(QtCore.QSize(20, 20))
-        self.pushButton_16.setObjectName("pushButton_16")
-        self.gridLayout_4.addWidget(self.pushButton_16, 6, 2, 1, 1)
         self.gridLayout_3.addWidget(self.frame_5, 2, 0, 1, 1)
         self.gridLayout_3.setRowStretch(0, 1)
         self.gridLayout_3.setRowStretch(1, 1)
@@ -617,7 +601,6 @@ class Ui_Form_RI(object):
         self.gridLayout.addWidget(self.frame_2, 1, 1, 1, 1)
 
         self.retranslateUi(Form)
-        self.pushButton_11.clicked.connect(Form.slot1) # type: ignore
         self.pushButton_12.clicked.connect(Form.slot2) # type: ignore
         self.pushButton_13.clicked.connect(Form.slot3) # type: ignore
         self.pushButton_14.clicked.connect(Form.slot4) # type: ignore
@@ -631,7 +614,6 @@ class Ui_Form_RI(object):
         self.pushButton_9.clicked.connect(Form.slot12) # type: ignore
         self.pushButton_10.clicked.connect(Form.slot13) # type: ignore
         self.pushButton_15.clicked.connect(Form.slot14) # type: ignore
-        self.pushButton_16.clicked.connect(Form.slot15) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):

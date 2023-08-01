@@ -81,7 +81,7 @@ class Ui_Form_None(object):
         self.pushButton_8.setMaximumSize(QtCore.QSize(20, 20))
         self.pushButton_8.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("C:/Users/86724/Desktop/R-C.jpg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(":/R-C.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_8.setIcon(icon)
         self.pushButton_8.setIconSize(QtCore.QSize(20, 20))
         self.pushButton_8.setObjectName("pushButton_8")
@@ -284,6 +284,12 @@ class Ui_Form_None(object):
         self.gridLayout_3.setRowStretch(1, 10)
 
         self.retranslateUi(Form)
+        self.pushButton_8.clicked.connect(Form.slot1) # type: ignore
+        self.pushButton_9.clicked.connect(Form.slot2) # type: ignore
+        self.pushButton_10.clicked.connect(Form.slot3) # type: ignore
+        self.pushButton_11.clicked.connect(Form.slot4) # type: ignore
+        self.pushButton_12.clicked.connect(Form.slot5) # type: ignore
+        self.pushButton_13.clicked.connect(Form.slot6) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):

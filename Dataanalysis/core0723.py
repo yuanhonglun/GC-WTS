@@ -1846,7 +1846,7 @@ class DataAnalysis():
         results_df.drop(results_df.columns[1], axis=1, inplace=True)
         # if not species_pool.empty:
         #     results_df = species_pool_opt(results_df, species_pool)
-        results_df.to_excel('./final_results.xlsx')
+        #results_df.to_excel('./final_results.xlsx')
 
         return results_df
 

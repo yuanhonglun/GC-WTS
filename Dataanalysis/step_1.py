@@ -84,7 +84,7 @@ class Ui_Form_Step1(object):
         self.pushButton_6.setMaximumSize(QtCore.QSize(20, 20))
         self.pushButton_6.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("C:/Users/86724/Desktop/R-C.jpg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(":/R-C.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_6.setIcon(icon)
         self.pushButton_6.setIconSize(QtCore.QSize(20, 20))
         self.pushButton_6.setObjectName("pushButton_6")
