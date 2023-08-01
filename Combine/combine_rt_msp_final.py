@@ -36,6 +36,8 @@ class CombineRtMsp():
         FUNCTION:去除无离子信息的msp
         """
         lines = msp.readlines()
+        new_list = [item.replace('NAME:', 'Name:') for item in lines]
+        lines = [item.replace("Num peaks:", "Num Peaks:") for item in new_list]
         group_inf_idx = self.group_cmp_inf(lines)
         del_list = []
         del_none_ion_cpm_list = []
@@ -131,7 +133,7 @@ class CombineRtMsp():
         # print('去重后的物质数量：', len(self.group_cmp_inf(lines)))
 
         group_inf_idx = self.group_cmp_inf(lines)
-        del_list = []
+        del_list_n = []
         n_all_list = [lines[s].replace('Name: ', '') for s in group_inf_idx[:-1]]
         n_list = sorted(set(n_all_list))
 
@@ -141,18 +143,18 @@ class CombineRtMsp():
             for idx in index_list:
                 error_df.loc[len(error_df.index)] = [lines[group_inf_idx[idx]].replace('Name: ', ''),
                                                      '该化合物在库中出现重复']
-                del_list.extend(
+                del_list_n.extend(
                     (
                         group_inf_idx[idx],
                         group_inf_idx[idx + 1]
                     )
                 )
 
-        del_list.sort()
-        del_com = len(del_list) - 1
+        del_list_n.sort()
+        del_com = len(del_list_n) - 1
         while del_com > 0:
             if del_com < len(lines):
-                del lines[del_list[del_com - 1]:del_list[del_com]]
+                del lines[del_list_n[del_com - 1]:del_list_n[del_com]]
             del_com = del_com - 2
         with open(out_path + '/Remove_Duplicates.msp', 'w+') as f:
             for p in lines:
@@ -238,6 +240,8 @@ class CombineRtMsp():
                     # 将RT列表中.alpha.等统一改为alpha
 
         lines = msp.readlines()
+        new_list = [item.replace('NAME:', 'Name:') for item in lines]
+        lines = [item.replace("Num peaks:", "Num Peaks:") for item in new_list]
         lines = self.Replace_Greek_numbers(lines)
 
         name_df = pd.DataFrame(columns=["Name", "Index"])
@@ -313,6 +317,8 @@ class CombineRtMsp():
         """
         msp = open(path_rt, "r")
         lines = msp.readlines()
+        new_list = [item.replace('NAME:', 'Name:') for item in lines]
+        lines = [item.replace("Num peaks:", "Num Peaks:") for item in new_list]
         group_inf_idx = self.group_cmp_inf(lines)
         RI_df = pd.DataFrame(columns=['Name', 'RI_msp'])
         for j in range(len(group_inf_idx) - 1):
@@ -360,6 +366,8 @@ class CombineRtMsp():
         print('去重后含有RI物质的数量：', combine_df.shape[0])
         combine_df = combine_df.sort_values(by="RT", ascending=True)
         combine_df.set_index(['Name'], inplace=True)
+        combine_df.dropna(how='all', subset=['RT', 'RI_msp'], inplace=True)
+
         return combine_df
 
     def alert_ri_offset_is_too_large(self, RI_msp, RI_input, RI_alert_lower_limit, RI_alert_upper_limit, RI_threshold_value,
@@ -450,6 +458,8 @@ class CombineRtMsp():
         with open(path_msp, "r") as msp:
             error_df = pd.DataFrame(columns=['Name', 'reason'])
             lines, error_df = self.del_none_ion_cpm(msp, error_df)
+            new_list = [item.replace('NAME:', 'Name:') for item in lines]
+            lines = [item.replace("Num peaks:", "Num Peaks:") for item in new_list]
             if check_latin:
                 lines = self.Replace_Greek_numbers(lines)
             lines, error_df = self.Remove_Duplicates(lines, error_df, out_path)
@@ -464,7 +474,7 @@ class CombineRtMsp():
             RT_data_file = out_path + "/combine_RT_file.xlsx"
             if os.path.exists(RT_data_file):
                 RT_data = pd.read_excel(RT_data_file, header=0)
-            else:
+            if RT_data.empty:
                 data = np.empty((0, 2))
                 RT_data = pd.DataFrame(data, columns=['Name', 'RT'])
             RT_data, error_df = self.Remove_Duplicates_RT(msp, RT_data, out_path, check_latin)

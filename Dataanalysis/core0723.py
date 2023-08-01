@@ -240,6 +240,10 @@ class DataAnalysis():
                                         # print("---------右", rt_list[y])
                                     break
                             break
+                        elif x == len(f_list) - 4:
+                            peak_list = []
+                            m = x
+                            break
 
                         else:
                             if f_list[x - 1] > 0 and s_list[x] < -1 * sf:
@@ -298,8 +302,8 @@ class DataAnalysis():
                                             break
 
                                     break
-
-                    total_list.append(peak_list)
+                    if peak_list != []:
+                        total_list.append(peak_list)
                 else:
                     m += 1
 
