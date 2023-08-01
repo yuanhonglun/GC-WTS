@@ -393,6 +393,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, GetMethod):  # 继承 QMainWindow
             'Help',
             'Set the minimum number of data points per second. If using the user-defined minimum dwell time would result in the number of data points per second lower than the this threshold, then the dwell time will be reduced to achieve the this data points per second threshold. However, if reducing the dwell time further would result in a dwell time less than 5 ms, then the dwell time will be maintained at a minimum of 5 ms, the number of data points per second might be lower than this threshold, and generate impracticable acquisition method      ')
 
+
+
     def run(self):
 
         self.progressBar.show()
