@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QMainWindow, QFileDialog, QMessageBox, QApplication
 from combine import Ui_MainWindow
 from combine_rt_msp_final import CombineRtMsp
 from qt_material import apply_stylesheet
-
+import images_rc
 
 class WorkerThread(QThread):
     finished = pyqtSignal(int)
