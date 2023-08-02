@@ -90,7 +90,6 @@ class GetMethod():
 
         return meta
 
-
     def dot_product_distance(self, p, q):
 
         if (np.sum(p)) == 0 or (np.sum(q)) == 0:
@@ -231,9 +230,6 @@ class GetMethod():
 
         return combination_df
 
-
-
-
     def calculate_solo_compound_combination_score(self, matrix_1, prefer_mz_threshold):
         matrix_1['ion'] = matrix_1['ion'].apply(lambda x: 1 if x < prefer_mz_threshold else x)
         # matrix_1.to_excel(r".\matrix_1_阈值校正后.xlsx", index=True)
@@ -267,7 +263,6 @@ class GetMethod():
         RT_data = pd.read_excel(rt_data_path, header=0, index_col=0)
         error_df = pd.DataFrame(columns=["error"])
         meta_1 = self.read_msp(msp)
-
 
         matrix_file = "matrix.xlsx"
         matrix = None

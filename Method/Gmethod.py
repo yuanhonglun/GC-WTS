@@ -8,14 +8,15 @@ from get_collect_method_final import GetMethod
 from qt_material import apply_stylesheet
 import pandas as pd
 
+
 class WorkerThread(QThread):
     finished = pyqtSignal(int)
 
-    def __init__(self, msp_path, rt_data_path,set_name_list, name_list_path,
-                      mz_min, mz_max, outpath, rt_window,
-                      min_ion_intensity_percent, min_ion_num,  prefer_mz_threshold, similarity_threshold, fr_factor,
-                      retention_time_max, solvent_delay, sim_sig_max,
-                      min_dwell_time,min_point_per_s,min_point_per_s_limit, convert_to_ag_method):
+    def __init__(self, msp_path, rt_data_path, set_name_list, name_list_path,
+                 mz_min, mz_max, outpath, rt_window,
+                 min_ion_intensity_percent, min_ion_num, prefer_mz_threshold, similarity_threshold, fr_factor,
+                 retention_time_max, solvent_delay, sim_sig_max,
+                 min_dwell_time, min_point_per_s, min_point_per_s_limit, convert_to_ag_method):
         super().__init__()
         self.msp_path = msp_path
         self.rt_data_path = rt_data_path
@@ -40,24 +41,22 @@ class WorkerThread(QThread):
 
         self.mymainwindow = MyMainWindow()
 
-
-
     def run(self):
 
         try:
             self.mymainwindow.Main(self.msp_path, self.rt_data_path, self.set_name_list, self.name_list_path,
-                              self.mz_min, self.mz_max, self.outpath, self.rt_window,
-                              self.min_ion_intensity_percent, self.min_ion_num, self.prefer_mz_threshold, self.similarity_threshold, self.fr_factor,
-                              self.retention_time_max, self.solvent_delay, self.sim_sig_max,
-                              self.min_dwell_time, self.min_point_per_s, self.min_point_per_s_limit, self.convert_to_ag_method)
+                                   self.mz_min, self.mz_max, self.outpath, self.rt_window,
+                                   self.min_ion_intensity_percent, self.min_ion_num, self.prefer_mz_threshold,
+                                   self.similarity_threshold, self.fr_factor,
+                                   self.retention_time_max, self.solvent_delay, self.sim_sig_max,
+                                   self.min_dwell_time, self.min_point_per_s, self.min_point_per_s_limit,
+                                   self.convert_to_ag_method)
             self.finished.emit(0)
         except:
             self.finished.emit(1)
 
 
-
 class MyMainWindow(QMainWindow, Ui_MainWindow, GetMethod):  # 继承 QMainWindow类和 Ui_MainWindow界面类
-
 
     def __init__(self, parent=None):
         super(MyMainWindow, self).__init__(parent)  # 初始化父类
@@ -74,8 +73,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, GetMethod):  # 继承 QMainWindow
         self.listWidget_3.itemDoubleClicked.connect(self.delete_item_3)
         self.listWidget_4.setHidden(True)
         self.listWidget_4.itemDoubleClicked.connect(self.delete_item_4)
-
-
 
         self.msp_path = ''
         self.rt_data_path = ''
@@ -98,8 +95,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, GetMethod):  # 继承 QMainWindow
         self.solvent_delay = 0
         self.convert_to_ag_method = False
 
-
-
     def open1(self):
         '''
             导入msp文件
@@ -110,7 +105,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, GetMethod):  # 继承 QMainWindow
         self.msp_path = self.msp_path[0]
         self.listWidget.setHidden(False)
         self.listWidget.addItem(os.path.basename(self.msp_path))
-
 
     def open2(self):
         '''
@@ -138,7 +132,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, GetMethod):  # 继承 QMainWindow
         self.listWidget_4.setHidden(False)
         self.listWidget_4.addItem(self.outpath)
 
-
     def ismateriallist(self, bool):
         '''
             是否导入物质名列表
@@ -150,13 +143,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, GetMethod):  # 继承 QMainWindow
             self.pushButton_3.setHidden(True)
             self.listWidget_3.setHidden(True)
 
-
     def isanjielun(self, bool):
         '''
             是否输入为安捷伦方法
         '''
         self.convert_to_ag_method = bool
-
 
     def mzmin(self, value):
         '''
@@ -166,7 +157,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, GetMethod):  # 继承 QMainWindow
         '''
         self.mz_min = value
 
-
     def mzmax(self, value):
         '''
             m/z范围0-500， 默认400
@@ -174,7 +164,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, GetMethod):  # 继承 QMainWindow
         :return:
         '''
         self.mz_max = value
-
 
     def maxrt(self, value):
         '''
@@ -216,7 +205,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, GetMethod):  # 继承 QMainWindow
         '''
         self.sim_sig_max = value
 
-
     def simtime(self, value):
         '''
             SIM最小驻留时间，1-1000，默认10
@@ -241,15 +229,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, GetMethod):  # 继承 QMainWindow
         '''
         self.min_point_per_s_limit = value
 
-
-
     def get_prefer_mz_threshold(self, value):
         self.prefer_mz_threshold = value
 
-
     def get_similarity_threshold(self, value):
         self.similarity_threshold = value
-
 
     def get_fr_factor(self, value):
         self.fr_factor = value
@@ -342,7 +326,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, GetMethod):  # 继承 QMainWindow
         QMessageBox.about(
             None,
             'Help',
-            'two spectra are considered distinguishable when similarity score below the threshold. default: 0.85'       )
+            'two spectra are considered distinguishable when similarity score below the threshold. default: 0.85')
 
     def tooltip7(self):
         QMessageBox.about(
@@ -386,14 +370,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, GetMethod):  # 继承 QMainWindow
             'Help',
             'Set the number of data points per second. If the dwell time of ion is less than the user-defined minimum dwell time according to the set value, the priority will be given to ensuring that the dwell time is greater than the user-defined value, thus will reduce the number of data points per second. default: 2        ')
 
-
     def tooltip14(self):
         QMessageBox.about(
             None,
             'Help',
             'Set the minimum number of data points per second. If using the user-defined minimum dwell time would result in the number of data points per second lower than the this threshold, then the dwell time will be reduced to achieve the this data points per second threshold. However, if reducing the dwell time further would result in a dwell time less than 5 ms, then the dwell time will be maintained at a minimum of 5 ms, the number of data points per second might be lower than this threshold, and generate impracticable acquisition method      ')
-
-
 
     def run(self):
 
@@ -417,10 +398,12 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, GetMethod):  # 继承 QMainWindow
         print("convert_to_ag_method", self.convert_to_ag_method)
 
         self.worker_thread = WorkerThread(self.msp_path, self.rt_data_path, self.set_name_list, self.name_list_path,
-                          self.mz_min, self.mz_max, self.outpath, self.rt_window,
-                          self.min_ion_intensity_percent, self.min_ion_num, self.prefer_mz_threshold, self.similarity_threshold, self.fr_factor,
-                          self.retention_time_max, self.solvent_delay, self.sim_sig_max,
-                          self.min_dwell_time, self.min_point_per_s, self.min_point_per_s_limit, self.convert_to_ag_method)
+                                          self.mz_min, self.mz_max, self.outpath, self.rt_window,
+                                          self.min_ion_intensity_percent, self.min_ion_num, self.prefer_mz_threshold,
+                                          self.similarity_threshold, self.fr_factor,
+                                          self.retention_time_max, self.solvent_delay, self.sim_sig_max,
+                                          self.min_dwell_time, self.min_point_per_s, self.min_point_per_s_limit,
+                                          self.convert_to_ag_method)
         self.worker_thread.finished.connect(self.hide_progress_bar)
 
         # self.log_window = ChildWindow()
@@ -428,9 +411,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, GetMethod):  # 继承 QMainWindow
         #
 
         self.worker_thread.start()
-
-
-
 
     def hide_progress_bar(self, run_stat):
         self.progressBar.hide()
@@ -465,10 +445,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, GetMethod):  # 继承 QMainWindow
 #     def add_log(self, log):
 #         self.log_text_edit.append(log)
 #
-
-
-
-
 
 
 if __name__ == '__main__':

@@ -14,11 +14,11 @@ import sys
 from qt_material import apply_stylesheet
 from pyecharts.charts import Bar, Line, Grid
 
-
 from pyecharts import options as opts
 from Wizard import GoWizard
 from core0723 import DataAnalysis
 import images_rc
+
 
 class WorkerThread(QThread):
     finished = pyqtSignal(int)
@@ -148,7 +148,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
 
         peak_group_df_tmp = peak_group_df_tmp[peak_group_df_tmp["ion_num"] >= ion_num]
         peak_group_df_tmp = peak_group_df_tmp.reset_index(drop=True)
-        #peak_group_df_tmp["rt"] = round(pd.Series(peak_group_df_tmp.rt), 2).to_list()
+        # peak_group_df_tmp["rt"] = round(pd.Series(peak_group_df_tmp.rt), 2).to_list()
         peak_group_df_tmp["rt"] = np.round(peak_group_df_tmp["rt"], decimals=2).to_list()
         # print("peak_group_df_tmp", peak_group_df_tmp)
         qualitative_and_quantitative_analysis_result_tmp["rt"] = round(
@@ -330,8 +330,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
                 is_show=True,
                 orient="horizontal",
                 feature={
-                         "dataZoom": {"yAxisIndex": "none"},
-                         "dataView": {}}),
+                    "dataZoom": {"yAxisIndex": "none"},
+                    "dataView": {}}),
             legend_opts=opts.LegendOpts(
                 type_='scroll',
                 is_show=True,
@@ -454,19 +454,19 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
 
         bar = (
             Bar(init_opts=opts.InitOpts(theme="walden", animation_opts=opts.AnimationOpts(animation=False)))
-                .add_xaxis(x_index)
-                .add_yaxis("Search", y_value1, stack="stack1", bar_width=1,
-                           label_opts=opts.LabelOpts(position="top", formatter="{b}"),
-                           itemstyle_opts=opts.ItemStyleOpts(color='red'))
-                .set_global_opts(
+            .add_xaxis(x_index)
+            .add_yaxis("Search", y_value1, stack="stack1", bar_width=1,
+                       label_opts=opts.LabelOpts(position="top", formatter="{b}"),
+                       itemstyle_opts=opts.ItemStyleOpts(color='red'))
+            .set_global_opts(
                 xaxis_opts=opts.AxisOpts(is_show=False, splitline_opts=opts.SplitLineOpts(is_show=False)),
                 title_opts=opts.TitleOpts(title="Spectrometry Comparison", pos_top='0%', subtitle=name),
                 datazoom_opts=opts.DataZoomOpts(range_start=0, range_end=100, type_="inside"),
-                  toolbox_opts=opts.ToolboxOpts(
+                toolbox_opts=opts.ToolboxOpts(
                     is_show=True,
                     feature={
-                             "dataZoom": {"yAxisIndex": "none"},
-                             "dataView": {}}),
+                        "dataZoom": {"yAxisIndex": "none"},
+                        "dataView": {}}),
                 tooltip_opts=opts.TooltipOpts(
                     is_show=True,
                     trigger="axis",
@@ -607,7 +607,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
 
     def all_processing(self):
         if self.total_result_pkl == '':
-            #打开mzml，不是导入project
+            # 打开mzml，不是导入project
             self.peak_group_pkl = ''
             self.wizard = GoWizard()
             self.wizard._signal.connect(self.get_parm)
@@ -619,7 +619,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
             self.wizard = GoWizard()
             self.wizard._signal.connect(self.get_parm)
             self.wizard.show()
-
 
     def get_parm(self, parm):
         # parm["group_peak_factor"] = 1
@@ -661,7 +660,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
                 now = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
                 with open(dir + '/total_result_' + now + '.pkl', "wb") as f:
                     pickle.dump(self.all_pkl, f)
-
 
     def chooseRTinfo(self, text):
         self.choose = text
@@ -718,10 +716,12 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
 
     def save(self):
         _out = QFileDialog.getExistingDirectory(None, "选择输出文件路径", './')
-        
-        _out_qualitative_and_quantitative_analysis_result = self.qualitative_and_quantitative_analysis_result[["Best_match_name", "All_match_list", "Quant_Ion","Relative_Peak_Area", "Peak_Height"]]
+
+        _out_qualitative_and_quantitative_analysis_result = self.qualitative_and_quantitative_analysis_result[
+            ["Best_match_name", "All_match_list", "Quant_Ion", "Relative_Peak_Area", "Peak_Height"]]
         for index, row in _out_qualitative_and_quantitative_analysis_result.iterrows():
-            _out_qualitative_and_quantitative_analysis_result.at[index, 'All_match_list'] = str(row['All_match_list']).strip('[[[').strip(']]]')
+            _out_qualitative_and_quantitative_analysis_result.at[index, 'All_match_list'] = str(
+                row['All_match_list']).strip('[[[').strip(']]]')
 
         _out_qualitative_and_quantitative_analysis_result.to_csv(
             _out + '/qualitative_and_quantitative_analysis_result.csv', index_label='RT')

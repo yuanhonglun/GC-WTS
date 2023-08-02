@@ -9,9 +9,9 @@ from combine_rt_msp_final import CombineRtMsp
 from qt_material import apply_stylesheet
 import images_rc
 
+
 class WorkerThread(QThread):
     finished = pyqtSignal(int)
-
 
     def __init__(self, all_msp_path, all_rt_path, RI_path, RIalertmin, RIalertmax,
                  RI_threshold_value, ri_window_scale, RTmin, RTmax, RImin, RImax, check_RT, check_latin, out_path):
@@ -31,24 +31,20 @@ class WorkerThread(QThread):
         self.check_latin = check_latin
         self.out_path = out_path
 
-
-
     def run(self):
         mymainwindow = MyMainWindow()
 
         try:
-            mymainwindow.Main(self.all_msp_path, self.all_rt_path, self.RI_path, self.RIalertmin, self.RIalertmax, self.RI_threshold_value, self.ri_window_scale,
-                                  self.RTmin, self.RTmax, self.RImin, self.RImax, self.check_RT, self.check_latin, self.out_path)
+            mymainwindow.Main(self.all_msp_path, self.all_rt_path, self.RI_path, self.RIalertmin, self.RIalertmax,
+                              self.RI_threshold_value, self.ri_window_scale,
+                              self.RTmin, self.RTmax, self.RImin, self.RImax, self.check_RT, self.check_latin,
+                              self.out_path)
             self.finished.emit(0)
         except:
             self.finished.emit(1)
 
 
-
-
-
 class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWindow类和 Ui_MainWindow界面类
-
 
     def __init__(self, parent=None):
         super(MyMainWindow, self).__init__(parent)  # 初始化父类
@@ -79,8 +75,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWin
         self.check_RT = False
         self.ri_window_scale = 5
 
-
-
     def open_file1(self):
         '''
             打开全部msp所在的文件目录
@@ -91,8 +85,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWin
             self.msp_input.extend(msp_file)
             self.listWidget.setHidden(False)
             self.listWidget.addItem(os.path.basename(msp_file[0]))
-
-
 
     def open_file2(self):
         '''
@@ -105,7 +97,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWin
             self.listWidget_2.setHidden(False)
             self.listWidget_2.addItem(os.path.basename(rt_file[0]))
 
-
     def open_file3(self):
         '''
             输入RI文件
@@ -114,13 +105,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWin
         self.listWidget_3.setHidden(False)
         self.listWidget_3.addItem(os.path.basename(self.RI_path))
 
-
     def check1(self, bool):
         '''
             是否导出理论RT
         '''
         self.check_RT = bool
-
 
     def check2(self, bool):
         '''
@@ -128,12 +117,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWin
         '''
         self.check_latin = bool
 
-
-
     def chooseRTmin(self, value):
 
         self.RTmin = value
-
 
     def chooseRTmax(self, value):
         self.RTmax = value
@@ -147,7 +133,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWin
     def chooseRIerror(self, value):
         self.RI_threshold_value = value
 
-
     def chooseRImin(self, value):
         self.RImin = value
 
@@ -156,7 +141,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWin
 
     def choose_ri_window(self, value):
         self.ri_window_scale = value
-
 
     def save(self):
         self.out_path = QFileDialog.getExistingDirectory(None, "Choose Output Path", './')
@@ -167,14 +151,13 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWin
         row = self.listWidget.row(item)
         if row != 0:
             self.listWidget.takeItem(row)
-            del self.msp_input[row-1]
+            del self.msp_input[row - 1]
 
     def delete_item_2(self, item):
         row = self.listWidget_2.row(item)
         if row != 0:
             self.listWidget_2.takeItem(row)
-            del self.rt_input[row-1]
-
+            del self.rt_input[row - 1]
 
     def delete_item_3(self, item):
         row = self.listWidget_3.row(item)
@@ -182,13 +165,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWin
             self.listWidget_3.takeItem(row)
             self.RI_path = ''
 
-
     def delete_item_4(self, item):
         row = self.listWidget_4.row(item)
         if row != 0:
             self.listWidget_4.takeItem(row)
             self.out_path = ''
-
 
     def ridemo(self):
 
@@ -268,22 +249,19 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWin
             'Help',
             'e. g. “.beta.” to “beta”       ')
 
-
     def run(self):
         self.frame_5.setHidden(False)
         self.progressBar.show()
 
         self.pushButton_4.setEnabled(False)
 
-
-        self.worker_thread = WorkerThread(self.msp_input, self.rt_input, self.RI_path,self.RIalertmin, self.RIalertmax,
+        self.worker_thread = WorkerThread(self.msp_input, self.rt_input, self.RI_path, self.RIalertmin, self.RIalertmax,
                                           self.RI_threshold_value, self.ri_window_scale, self.RTmin,
-                                          self.RTmax, self.RImin, self.RImax, self.check_RT, self.check_latin, self.out_path)
+                                          self.RTmax, self.RImin, self.RImax, self.check_RT, self.check_latin,
+                                          self.out_path)
         self.worker_thread.finished.connect(self.hide_progress_bar)
 
         self.worker_thread.start()
-
-
 
     def hide_progress_bar(self, run_stat):
         self.frame_5.setHidden(True)
@@ -294,9 +272,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWin
             QMessageBox.information(self, 'Success', 'Run successfully!')
         elif run_stat == 1:
             QMessageBox.critical(self, 'Error', 'Run Failed!')
-
-
-
 
 
 if __name__ == '__main__':
