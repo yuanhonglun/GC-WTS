@@ -1031,6 +1031,8 @@ class DataAnalysis():
             if matched_wave.iloc[n, 5] > 0 and matched_wave.iloc[n, 5] - matched_wave.iloc[n - 1, 5] > 0 and \
                     matched_wave.iloc[n, 5] - matched_wave.iloc[n + 1, 5] > 0:
                 peak_group_df.loc[len(peak_group_df)] = matched_wave.iloc[n]
+        peak_group_df = peak_group_df.drop(peak_group_df[peak_group_df['SV'] == 0].index)
+
 
         return matched_wave, peak_group_df
 
