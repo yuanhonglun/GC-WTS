@@ -168,144 +168,150 @@ class DataAnalysis():
             m = 0
             total_list = []
             index_list = []
+            aa = 1
             while m <= len(f_list) - 3:
                 peak_list = []
                 # len比最大index大1，所以减3
-                if f_list[m] > ff * filter_factor and f_list[m + 1] > ff * filter_factor and i_list[m] > 0 and i_list[
-                    m + 1] > 0:
-                    # print("m = ", m)
-                    w = m - 2
-                    if w < 0:
-                        w = 0
-                    tmp_list = i_list[w: m + 3]
-                    # print("tmp_list = ", tmp_list)
-                    u = tmp_list.index(i_list[m])
-                    # print("u = ", u)
-                    q = tmp_list.index(min(tmp_list))
-                    # print("q = ", q)
-                    p = m - (u - q)
-                    # print("p = ", p)
-                    if i_list[p] == 0:
-                        p = m
-                        left = rt_list[p]
-                    else:
-                        left = rt_list[p]
-                        # 加上这个条件，如果5点法找最小点找到了0值，那么就用原左点m
-                    peak_list.append(left)
-                    # peak_list.append(rt_list[m])
-                    # print("---------左", left)
-
-                    for x in range(p + 1, len(f_list) - 3):
-                        # print("p+1 = ", p + 1)
-                        # print("len(f_list) - 3 = ", len(f_list) - 3)
-
-                        # 冲顶峰峰顶的判断条件
-                        if f_list[x] == f_list[x + 1] == f_list[x + 2] == 0 and f_list[x + 3] != 0:
-
-                            peak_list.append(rt_list[x])
-                            index_list.append("peak_" + str(rt_list[x + 3]))
-                            x += 4
-                            for y in range(x, len(f_list) - 3):
-                                if f_list[y] > -ff * 10 and f_list[y + 1] > -ff * 10:
-                                    w_1 = y + 3
-                                    if w_1 > len(rt_list) + 1:
-                                        w_1 = len(rt_list) + 1
-                                    tmp_list = i_list[y - 2: w_1]
-                                    u_1 = tmp_list.index(i_list[y])
-                                    q_1 = tmp_list.index(min(tmp_list))
-                                    p_1 = y - (u_1 - q_1)
-
-                                    if i_list[p_1] == 0:
-                                        right = rt_list[y]
-                                        m = y
-                                    elif rt_list[p_1] <= rt_list[x]:
-                                        right = rt_list[y]
-                                        m = y
-                                    else:
-                                        right = rt_list[p_1]
-                                        m = p_1
-                                    peak_list.append(right)
-                                    # print("---------右", right)
-
-                                    break
-
-                                elif i_list[y] < i_list[x] * 0.05:
-                                    if rt_list[y] <= rt_list[x]:
-                                        peak_list.append(rt_list[y + 1])
-                                        m = y + 1
-                                        # print("---------右", rt_list[y+1])
-                                    else:
-                                        peak_list.append(rt_list[y])
-                                        m = y
-                                        # print("---------右", rt_list[y])
-                                    break
-                            break
-                        elif x > len(f_list) - 6:
-                            peak_list = []
-                            m = x
-                            break
-
+                if aa != m:
+                    aa = m
+                    if f_list[m] > ff * filter_factor and f_list[m + 1] > ff * filter_factor and i_list[m] > 0 and i_list[
+                        m + 1] > 0:
+                        # print("m = ", m)
+                        w = m - 2
+                        if w < 0:
+                            w = 0
+                        tmp_list = i_list[w: m + 3]
+                        # print("tmp_list = ", tmp_list)
+                        u = tmp_list.index(i_list[m])
+                        # print("u = ", u)
+                        q = tmp_list.index(min(tmp_list))
+                        # print("q = ", q)
+                        p = m - (u - q)
+                        # print("p = ", p)
+                        if i_list[p] == 0:
+                            p = m
+                            left = rt_list[p]
                         else:
-                            if f_list[x - 1] > 0 and s_list[x] < -1 * sf:
-                                if f_list[x] < 0 or f_list[x + 1] < 0:
+                            left = rt_list[p]
+                            # 加上这个条件，如果5点法找最小点找到了0值，那么就用原左点m
+                        peak_list.append(left)
+                        # peak_list.append(rt_list[m])
+                        # print("---------左", left)
 
-                                    # 找到顶点后，找其左右2点及本身，取最大值
-                                    start_index = max(0, x - 2)
-                                    end_index = min(len(i_list), x + 3)
-                                    five_elements = i_list[start_index:end_index]
-                                    max_index = five_elements.index(max(five_elements))
-                                    n = start_index + max_index
-                                    # print(rt_list[n])
-                                    peak_list.append(rt_list[n])
-                                    index_list.append("peak_" + str(rt_list[n]))
+                        for x in range(p + 1, len(f_list) - 3):
+                            # print("p+1 = ", p + 1)
+                            # print("len(f_list) - 3 = ", len(f_list) - 3)
 
-                                    for y in range(n + 1, len(f_list) - 3):
-                                        if f_list[y] > -ff * filter_factor and f_list[y + 1] > -ff * filter_factor:
-                                            w_1 = y + 3
-                                            if w_1 > len(rt_list) + 1:
-                                                w_1 = len(rt_list) + 1
-                                            tmp_list = i_list[y - 2: w_1]
-                                            # print("tmp_list = ", tmp_list)
-                                            u_1 = tmp_list.index(i_list[y])
-                                            # print("u_1 = ", u_1)
-                                            q_1 = tmp_list.index(min(tmp_list))
-                                            # print("q_1 = ", q_1)
-                                            p_1 = y - (u_1 - q_1)
-                                            # print("p_1 = ", p_1)
-                                            if i_list[p_1] == 0:
-                                                right = rt_list[y]
-                                                m = y
-                                            elif rt_list[p_1] <= rt_list[n]:
-                                                right = rt_list[y]
-                                                m = y
-                                            else:
-                                                right = rt_list[p_1]
-                                                m = p_1
-                                            peak_list.append(right)
+                            # 冲顶峰峰顶的判断条件
+                            if f_list[x] == f_list[x + 1] == f_list[x + 2] == 0 and f_list[x + 3] != 0:
 
-                                            # print("---------右282", right)
-                                            break
+                                peak_list.append(rt_list[x])
+                                index_list.append("peak_" + str(rt_list[x + 3]))
+                                x += 4
+                                for y in range(x, len(f_list) - 3):
+                                    if f_list[y] > -ff * 10 and f_list[y + 1] > -ff * 10:
+                                        w_1 = y + 3
+                                        if w_1 > len(rt_list) + 1:
+                                            w_1 = len(rt_list) + 1
+                                        tmp_list = i_list[y - 2: w_1]
+                                        u_1 = tmp_list.index(i_list[y])
+                                        q_1 = tmp_list.index(min(tmp_list))
+                                        p_1 = y - (u_1 - q_1)
 
-                                        elif i_list[y] < i_list[n] * 0.05:
-                                            if rt_list[y] <= rt_list[n]:
-                                                peak_list.append(rt_list[y + 1])
-                                                m = y + 1
-                                                # print("---------右289", rt_list[y+1])
-                                            else:
-                                                peak_list.append(rt_list[y])
-                                                m = y
-                                                # print("---------右293", rt_list[y])
-                                            break
-                                        elif y == len(f_list) - 4:
+                                        if i_list[p_1] == 0:
+                                            right = rt_list[y]
+                                            m = y
+                                        elif rt_list[p_1] <= rt_list[x]:
+                                            right = rt_list[y]
+                                            m = y
+                                        else:
+                                            right = rt_list[p_1]
+                                            m = p_1
+                                        peak_list.append(right)
+                                        # print("---------右", right)
+
+                                        break
+
+                                    elif i_list[y] < i_list[x] * 0.05:
+                                        if rt_list[y] <= rt_list[x]:
+                                            peak_list.append(rt_list[y + 1])
+                                            m = y + 1
+                                            # print("---------右", rt_list[y+1])
+                                        else:
                                             peak_list.append(rt_list[y])
                                             m = y
-                                            break
+                                            # print("---------右", rt_list[y])
+                                        break
+                                break
+                            elif x > len(f_list) - 6:
+                                peak_list = []
+                                m = x
+                                break
 
-                                    break
-                    if peak_list != []:
-                        total_list.append(peak_list)
+                            else:
+                                if f_list[x - 1] > 0 and s_list[x] < -1 * sf:
+                                    if f_list[x] < 0 or f_list[x + 1] < 0:
+
+                                        # 找到顶点后，找其左右2点及本身，取最大值
+                                        start_index = max(0, x - 2)
+                                        end_index = min(len(i_list), x + 3)
+                                        five_elements = i_list[start_index:end_index]
+                                        max_index = five_elements.index(max(five_elements))
+                                        n = start_index + max_index
+                                        # print(rt_list[n])
+                                        peak_list.append(rt_list[n])
+                                        index_list.append("peak_" + str(rt_list[n]))
+
+                                        for y in range(n + 1, len(f_list) - 3):
+                                            if f_list[y] > -ff * filter_factor and f_list[y + 1] > -ff * filter_factor:
+                                                w_1 = y + 3
+                                                if w_1 > len(rt_list) + 1:
+                                                    w_1 = len(rt_list) + 1
+                                                tmp_list = i_list[y - 2: w_1]
+                                                # print("tmp_list = ", tmp_list)
+                                                u_1 = tmp_list.index(i_list[y])
+                                                # print("u_1 = ", u_1)
+                                                q_1 = tmp_list.index(min(tmp_list))
+                                                # print("q_1 = ", q_1)
+                                                p_1 = y - (u_1 - q_1)
+                                                # print("p_1 = ", p_1)
+                                                if i_list[p_1] == 0:
+                                                    right = rt_list[y]
+                                                    m = y
+                                                elif rt_list[p_1] <= rt_list[n]:
+                                                    right = rt_list[y]
+                                                    m = y
+                                                else:
+                                                    right = rt_list[p_1]
+                                                    m = p_1
+                                                peak_list.append(right)
+
+                                                # print("---------右282", right)
+                                                break
+
+                                            elif i_list[y] < i_list[n] * 0.05:
+                                                if rt_list[y] <= rt_list[n]:
+                                                    peak_list.append(rt_list[y + 1])
+                                                    m = y + 1
+                                                    # print("---------右289", rt_list[y+1])
+                                                else:
+                                                    peak_list.append(rt_list[y])
+                                                    m = y
+                                                    # print("---------右293", rt_list[y])
+                                                break
+                                            elif y == len(f_list) - 4:
+                                                peak_list.append(rt_list[y])
+                                                m = y
+                                                break
+
+                                        break
+                        if peak_list != []:
+                            total_list.append(peak_list)
+                    else:
+                        m += 1
                 else:
-                    m += 1
+                    print('find_peak_error')
+                    break
 
             print(total_list)
 
