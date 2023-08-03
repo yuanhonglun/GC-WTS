@@ -240,7 +240,7 @@ class DataAnalysis():
                                         # print("---------右", rt_list[y])
                                     break
                             break
-                        elif x == len(f_list) - 4:
+                        elif x > len(f_list) - 6:
                             peak_list = []
                             m = x
                             break
@@ -255,7 +255,7 @@ class DataAnalysis():
                                     five_elements = i_list[start_index:end_index]
                                     max_index = five_elements.index(max(five_elements))
                                     n = start_index + max_index
-                                    print(rt_list[n])
+                                    # print(rt_list[n])
                                     peak_list.append(rt_list[n])
                                     index_list.append("peak_" + str(rt_list[n]))
 
@@ -283,18 +283,18 @@ class DataAnalysis():
                                                 m = p_1
                                             peak_list.append(right)
 
-                                            print("---------右282", right)
+                                            # print("---------右282", right)
                                             break
 
                                         elif i_list[y] < i_list[n] * 0.05:
                                             if rt_list[y] <= rt_list[n]:
                                                 peak_list.append(rt_list[y + 1])
                                                 m = y + 1
-                                                print("---------右289", rt_list[y+1])
+                                                # print("---------右289", rt_list[y+1])
                                             else:
                                                 peak_list.append(rt_list[y])
                                                 m = y
-                                                print("---------右293", rt_list[y])
+                                                # print("---------右293", rt_list[y])
                                             break
                                         elif y == len(f_list) - 4:
                                             peak_list.append(rt_list[y])
