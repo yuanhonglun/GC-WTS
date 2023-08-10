@@ -892,12 +892,13 @@ class DataAnalysis():
         #     if matched_wave.iloc[n, 5] > 0 and matched_wave.iloc[n, 5] - matched_wave.iloc[n - 1, 5] > 0 and \
         #             matched_wave.iloc[n, 5] - matched_wave.iloc[n + 1, 5] > 0:
         #         peak_group_df.loc[len(peak_group_df)] = matched_wave.iloc[n]
-
+        #matched_wave.to_csv("C:/Users/86724/Desktop/matcher_wave_1.csv")
         if group_method == 0:
             matched_wave, peak_group_df = self.MSDIAL(matched_wave, wid, sigma)
         elif group_method == 1:
             matched_wave, peak_group_df = self.AMDIS(matched_wave)
-
+        #matched_wave.to_csv("C:/Users/86724/Desktop/matcher_wave_2.csv")
+        #peak_group_df.to_csv("C:/Users/86724/Desktop/peak_group_df_1.csv")
         ##########
         for group, row in peak_group_df.iterrows():
             quant_df = row["ions"]
@@ -994,7 +995,7 @@ class DataAnalysis():
             # plt.close()
         # matched_wave.to_excel('./results/group/matched_wave.xlsx')
         # peak_group_df.to_excel('./peak_group_df.xlsx')
-
+        #peak_group_df.to_csv("C:/Users/86724/Desktop/peak_group_df_2.csv")
         return matched_wave, peak_group_df, quant_result_df
 
     def peak_group_df_add_retention_infor(self, peak_group_df, RI_Presentation, standard_df, RI_min, RI_max):
@@ -2131,6 +2132,7 @@ class DataAnalysis():
                 decon_peak_dic, decon_data_df = self.decon(ion_list, smooth_df_final, con_peak_dic)
                 peak_dic, decon_peak_dic = self.calculate_sv(smooth_df_final, peak_dic, decon_data_df, decon_peak_dic)
                 # yuannote: group_peak里倒数第二个数字：0.5（bin_num)，对应的是向导页面1里的峰聚类灵敏度
+                #smooth_df.to_csv("C:/Users/86724/Desktop/smooth_df.csv")
                 matched_wave, peak_group_df, quant_result_df = self.group_peak(peak_dic, decon_peak_dic, smooth_df,
                                                                                smooth_df_final,
                                                                                decon_data_df, 5,
@@ -2160,10 +2162,10 @@ class DataAnalysis():
                 # yuannote: RT_df_filename对应：向导页面2，基于保留信息分析数据选择RT时，点击读取保留信息按钮，读取RT信息
                 RT_df_filename = ''  # liunote
                 RI_data_filename = ''  # liunote
-                if chooseinfo == "基于RT":  # liunote
+                if chooseinfo == "RT":  # liunote
                     RT_df_filename = RTRIinfo  # 用户输入的RT
                 # yuannote: RI_data_filename：向导页面2，基于保留信息分析数据选择RI时，点击读取保留信息按钮，读取RI信息
-                elif chooseinfo == "基于RI":  # liunote
+                elif chooseinfo == "RI":  # liunote
                     RI_data_filename = RTRIinfo  # 用户输入的RI
                 # species_pool_filename = r"02.csv"
                 # species_pool = pd.DataFrame()
@@ -2359,7 +2361,7 @@ class DataAnalysis():
 
             total_result = (peak_group_result, qualitative_and_quantitative_analysis_result)
 
-            # with open(total_result_file, "wb") as f:  # liunote
+            # with open(r"C:\Users\86724\Desktop\total_result_test.pkl", "wb") as f:  # liunote
             #     pickle.dump(total_result, f)
 
         total_result_pkl = pickle.dumps(total_result)
@@ -2374,70 +2376,70 @@ class DataAnalysis():
         return total_result_pkl
 
 
-# a = DataAnalysis()
-# total_result_pkl = 'total_result_pkl'
-# peak_group_pkl = 'peak_group_pkl'
-# filename = 'D:/work/GC方法/GC可视化/work/DataAnalysis/tomato0418.mzML'
-# smooth_value = 5
-# peak_filt_value = 10
-# group_peak_factor = 1
-# msp = 'D:/work/GC方法/GC可视化/work/DataAnalysis/Remove_Duplicates.msp'
-# chooseinfo = "基于RT"
-# RTRIinfo= 'D:/work/GC方法/GC可视化/work/DataAnalysis/New_RT_list.csv'
-#
-#
-#
-#
-#
-#
-# page3none_match_weight = 0.3
-# page3none_r_match_weight = 0.7
-# page3none_group_weight = 0.2
-# page3none_direct_weight = 0.8
-# page3none_group_minimum_number_of_ions = 1
-# page3none_sim_threshold = 0.3
-#
-# page3RT_search_wid = 1.5
-# page3RT_match_weight = 0.3
-# page3RT_r_match_weight = 0.7
-# page3RT_group_weight = 0.2
-# page3RT_direct_weight = 0.8
-# page3RT_group_minimum_number_of_ions = 1
-# page3RT_ri_participate = True
-# page3RT_sim_threshold = 0.3
-# page3RT_window = 0.30
-# page3RT_level_factor = 0.05
-# page3RT_max_penalty = 0.1
-# page3RT_no_info_penalty = 0.05
-#
-#
-#
-# page3RI_search_wid = 150
-# page3RI_match_weight = 0.7
-# page3RI_r_match_weight = 0.3
-# page3RI_group_weight = 0.2
-# page3RI_direct_weight = 0.8
-# page3RI_group_minimum_number_of_ions = 1
-# page3RI_RI_max = 3000
-# page3RI_ri_participate = True
-# page3RI_sim_threshold = 0.4
-# page3RI_window = 10
-# page3RI_window_scale = 2
-# page3RI_level_factor = 0.2
-# page3RI_max_penalty = 0.4
-# page3RI_no_info_penalty = 0.3
-# page3RI_inaccurate_ri_threshold = 800
-# page3RI_inaccurate_ri_level_factor = 0.01
-#
-# a.Main(total_result_pkl, peak_group_pkl, filename, smooth_value, peak_filt_value, group_peak_factor, msp, chooseinfo, RTRIinfo,
-#              page3none_match_weight, page3none_r_match_weight, page3none_group_weight, page3none_direct_weight, page3none_group_minimum_number_of_ions, page3none_sim_threshold, page3RT_search_wid,
-#        page3RT_match_weight, page3RT_r_match_weight, page3RT_group_weight, page3RT_direct_weight,
-#        page3RT_group_minimum_number_of_ions, page3RT_ri_participate, page3RT_sim_threshold, page3RT_window,
-#        page3RT_level_factor, page3RT_max_penalty, page3RT_no_info_penalty,
-#        page3RI_search_wid, page3RI_match_weight,
-#        page3RI_r_match_weight, page3RI_group_weight, page3RI_direct_weight, page3RI_group_minimum_number_of_ions,
-#        page3RI_RI_max, page3RI_ri_participate, page3RI_sim_threshold, page3RI_window,
-#        page3RI_window_scale, page3RI_level_factor, page3RI_max_penalty, page3RI_no_info_penalty,
-#        page3RI_inaccurate_ri_threshold, page3RI_inaccurate_ri_level_factor
-#        )
+a = DataAnalysis()
+total_result_pkl = ''
+peak_group_pkl = ''
+filename = 'D:/work/GC方法/GC可视化/work/DataAnalysis/tomato0418.mzML'
+smooth_value = 5
+peak_filt_value = 10
+group_peak_factor = 1
+msp = 'D:/work/GC方法/GC可视化/work/DataAnalysis/Remove_Duplicates.msp'
+chooseinfo = "RT"
+RTRIinfo= 'D:/work/GC方法/GC可视化/work/DataAnalysis/New_RT_list.csv'
+
+
+
+
+
+
+page3none_match_weight = 0.3
+page3none_r_match_weight = 0.7
+page3none_group_weight = 0.2
+page3none_direct_weight = 0.8
+page3none_group_minimum_number_of_ions = 1
+page3none_sim_threshold = 0.3
+
+page3RT_search_wid = 1.5
+page3RT_match_weight = 0.3
+page3RT_r_match_weight = 0.7
+page3RT_group_weight = 0.2
+page3RT_direct_weight = 0.8
+page3RT_group_minimum_number_of_ions = 1
+page3RT_ri_participate = True
+page3RT_sim_threshold = 0.3
+page3RT_window = 0.30
+page3RT_level_factor = 0.05
+page3RT_max_penalty = 0.1
+page3RT_no_info_penalty = 0.05
+
+
+
+page3RI_search_wid = 150
+page3RI_match_weight = 0.7
+page3RI_r_match_weight = 0.3
+page3RI_group_weight = 0.2
+page3RI_direct_weight = 0.8
+page3RI_group_minimum_number_of_ions = 1
+page3RI_RI_max = 3000
+page3RI_ri_participate = True
+page3RI_sim_threshold = 0.4
+page3RI_window = 10
+page3RI_window_scale = 2
+page3RI_level_factor = 0.2
+page3RI_max_penalty = 0.4
+page3RI_no_info_penalty = 0.3
+page3RI_inaccurate_ri_threshold = 800
+page3RI_inaccurate_ri_level_factor = 0.01
+
+a.Main(total_result_pkl, peak_group_pkl, filename, smooth_value, peak_filt_value, group_peak_factor, msp, chooseinfo, RTRIinfo,
+             page3none_match_weight, page3none_r_match_weight, page3none_group_weight, page3none_direct_weight, page3none_group_minimum_number_of_ions, page3none_sim_threshold, page3RT_search_wid,
+       page3RT_match_weight, page3RT_r_match_weight, page3RT_group_weight, page3RT_direct_weight,
+       page3RT_group_minimum_number_of_ions, page3RT_ri_participate, page3RT_sim_threshold, page3RT_window,
+       page3RT_level_factor, page3RT_max_penalty, page3RT_no_info_penalty,
+       page3RI_search_wid, page3RI_match_weight,
+       page3RI_r_match_weight, page3RI_group_weight, page3RI_direct_weight, page3RI_group_minimum_number_of_ions,
+       page3RI_RI_max, page3RI_ri_participate, page3RI_sim_threshold, page3RI_window,
+       page3RI_window_scale, page3RI_level_factor, page3RI_max_penalty, page3RI_no_info_penalty,
+       page3RI_inaccurate_ri_threshold, page3RI_inaccurate_ri_level_factor
+       )
 

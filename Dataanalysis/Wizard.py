@@ -49,7 +49,7 @@ class WizardPage2(QWizardPage, Ui_Form_Step2):
         super(WizardPage2, self).__init__(parent)
         self.setupUi(self)
         ui = Ui_Form_Step1()
-        self.choose = "不选择"
+        self.choose = "None"
         self.msp = ""
         self.RTRIinfo = ""
         self.demo = ""
@@ -79,7 +79,7 @@ class WizardPage2(QWizardPage, Ui_Form_Step2):
             QMessageBox.about(
                 None,
                 'Help',
-                'RT和RI示例文件存储在软件同目录下')
+                'RT and RI sample files are stored in the same directory as the software')
         except:
             pass
 
@@ -93,17 +93,17 @@ class WizardPage2(QWizardPage, Ui_Form_Step2):
 
     def validatePage(self):
 
-        if self.choose == "不选择":
+        if self.choose == "None":
             if self.msp != "":
                 return True
             else:
                 QMessageBox.critical(
                     None,
                     'Error',
-                    '请选择输入MSP文件！')
+                    'Please enter the MSP file！')
                 return False
 
-        elif self.choose == "基于RT" or self.choose == "基于RI":
+        elif self.choose == "RT" or self.choose == "RI":
             print(self.msp)
             print(self.RTRIinfo)
             if self.msp != "" and self.RTRIinfo != "":
@@ -112,19 +112,19 @@ class WizardPage2(QWizardPage, Ui_Form_Step2):
                 QMessageBox.critical(
                     None,
                     'Error',
-                    '请选择输入MSP文件！')
+                    'Please enter the MSP file！')
                 return False
             elif self.msp != "" and self.RTRIinfo == "":
                 QMessageBox.critical(
                     None,
                     'Error',
-                    '请选择输入保留信息文件！')
+                    'Please enter a reserved information file！')
                 return False
             else:
                 QMessageBox.critical(
                     None,
                     'Error',
-                    '请选择MPS文件和输入保留信息文件！')
+                    'Please enter MPS file and retention information file！')
                 return False
 
     def openmsp(self):
@@ -140,16 +140,16 @@ class WizardPage2(QWizardPage, Ui_Form_Step2):
     def chooseRTRIinfo(self, text):
         self.choose = text
 
-        if self.choose == "不选择":
+        if self.choose == "None":
             self.pushButton_2.setEnabled(False)
             self.pushButton_4.setEnabled(False)
-        elif self.choose == "基于RT":
+        elif self.choose == "RT":
             self.pushButton_2.setEnabled(True)
             self.pushButton_4.setEnabled(True)
             self.label_4.setText("读取RT library")
             self.pushButton_4.setText("RT")
 
-        elif self.choose == "基于RI":
+        elif self.choose == "RI":
             self.pushButton_2.setEnabled(True)
             self.pushButton_4.setEnabled(True)
             self.label_4.setText("读取RI library")

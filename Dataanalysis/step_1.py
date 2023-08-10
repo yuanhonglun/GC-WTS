@@ -14,7 +14,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form_Step1(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(701, 567)
+        Form.resize(701, 564)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        Form.setWindowIcon(icon)
         self.gridLayout_2 = QtWidgets.QGridLayout(Form)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.frame = QtWidgets.QFrame(Form)
@@ -83,9 +86,9 @@ class Ui_Form_Step1(object):
         self.pushButton_6.setMinimumSize(QtCore.QSize(20, 20))
         self.pushButton_6.setMaximumSize(QtCore.QSize(20, 20))
         self.pushButton_6.setText("")
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/R-C.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_6.setIcon(icon)
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap(":/R-C.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButton_6.setIcon(icon1)
         self.pushButton_6.setIconSize(QtCore.QSize(20, 20))
         self.pushButton_6.setObjectName("pushButton_6")
         self.gridLayout.addWidget(self.pushButton_6, 0, 2, 1, 1)
@@ -125,7 +128,7 @@ class Ui_Form_Step1(object):
         self.pushButton_7.setMinimumSize(QtCore.QSize(20, 20))
         self.pushButton_7.setMaximumSize(QtCore.QSize(20, 20))
         self.pushButton_7.setText("")
-        self.pushButton_7.setIcon(icon)
+        self.pushButton_7.setIcon(icon1)
         self.pushButton_7.setIconSize(QtCore.QSize(20, 20))
         self.pushButton_7.setObjectName("pushButton_7")
         self.gridLayout.addWidget(self.pushButton_7, 1, 2, 1, 1)
@@ -158,7 +161,7 @@ class Ui_Form_Step1(object):
         self.pushButton_8.setMinimumSize(QtCore.QSize(20, 20))
         self.pushButton_8.setMaximumSize(QtCore.QSize(20, 20))
         self.pushButton_8.setText("")
-        self.pushButton_8.setIcon(icon)
+        self.pushButton_8.setIcon(icon1)
         self.pushButton_8.setIconSize(QtCore.QSize(20, 20))
         self.pushButton_8.setObjectName("pushButton_8")
         self.gridLayout.addWidget(self.pushButton_8, 2, 2, 1, 1)
@@ -174,12 +177,12 @@ class Ui_Form_Step1(object):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.label.setText(_translate("Form", "Step1:峰识别、峰聚类参数"))
+        Form.setWindowTitle(_translate("Form", "DataAnalyzer-WTS"))
+        self.label.setText(_translate("Form", "Peak detection and compound perception"))
         self.frame_2.setToolTip(_translate("Form", "<html><head/><body><p>asdsada</p></body></html>"))
-        self.label_3.setText(_translate("Form", "平滑系数："))
-        self.label_2.setText(_translate("Form", "峰过滤系数："))
-        self.label_4.setText(_translate("Form", "峰聚类灵敏度："))
+        self.label_3.setText(_translate("Form", "Smoothing factor:"))
+        self.label_2.setText(_translate("Form", "Peak filter factor:"))
+        self.label_4.setText(_translate("Form", "Bin number:"))
 
 
 if __name__ == "__main__":

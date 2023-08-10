@@ -120,7 +120,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
         self.show_qualitative = False
         self.input_file = ''
         self.ion_num = 0
-        self.choose = "Choose RT(s)"
+        self.choose = "s"
         self.choose_peak_group = ''
         self.total_result_pkl = ''
         self.peak_group_pkl = ''
@@ -165,16 +165,15 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
             merge_df = merge_df[merge_df['Best_match_name'] != 'Unknown']
 
             # merge_df.to_csv("C:/Users/86724/Desktop/merge_df1.csv")
-            if choose == "Choose RT(min)":
+            if choose == "min":
                 merge_df["rt"] = np.round(merge_df["rt"].astype(np.float64) / 60, decimals=2)
             if len(merge_df.index) != 0:
                 self.tableWidget.setRowCount(merge_df.shape[0])
                 self.tableWidget.setColumnCount(5)
-                self.tableWidget.setHorizontalHeaderLabels(
-                    ["RT", "best_match", "Quant Ion", "Area", "Height"])
+                self.tableWidget.setHorizontalHeaderLabels(["RT", "Identification result", "Quant ion", "Area", "Height"])
 
                 for row in range(merge_df.shape[0]):
-                    if choose == "Choose RT(min)":
+                    if choose == "min":
 
                         son_choose_ion_df = self.choose_ion_df[
                             np.round(self.choose_ion_df["Peak_group"].astype(np.float64) / 60, decimals=2) ==
@@ -185,7 +184,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
                     combo_box = QComboBox()
 
                     ion_list = list(son_choose_ion_df["Ion"])
-                    if choose == "Choose RT(min)":
+                    if choose == "min":
                         default_ion = peak_group_df_tmp[
                             np.round(peak_group_df_tmp["rt"].astype(np.float64) / 60, decimals=2) == merge_df.iloc[
                                 row, 0]].iloc[0, 8]
@@ -214,7 +213,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
                                 how="left",
                                 on="rt")
             # merge_df.to_csv("C:/Users/86724/Desktop/ccccc.csv")
-            if choose == "Choose RT(min)":
+            if choose == "min":
                 merge_df["rt"] = np.round(merge_df["rt"].astype(np.float64) / 60, decimals=2)
 
             self.tableWidget.setRowCount(merge_df.shape[0])
@@ -223,7 +222,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
                 ["RT", "best_match", "Quant Ion", "Area", "Height"])
 
             for row in range(merge_df.shape[0]):
-                if choose == "Choose RT(min)":
+                if choose == "min":
 
                     son_choose_ion_df = self.choose_ion_df[
                         np.round(self.choose_ion_df["Peak_group"].astype(np.float64) / 60, decimals=2) == merge_df.iloc[
@@ -235,7 +234,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
                 combo_box = QComboBox()
 
                 ion_list = list(son_choose_ion_df["Ion"])
-                if choose == "Choose RT(min)":
+                if choose == "min":
                     default_ion = peak_group_df_tmp[
                         np.round(peak_group_df_tmp["rt"].astype(np.float64) / 60, decimals=2) == merge_df.iloc[
                             row, 0]].iloc[0, 8]
@@ -271,7 +270,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
     def change_ion(self, item):
         # self.tableWidget.setItem(0, 0, QTableWidgetItem("sss"))
         row = self.tableWidget.currentRow()
-        if self.choose == "Choose RT(min)":
+        if self.choose == "min":
             line = self.choose_ion_df.loc[
                 (np.round(self.choose_ion_df["Peak_group"].astype(np.float64) / 60, decimals=2) == float(
                     self.tableWidget.item(row, 0).text())) & (
@@ -296,7 +295,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
         # print("type-choose_peak-group", type(self.choose_peak_group))
         # print("round(self.peak_group_df.rt, 2)", round(self.peak_group_df.rt, 2))
         # print("self.peak_group_df.rt", self.peak_group_df.rt)
-        if self.choose == "Choose RT(min)":
+        if self.choose == "min":
             line = self.peak_group_df[np.round(self.peak_group_df.rt.astype(np.float64) / 60, decimals=2) == round(
                 float(self.choose_peak_group), 2)]
         else:
@@ -322,7 +321,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
         c = Line(init_opts=opts.InitOpts(theme="walden", animation_opts=opts.AnimationOpts(animation=False)))
 
         c.set_global_opts(
-            title_opts=opts.TitleOpts(title="Peak Group Eic", pos_top='0'),
+            title_opts=opts.TitleOpts(title="Peak Group EIC", pos_top='0'),
             xaxis_opts=opts.AxisOpts(type_="value", is_scale=True, splitline_opts=opts.SplitLineOpts(is_show=False)),
             yaxis_opts=opts.AxisOpts(name="1e7", splitline_opts=opts.SplitLineOpts(is_show=False)),
 
@@ -376,7 +375,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
         ##画初始ms比对图
         self.radioButton_2.setHidden(False)
         self.radioButton_2.setChecked(False)
-        if self.choose == "Choose RT(min)":
+        if self.choose == "min":
             qua_line = self.qualitative_and_quantitative_analysis_result[
                 np.around(self.qualitative_and_quantitative_analysis_result.index / 60, decimals=2) == float(
                     self.choose_peak_group)]
@@ -426,7 +425,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
         self.radioButton_2.setChecked(False)
         row = item.row()  # 行数，0开始
         self.click_match = self.group_info.item(row, 0).text()
-        if self.choose == "Choose RT(min)":
+        if self.choose == "min":
             qua_line = self.qualitative_and_quantitative_analysis_result[
                 np.around(self.qualitative_and_quantitative_analysis_result.index / 60, decimals=2) == float(
                     self.choose_peak_group)]
@@ -460,6 +459,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
                        itemstyle_opts=opts.ItemStyleOpts(color='red'))
             .set_global_opts(
                 xaxis_opts=opts.AxisOpts(is_show=False, splitline_opts=opts.SplitLineOpts(is_show=False)),
+                yaxis_opts=opts.AxisOpts(
+                    axislabel_opts=opts.LabelOpts(is_show=False)
+                ),
                 title_opts=opts.TitleOpts(title="Spectrometry Comparison", pos_top='0%', subtitle=name),
                 datazoom_opts=opts.DataZoomOpts(range_start=0, range_end=100, type_="inside"),
                 toolbox_opts=opts.ToolboxOpts(
@@ -508,7 +510,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
         self.group_info.clear()
         row = item.row()
         choose_peak_group = self.tableWidget.item(row, 0).text()
-        if self.choose == "Choose RT(min)":
+        if self.choose == "min":
             line = self.qualitative_and_quantitative_analysis_result[np.around(
                 pd.Series(self.qualitative_and_quantitative_analysis_result.index,
                           index=self.qualitative_and_quantitative_analysis_result.index) / 60, decimals=2) == float(
@@ -646,6 +648,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
             if self.input_file != '':
                 dir = os.path.dirname(self.input_file)
                 now = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+
                 with open(dir + '/total_result_' + now + '.pkl', "wb") as f:
                     pickle.dump(self.all_pkl, f)
 

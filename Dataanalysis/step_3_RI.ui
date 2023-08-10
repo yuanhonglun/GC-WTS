@@ -11,7 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>DataAnalyzer-WTS</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../Combine/icon.png</normaloff>../Combine/icon.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0" colspan="2">
@@ -43,7 +47,7 @@
          <string notr="true">font: 22pt;</string>
         </property>
         <property name="text">
-         <string>Step3:选择RI</string>
+         <string>Qualitative analysis</string>
         </property>
        </widget>
       </item>
@@ -58,38 +62,8 @@
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <layout class="QGridLayout" name="gridLayout_2" rowstretch="1,10">
+     <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="0">
-       <widget class="QWidget" name="widget_2" native="true">
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QLabel" name="label_12">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>20</pointsize>
-             <weight>50</weight>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">font: 20pt;</string>
-           </property>
-           <property name="text">
-            <string>定性参数</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item row="1" column="0">
        <widget class="QFrame" name="frame_4">
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
@@ -130,7 +104,7 @@
             <string notr="true">font: 16pt;</string>
            </property>
            <property name="text">
-            <string>搜库范围：</string>
+            <string>Library search window:</string>
            </property>
           </widget>
          </item>
@@ -191,7 +165,7 @@
             <string notr="true">font: 16pt;</string>
            </property>
            <property name="text">
-            <string>最大保留指数:</string>
+            <string>Maximum RI:</string>
            </property>
           </widget>
          </item>
@@ -239,7 +213,7 @@
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+             <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -281,7 +255,7 @@
             <string notr="true">font: 16pt;</string>
            </property>
            <property name="text">
-            <string>峰组Match系数：</string>
+            <string>Peak group Match weight:</string>
            </property>
           </widget>
          </item>
@@ -335,7 +309,7 @@
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+             <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -359,7 +333,7 @@
             <string notr="true">font: 16pt;</string>
            </property>
            <property name="text">
-            <string>峰组R Match系数：</string>
+            <string>Peak group Reverse Match weight:</string>
            </property>
            <property name="wordWrap">
             <bool>true</bool>
@@ -413,7 +387,7 @@
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+             <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -437,7 +411,7 @@
             <string notr="true">font: 16pt;</string>
            </property>
            <property name="text">
-            <string>参与定性group最少离子数：</string>
+            <string>Minimum ions number in peak group for identification:</string>
            </property>
            <property name="wordWrap">
             <bool>true</bool>
@@ -488,7 +462,7 @@
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+             <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -530,7 +504,7 @@
             <string notr="true">font: 16pt;</string>
            </property>
            <property name="text">
-            <string>峰组打分权重：</string>
+            <string>Peak group search score weight:</string>
            </property>
            <property name="wordWrap">
             <bool>true</bool>
@@ -584,7 +558,7 @@
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+             <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -605,13 +579,13 @@
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>30</height>
+             <height>60</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>30</height>
+             <height>60</height>
             </size>
            </property>
            <property name="font">
@@ -626,7 +600,8 @@
             <string notr="true">font: 16pt;</string>
            </property>
            <property name="text">
-            <string>直接搜索打分权重：</string>
+            <string>Direct search score
+weight:</string>
            </property>
            <property name="wordWrap">
             <bool>false</bool>
@@ -683,7 +658,7 @@
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+             <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -704,13 +679,13 @@
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>30</height>
+             <height>60</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>30</height>
+             <height>60</height>
             </size>
            </property>
            <property name="font">
@@ -725,7 +700,8 @@
             <string notr="true">font: 16pt;</string>
            </property>
            <property name="text">
-            <string>相似性阈值：</string>
+            <string>Similarity score
+threshold:</string>
            </property>
            <property name="wordWrap">
             <bool>false</bool>
@@ -782,7 +758,7 @@
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+             <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -806,38 +782,8 @@
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <layout class="QGridLayout" name="gridLayout_3" rowstretch="1,1,10">
+     <layout class="QGridLayout" name="gridLayout_3" rowstretch="1,10">
       <item row="0" column="0">
-       <widget class="QWidget" name="widget_3" native="true">
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
-         <item>
-          <widget class="QLabel" name="label_13">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>20</pointsize>
-             <weight>50</weight>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">font: 20pt;</string>
-           </property>
-           <property name="text">
-            <string>保留信息参数</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item row="1" column="0">
        <widget class="QFrame" name="frame_6">
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
@@ -878,7 +824,7 @@
             <string notr="true">font: 16pt;</string>
            </property>
            <property name="text">
-            <string>RI参与打分：</string>
+            <string>Calculate RI penalty:</string>
            </property>
           </widget>
          </item>
@@ -901,7 +847,7 @@
         </layout>
        </widget>
       </item>
-      <item row="2" column="0">
+      <item row="1" column="0">
        <widget class="QFrame" name="frame_5">
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
@@ -921,13 +867,13 @@
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>30</height>
+             <height>60</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>30</height>
+             <height>60</height>
             </size>
            </property>
            <property name="font">
@@ -942,7 +888,7 @@
             <string notr="true">font: 16pt;</string>
            </property>
            <property name="text">
-            <string>罚分窗口：</string>
+            <string>RI window:</string>
            </property>
           </widget>
          </item>
@@ -999,7 +945,7 @@
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+             <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -1011,6 +957,18 @@
          </item>
          <item row="1" column="0">
           <widget class="QLabel" name="label_9">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>60</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>60</height>
+            </size>
+           </property>
            <property name="font">
             <font>
              <pointsize>16</pointsize>
@@ -1023,7 +981,7 @@
             <string notr="true">font: 16pt;</string>
            </property>
            <property name="text">
-            <string>RI窗口调整系数：</string>
+            <string>RI window scale:</string>
            </property>
            <property name="wordWrap">
             <bool>true</bool>
@@ -1080,7 +1038,7 @@
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+             <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -1092,6 +1050,18 @@
          </item>
          <item row="2" column="0">
           <widget class="QLabel" name="label_8">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>60</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>60</height>
+            </size>
+           </property>
            <property name="font">
             <font>
              <pointsize>16</pointsize>
@@ -1104,7 +1074,7 @@
             <string notr="true">font: 16pt;</string>
            </property>
            <property name="text">
-            <string>罚分系数：</string>
+            <string>Level factor:</string>
            </property>
            <property name="wordWrap">
             <bool>true</bool>
@@ -1158,7 +1128,7 @@
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+             <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -1170,6 +1140,18 @@
          </item>
          <item row="3" column="0">
           <widget class="QLabel" name="label_10">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>60</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>60</height>
+            </size>
+           </property>
            <property name="font">
             <font>
              <pointsize>16</pointsize>
@@ -1182,7 +1164,7 @@
             <string notr="true">font: 16pt;</string>
            </property>
            <property name="text">
-            <string>最大罚分：</string>
+            <string>Maximum penalty:</string>
            </property>
            <property name="wordWrap">
             <bool>true</bool>
@@ -1239,7 +1221,7 @@
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+             <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -1251,6 +1233,18 @@
          </item>
          <item row="4" column="0">
           <widget class="QLabel" name="label_11">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>60</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>60</height>
+            </size>
+           </property>
            <property name="font">
             <font>
              <pointsize>16</pointsize>
@@ -1263,7 +1257,7 @@
             <string notr="true">font: 16pt;</string>
            </property>
            <property name="text">
-            <string>保留信息缺失罚分：</string>
+            <string>No RI penalty:</string>
            </property>
            <property name="wordWrap">
             <bool>true</bool>
@@ -1317,7 +1311,7 @@
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+             <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -1329,6 +1323,18 @@
          </item>
          <item row="5" column="0">
           <widget class="QLabel" name="label_15">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>60</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>60</height>
+            </size>
+           </property>
            <property name="font">
             <font>
              <pointsize>16</pointsize>
@@ -1341,7 +1347,7 @@
             <string notr="true">font: 16pt;</string>
            </property>
            <property name="text">
-            <string>不准确RI阈值：</string>
+            <string>Inaccurate RI threshold:</string>
            </property>
            <property name="wordWrap">
             <bool>true</bool>
@@ -1392,7 +1398,7 @@
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+             <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -1404,6 +1410,18 @@
          </item>
          <item row="6" column="0">
           <widget class="QLabel" name="label_19">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>60</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>60</height>
+            </size>
+           </property>
            <property name="font">
             <font>
              <pointsize>16</pointsize>
@@ -1416,10 +1434,11 @@
             <string notr="true">font: 16pt;</string>
            </property>
            <property name="text">
-            <string>不准确RI罚分系数：</string>
+            <string>Inaccurate RI
+level factor:</string>
            </property>
            <property name="wordWrap">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -1468,8 +1487,8 @@
    <slot>slot2()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>369</x>
-     <y>243</y>
+     <x>376</x>
+     <y>239</y>
     </hint>
     <hint type="destinationlabel">
      <x>-165</x>
@@ -1484,8 +1503,8 @@
    <slot>slot3()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>360</x>
-     <y>302</y>
+     <x>376</x>
+     <y>293</y>
     </hint>
     <hint type="destinationlabel">
      <x>-119</x>
@@ -1500,8 +1519,8 @@
    <slot>slot4()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>358</x>
-     <y>363</y>
+     <x>376</x>
+     <y>354</y>
     </hint>
     <hint type="destinationlabel">
      <x>-161</x>
@@ -1516,8 +1535,8 @@
    <slot>slot5()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>356</x>
-     <y>431</y>
+     <x>376</x>
+     <y>435</y>
     </hint>
     <hint type="destinationlabel">
      <x>-138</x>
@@ -1532,8 +1551,8 @@
    <slot>slot6()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>364</x>
-     <y>492</y>
+     <x>376</x>
+     <y>516</y>
     </hint>
     <hint type="destinationlabel">
      <x>-47</x>
@@ -1548,8 +1567,8 @@
    <slot>slot7()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>360</x>
-     <y>552</y>
+     <x>376</x>
+     <y>578</y>
     </hint>
     <hint type="destinationlabel">
      <x>-68</x>
@@ -1580,8 +1599,8 @@
    <slot>slot9()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>759</x>
-     <y>238</y>
+     <x>766</x>
+     <y>237</y>
     </hint>
     <hint type="destinationlabel">
      <x>906</x>
@@ -1612,8 +1631,8 @@
    <slot>slot11()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>758</x>
-     <y>357</y>
+     <x>766</x>
+     <y>349</y>
     </hint>
     <hint type="destinationlabel">
      <x>908</x>
@@ -1628,8 +1647,8 @@
    <slot>slot12()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>748</x>
-     <y>426</y>
+     <x>766</x>
+     <y>405</y>
     </hint>
     <hint type="destinationlabel">
      <x>875</x>
@@ -1644,8 +1663,8 @@
    <slot>slot13()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>754</x>
-     <y>487</y>
+     <x>766</x>
+     <y>461</y>
     </hint>
     <hint type="destinationlabel">
      <x>880</x>
@@ -1660,8 +1679,8 @@
    <slot>slot14()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>757</x>
-     <y>546</y>
+     <x>766</x>
+     <y>524</y>
     </hint>
     <hint type="destinationlabel">
      <x>875</x>

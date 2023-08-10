@@ -11,9 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>DataAnalyzer-WTS</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2" rowstretch="1,10">
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../Combine/icon.png</normaloff>../Combine/icon.png</iconset>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2" rowstretch="1,10,0">
    <item row="0" column="0">
     <widget class="QFrame" name="frame">
      <property name="frameShape">
@@ -43,7 +47,7 @@
          <string notr="true">font: 22pt;</string>
         </property>
         <property name="text">
-         <string>Step2:文件读取</string>
+         <string>Import library files</string>
         </property>
        </widget>
       </item>
@@ -91,7 +95,7 @@
          <string notr="true">font: 20pt;</string>
         </property>
         <property name="text">
-         <string>读取MSP库：</string>
+         <string>Import MSP library:</string>
         </property>
        </widget>
       </item>
@@ -136,13 +140,13 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>30</height>
+          <height>60</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
           <width>16777215</width>
-          <height>30</height>
+          <height>60</height>
          </size>
         </property>
         <property name="font">
@@ -157,7 +161,10 @@
          <string notr="true">font: 20pt;</string>
         </property>
         <property name="text">
-         <string>选择保留信息：</string>
+         <string>Select retention information type:</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -169,6 +176,12 @@
          </property>
          <item>
           <widget class="QComboBox" name="comboBox">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>50</width>
@@ -200,17 +213,17 @@
            </property>
            <item>
             <property name="text">
-             <string>不选择</string>
+             <string>None</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>基于RT</string>
+             <string>RT</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>基于RI</string>
+             <string>RI</string>
             </property>
            </item>
           </widget>
@@ -234,7 +247,7 @@
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+             <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -249,6 +262,18 @@
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_4">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>60</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>60</height>
+         </size>
+        </property>
         <property name="font">
          <font>
           <pointsize>20</pointsize>
@@ -261,10 +286,11 @@
          <string notr="true">font: 20pt;</string>
         </property>
         <property name="text">
-         <string>读取保留信息按钮：</string>
+         <string>Import RT list/import
+RI calibration data:</string>
         </property>
         <property name="wordWrap">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -294,12 +320,24 @@
          <string notr="true">font: 16pt;</string>
         </property>
         <property name="text">
-         <string>保留信息</string>
+         <string>RT/RI</string>
         </property>
        </widget>
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_5">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>60</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>60</height>
+         </size>
+        </property>
         <property name="font">
          <font>
           <pointsize>20</pointsize>
@@ -312,10 +350,11 @@
          <string notr="true">font: 20pt;</string>
         </property>
         <property name="text">
-         <string>示例保留信息列表：</string>
+         <string>Example file of 
+retention information:</string>
         </property>
         <property name="wordWrap">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
        </widget>
       </item>

@@ -6,12 +6,16 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>755</width>
-    <height>557</height>
+    <width>831</width>
+    <height>634</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>DataAnalyzer-WTS</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../Combine/icon.png</normaloff>../Combine/icon.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout_3" rowstretch="1,10">
    <item row="1" column="0">
@@ -22,37 +26,7 @@
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout" stretch="1,10">
-      <item>
-       <widget class="QWidget" name="widget_5" native="true">
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <item>
-          <widget class="QLabel" name="label_7">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>20</pointsize>
-             <weight>50</weight>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">font: 20pt;</string>
-           </property>
-           <property name="text">
-            <string>定性参数</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
+     <layout class="QVBoxLayout" name="verticalLayout" stretch="10">
       <item>
        <widget class="QFrame" name="frame_2">
         <property name="frameShape">
@@ -94,7 +68,7 @@
             <string notr="true">font: 20pt;</string>
            </property>
            <property name="text">
-            <string>峰组Match系数：</string>
+            <string>Peak group Match weight:</string>
            </property>
           </widget>
          </item>
@@ -148,7 +122,7 @@
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+             <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -190,7 +164,7 @@
             <string notr="true">font: 20pt;</string>
            </property>
            <property name="text">
-            <string>峰组R Match系数：</string>
+            <string>Peak group Reverse Match weight:</string>
            </property>
           </widget>
          </item>
@@ -241,7 +215,7 @@
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+             <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -253,6 +227,18 @@
          </item>
          <item row="2" column="0">
           <widget class="QLabel" name="label_4">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>60</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>60</height>
+            </size>
+           </property>
            <property name="font">
             <font>
              <pointsize>20</pointsize>
@@ -265,7 +251,7 @@
             <string notr="true">font: 20pt;</string>
            </property>
            <property name="text">
-            <string>参与定性group所含最少离子数：</string>
+            <string>Minimum ions number in peak group for identification:</string>
            </property>
            <property name="wordWrap">
             <bool>true</bool>
@@ -316,7 +302,7 @@
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+             <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -337,13 +323,13 @@
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>30</height>
+             <height>60</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>30</height>
+             <height>60</height>
             </size>
            </property>
            <property name="font">
@@ -358,10 +344,10 @@
             <string notr="true">font: 20pt;</string>
            </property>
            <property name="text">
-            <string>峰组打分权重：</string>
+            <string>Peak group search score weight:</string>
            </property>
            <property name="wordWrap">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -412,7 +398,7 @@
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+             <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -433,13 +419,13 @@
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>30</height>
+             <height>60</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>30</height>
+             <height>60</height>
             </size>
            </property>
            <property name="font">
@@ -454,10 +440,10 @@
             <string notr="true">font: 20pt;</string>
            </property>
            <property name="text">
-            <string>直接搜索打分权重：</string>
+            <string>Direct search score weight:</string>
            </property>
            <property name="wordWrap">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -511,7 +497,7 @@
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+             <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -532,13 +518,13 @@
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>30</height>
+             <height>60</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>30</height>
+             <height>60</height>
             </size>
            </property>
            <property name="font">
@@ -553,10 +539,10 @@
             <string notr="true">font: 20pt;</string>
            </property>
            <property name="text">
-            <string>相似性阈值：</string>
+            <string>Similarity score threshold:</string>
            </property>
            <property name="wordWrap">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -610,7 +596,7 @@
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+             <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -655,7 +641,7 @@
          <string notr="true">font: 22pt;</string>
         </property>
         <property name="text">
-         <string>Step3:不选择</string>
+         <string>Qualitative analysis</string>
         </property>
        </widget>
       </item>
@@ -673,11 +659,11 @@
    <slot>slot1()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>634</x>
-     <y>173</y>
+     <x>752</x>
+     <y>191</y>
     </hint>
     <hint type="destinationlabel">
-     <x>971</x>
+     <x>830</x>
      <y>196</y>
     </hint>
    </hints>
@@ -689,11 +675,11 @@
    <slot>slot2()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>632</x>
-     <y>231</y>
+     <x>752</x>
+     <y>250</y>
     </hint>
     <hint type="destinationlabel">
-     <x>866</x>
+     <x>830</x>
      <y>236</y>
     </hint>
    </hints>
@@ -705,11 +691,11 @@
    <slot>slot3()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>639</x>
-     <y>305</y>
+     <x>752</x>
+     <y>309</y>
     </hint>
     <hint type="destinationlabel">
-     <x>900</x>
+     <x>830</x>
      <y>307</y>
     </hint>
    </hints>
@@ -721,11 +707,11 @@
    <slot>slot4()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>641</x>
-     <y>368</y>
+     <x>752</x>
+     <y>383</y>
     </hint>
     <hint type="destinationlabel">
-     <x>913</x>
+     <x>830</x>
      <y>373</y>
     </hint>
    </hints>
@@ -737,11 +723,11 @@
    <slot>slot5()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>642</x>
-     <y>430</y>
+     <x>752</x>
+     <y>472</y>
     </hint>
     <hint type="destinationlabel">
-     <x>929</x>
+     <x>830</x>
      <y>442</y>
     </hint>
    </hints>
@@ -753,11 +739,11 @@
    <slot>slot6()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>636</x>
-     <y>489</y>
+     <x>752</x>
+     <y>561</y>
     </hint>
     <hint type="destinationlabel">
-     <x>844</x>
+     <x>830</x>
      <y>513</y>
     </hint>
    </hints>

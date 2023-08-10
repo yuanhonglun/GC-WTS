@@ -7,11 +7,15 @@
     <x>0</x>
     <y>0</y>
     <width>701</width>
-    <height>567</height>
+    <height>564</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>DataAnalyzer-WTS</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../Combine/icon.png</normaloff>../Combine/icon.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout_2" rowstretch="1,10">
    <item row="0" column="0">
@@ -43,7 +47,7 @@
          <string notr="true">font: 22pt;</string>
         </property>
         <property name="text">
-         <string>Step1:峰识别、峰聚类参数</string>
+         <string>Peak detection and compound perception</string>
         </property>
        </widget>
       </item>
@@ -97,7 +101,7 @@
          <string notr="true">font: 20pt;</string>
         </property>
         <property name="text">
-         <string>平滑系数：</string>
+         <string>Smoothing factor:</string>
         </property>
        </widget>
       </item>
@@ -159,7 +163,7 @@
         </property>
         <property name="icon">
          <iconset>
-          <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+          <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -201,7 +205,7 @@
          <string notr="true">font: 20pt;</string>
         </property>
         <property name="text">
-         <string>峰过滤系数：</string>
+         <string>Peak filter factor:</string>
         </property>
        </widget>
       </item>
@@ -260,7 +264,7 @@
         </property>
         <property name="icon">
          <iconset>
-          <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+          <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -284,7 +288,7 @@
          <string notr="true">font: 20pt;</string>
         </property>
         <property name="text">
-         <string>峰聚类灵敏度：</string>
+         <string>Bin number:</string>
         </property>
        </widget>
       </item>
@@ -343,7 +347,7 @@
         </property>
         <property name="icon">
          <iconset>
-          <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+          <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
         </property>
         <property name="iconSize">
          <size>
