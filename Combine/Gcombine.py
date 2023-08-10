@@ -182,7 +182,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWin
             QMessageBox.about(
                 None,
                 'Help',
-                '一个RI示例文件存储在软件同目录下')
+                'An RI sample file has been stored in the same directory as the software')
         except:
             pass
 
@@ -197,7 +197,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWin
             QMessageBox.about(
                 None,
                 'Help',
-                '一个RT示例文件存储在软件同目录下')
+                'An RT sample file has been stored in the same directory as the software')
         except:
             pass
 

@@ -2,6 +2,7 @@
 <RCC version="1.0">
     <qresource>
         <file alias="R-C.png">R-C.png</file>
+        <file alias="icon.png">icon.png</file>
 
     </qresource>
 </RCC>
