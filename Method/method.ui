@@ -11,7 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>MethodGenerator-WTS</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>icon.png</normaloff>icon.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout" columnstretch="1,1,1">
@@ -159,7 +163,7 @@
              <string notr="true">font: 18pt;</string>
             </property>
             <property name="text">
-             <string>M/Z范围</string>
+             <string>m/Z range</string>
             </property>
            </widget>
           </item>
@@ -302,7 +306,7 @@
                    <string notr="true">font: 18pt;</string>
                   </property>
                   <property name="text">
-                   <string>最大保留时间</string>
+                   <string>Maximum RT</string>
                   </property>
                  </widget>
                 </item>
@@ -325,7 +329,7 @@
                   </property>
                   <property name="icon">
                    <iconset>
-                    <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+                    <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
                   </property>
                   <property name="iconSize">
                    <size>
@@ -449,7 +453,7 @@
                    <string notr="true">font: 18pt;</string>
                   </property>
                   <property name="text">
-                   <string>RT窗口范围</string>
+                   <string>RT window</string>
                   </property>
                  </widget>
                 </item>
@@ -472,7 +476,7 @@
                   </property>
                   <property name="icon">
                    <iconset>
-                    <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+                    <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
                   </property>
                   <property name="iconSize">
                    <size>
@@ -608,7 +612,7 @@
                    <string notr="true">font: 18pt;</string>
                   </property>
                   <property name="text">
-                   <string>fr factor</string>
+                   <string>F&lt;sub&gt;R&lt;/sub&gt; factor</string>
                   </property>
                  </widget>
                 </item>
@@ -631,7 +635,7 @@
                   </property>
                   <property name="icon">
                    <iconset>
-                    <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+                    <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
                   </property>
                   <property name="iconSize">
                    <size>
@@ -749,7 +753,7 @@
                    <string notr="true">font: 18pt;</string>
                   </property>
                   <property name="text">
-                   <string>最少离子数</string>
+                   <string>Minimum ions number</string>
                   </property>
                   <property name="wordWrap">
                    <bool>true</bool>
@@ -775,7 +779,7 @@
                   </property>
                   <property name="icon">
                    <iconset>
-                    <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+                    <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
                   </property>
                   <property name="iconSize">
                    <size>
@@ -911,7 +915,7 @@
                    <string notr="true">font: 18pt;</string>
                   </property>
                   <property name="text">
-                   <string>solvent delay</string>
+                   <string>Solvent delay</string>
                   </property>
                   <property name="wordWrap">
                    <bool>true</bool>
@@ -1063,7 +1067,7 @@
                    <string notr="true">font: 18pt;</string>
                   </property>
                   <property name="text">
-                   <string>离子响应阈值</string>
+                   <string>Ion intensity threshold</string>
                   </property>
                   <property name="wordWrap">
                    <bool>true</bool>
@@ -1089,7 +1093,7 @@
                   </property>
                   <property name="icon">
                    <iconset>
-                    <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+                    <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
                   </property>
                   <property name="iconSize">
                    <size>
@@ -1194,7 +1198,7 @@
                    <string notr="true">font: 18pt;</string>
                   </property>
                   <property name="text">
-                   <string>prefer mz threshold</string>
+                   <string>Prefer m/Z threshold</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -1223,7 +1227,7 @@
                   </property>
                   <property name="icon">
                    <iconset>
-                    <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+                    <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
                   </property>
                   <property name="iconSize">
                    <size>
@@ -1320,13 +1324,13 @@
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
-                    <height>50</height>
+                    <height>80</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
                     <width>16777215</width>
-                    <height>50</height>
+                    <height>80</height>
                    </size>
                   </property>
                   <property name="font">
@@ -1341,7 +1345,7 @@
                    <string notr="true">font: 18pt;</string>
                   </property>
                   <property name="text">
-                   <string>similarity threshold</string>
+                   <string>Similarity score threshold</string>
                   </property>
                   <property name="wordWrap">
                    <bool>true</bool>
@@ -1367,7 +1371,7 @@
                   </property>
                   <property name="icon">
                    <iconset>
-                    <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+                    <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
                   </property>
                   <property name="iconSize">
                    <size>
@@ -1470,10 +1474,10 @@
           <string notr="true">font: 18pt;</string>
          </property>
          <property name="text">
-          <string>SIM分段参数</string>
+          <string>SIM segmentation parameters</string>
          </property>
          <property name="wordWrap">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -1493,7 +1497,7 @@
            <widget class="QLabel" name="label_12">
             <property name="maximumSize">
              <size>
-              <width>100</width>
+              <width>150</width>
               <height>16777215</height>
              </size>
             </property>
@@ -1509,7 +1513,10 @@
              <string notr="true">font: 18pt;</string>
             </property>
             <property name="text">
-             <string>最多段数</string>
+             <string>Maximum SIM segments</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -1557,7 +1564,7 @@
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+              <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -1586,7 +1593,7 @@
            <widget class="QLabel" name="label_13">
             <property name="maximumSize">
              <size>
-              <width>100</width>
+              <width>150</width>
               <height>16777215</height>
              </size>
             </property>
@@ -1602,7 +1609,7 @@
              <string notr="true">font: 18pt;</string>
             </property>
             <property name="text">
-             <string>最小驻留时间</string>
+             <string>Minimum dwell time(ms)</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
@@ -1656,7 +1663,7 @@
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+              <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -1685,7 +1692,7 @@
            <widget class="QLabel" name="label_14">
             <property name="maximumSize">
              <size>
-              <width>100</width>
+              <width>150</width>
               <height>16777215</height>
              </size>
             </property>
@@ -1701,7 +1708,7 @@
              <string notr="true">font: 18pt;</string>
             </property>
             <property name="text">
-             <string>最少打点次数</string>
+             <string>Set number of data points per second</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
@@ -1755,7 +1762,7 @@
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+              <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -1854,7 +1861,7 @@
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+              <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -1885,10 +1892,16 @@
           <item row="0" column="0">
            <widget class="QCheckBox" name="checkBox_2">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>70</height>
+             </size>
             </property>
             <property name="maximumSize">
              <size>
@@ -1908,7 +1921,8 @@
              <string notr="true">font: 18pt;</string>
             </property>
             <property name="text">
-             <string>是否导出为安捷伦方法</string>
+             <string>Export to Agilent acquisition 
+method(xml format file)</string>
             </property>
             <property name="checked">
              <bool>false</bool>
@@ -1937,7 +1951,7 @@
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+              <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -2012,7 +2026,7 @@
              <string notr="true">font: 18pt;</string>
             </property>
             <property name="text">
-             <string>选择输出文件夹</string>
+             <string>Set export path</string>
             </property>
             <property name="scaledContents">
              <bool>false</bool>
@@ -2032,7 +2046,7 @@
             </property>
             <item>
              <property name="text">
-              <string>已选择的输出文件夹：</string>
+              <string>Selected output folder:</string>
              </property>
             </item>
            </widget>
@@ -2100,7 +2114,7 @@
              <string notr="true">font: 18pt;</string>
             </property>
             <property name="text">
-             <string>导入MSP库</string>
+             <string>Import MSP library</string>
             </property>
             <property name="scaledContents">
              <bool>false</bool>
@@ -2120,7 +2134,7 @@
             </property>
             <item>
              <property name="text">
-              <string>已导入的msp库：</string>
+              <string>Imported MSP library:</string>
              </property>
             </item>
            </widget>
@@ -2168,6 +2182,31 @@
           <enum>QFrame::Raised</enum>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
+          <item row="1" column="0" colspan="4" alignment="Qt::AlignHCenter">
+           <widget class="QPushButton" name="pushButton_3">
+            <property name="minimumSize">
+             <size>
+              <width>200</width>
+              <height>35</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>35</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">font: 16pt;</string>
+            </property>
+            <property name="text">
+             <string>Compound List</string>
+            </property>
+            <property name="flat">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="0">
            <widget class="QCheckBox" name="checkBox">
             <property name="sizePolicy">
@@ -2180,7 +2219,7 @@
              <string notr="true">font: 18pt;</string>
             </property>
             <property name="text">
-             <string>是否导入物质名列表</string>
+             <string>Set compound list</string>
             </property>
            </widget>
           </item>
@@ -2203,7 +2242,7 @@
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+              <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -2211,6 +2250,18 @@
               <height>20</height>
              </size>
             </property>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="4">
+           <widget class="QListWidget" name="listWidget_3">
+            <property name="styleSheet">
+             <string notr="true">font: 14pt;</string>
+            </property>
+            <item>
+             <property name="text">
+              <string>Imported compound  list file:</string>
+             </property>
+            </item>
            </widget>
           </item>
           <item row="0" column="2">
@@ -2230,43 +2281,6 @@
             <property name="text">
              <string>Demo</string>
             </property>
-           </widget>
-          </item>
-          <item row="1" column="0" colspan="3" alignment="Qt::AlignHCenter">
-           <widget class="QPushButton" name="pushButton_3">
-            <property name="minimumSize">
-             <size>
-              <width>200</width>
-              <height>35</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>200</width>
-              <height>35</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">font: 16pt;</string>
-            </property>
-            <property name="text">
-             <string>物质名列表</string>
-            </property>
-            <property name="flat">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0" colspan="3">
-           <widget class="QListWidget" name="listWidget_3">
-            <property name="styleSheet">
-             <string notr="true">font: 14pt;</string>
-            </property>
-            <item>
-             <property name="text">
-              <string>已导入的物质名列表文件：</string>
-             </property>
-            </item>
            </widget>
           </item>
          </layout>
@@ -2313,7 +2327,7 @@
              <string notr="true">font: 18pt;</string>
             </property>
             <property name="text">
-             <string>导入RT文件</string>
+             <string>Import RT list</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -2364,7 +2378,7 @@
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>C:/Users/86724/Desktop/R-C.jpg</normaloff>C:/Users/86724/Desktop/R-C.jpg</iconset>
+              <normaloff>../Combine/R-C.png</normaloff>../Combine/R-C.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -2400,7 +2414,7 @@
             </property>
             <item>
              <property name="text">
-              <string>已导入的RT文件：</string>
+              <string>Imported RT file:</string>
              </property>
             </item>
            </widget>
@@ -2433,8 +2447,8 @@
    <slot>open1()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>274</x>
-     <y>77</y>
+     <x>376</x>
+     <y>86</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -2513,7 +2527,7 @@
    <slot>ionmax()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>793</x>
+     <x>777</x>
      <y>786</y>
     </hint>
     <hint type="destinationlabel">
@@ -2529,8 +2543,8 @@
    <slot>ionnum()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>793</x>
-     <y>626</y>
+     <x>777</x>
+     <y>608</y>
     </hint>
     <hint type="destinationlabel">
      <x>639</x>
@@ -2609,8 +2623,8 @@
    <slot>maxrt()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>612</x>
-     <y>321</y>
+     <x>604</x>
+     <y>250</y>
     </hint>
     <hint type="destinationlabel">
      <x>498</x>
@@ -2625,8 +2639,8 @@
    <slot>rtwindow()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>814</x>
-     <y>321</y>
+     <x>793</x>
+     <y>250</y>
     </hint>
     <hint type="destinationlabel">
      <x>374</x>
@@ -2657,7 +2671,7 @@
    <slot>simionmincount()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1155</x>
+     <x>1149</x>
      <y>614</y>
     </hint>
     <hint type="destinationlabel">
@@ -2673,8 +2687,8 @@
    <slot>mzmin()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>554</x>
-     <y>141</y>
+     <x>602</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>536</x>
@@ -2689,8 +2703,8 @@
    <slot>mzmax()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>762</x>
-     <y>141</y>
+     <x>763</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>708</x>
@@ -2705,8 +2719,8 @@
    <slot>get_prefer_mz_threshold()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>591</x>
-     <y>473</y>
+     <x>588</x>
+     <y>430</y>
     </hint>
     <hint type="destinationlabel">
      <x>395</x>
@@ -2721,8 +2735,8 @@
    <slot>get_similarity_threshold()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>793</x>
-     <y>473</y>
+     <x>777</x>
+     <y>430</y>
     </hint>
     <hint type="destinationlabel">
      <x>675</x>
@@ -2737,8 +2751,8 @@
    <slot>get_fr_factor()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>591</x>
-     <y>626</y>
+     <x>588</x>
+     <y>608</y>
     </hint>
     <hint type="destinationlabel">
      <x>504</x>
@@ -2753,7 +2767,7 @@
    <slot>get_solvent_delay()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>591</x>
+     <x>588</x>
      <y>786</y>
     </hint>
     <hint type="destinationlabel">
@@ -2801,8 +2815,8 @@
    <slot>tooltip1()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>291</x>
-     <y>275</y>
+     <x>315</x>
+     <y>285</y>
     </hint>
     <hint type="destinationlabel">
      <x>298</x>
@@ -2817,8 +2831,8 @@
    <slot>tooltip2()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>298</x>
-     <y>468</y>
+     <x>297</x>
+     <y>473</y>
     </hint>
     <hint type="destinationlabel">
      <x>-207</x>
@@ -2833,8 +2847,8 @@
    <slot>tooltip3()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>625</x>
-     <y>255</y>
+     <x>612</x>
+     <y>200</y>
     </hint>
     <hint type="destinationlabel">
      <x>630</x>
@@ -2849,8 +2863,8 @@
    <slot>tooltip4()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>804</x>
-     <y>256</y>
+     <x>796</x>
+     <y>200</y>
     </hint>
     <hint type="destinationlabel">
      <x>839</x>
@@ -2865,8 +2879,8 @@
    <slot>tooltip5()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>620</x>
-     <y>412</y>
+     <x>610</x>
+     <y>355</y>
     </hint>
     <hint type="destinationlabel">
      <x>523</x>
@@ -2881,8 +2895,8 @@
    <slot>tooltip6()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>813</x>
-     <y>411</y>
+     <x>800</x>
+     <y>355</y>
     </hint>
     <hint type="destinationlabel">
      <x>850</x>
@@ -2897,8 +2911,8 @@
    <slot>tooltip7()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>605</x>
-     <y>561</y>
+     <x>599</x>
+     <y>534</y>
     </hint>
     <hint type="destinationlabel">
      <x>378</x>
@@ -2913,8 +2927,8 @@
    <slot>tooltip9()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>818</x>
-     <y>564</y>
+     <x>800</x>
+     <y>534</y>
     </hint>
     <hint type="destinationlabel">
      <x>468</x>
@@ -2929,8 +2943,8 @@
    <slot>tooltip10()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>822</x>
-     <y>721</y>
+     <x>800</x>
+     <y>712</y>
     </hint>
     <hint type="destinationlabel">
      <x>897</x>
@@ -2945,8 +2959,8 @@
    <slot>tooltip11()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1207</x>
-     <y>179</y>
+     <x>1228</x>
+     <y>190</y>
     </hint>
     <hint type="destinationlabel">
      <x>1180</x>
@@ -2961,8 +2975,8 @@
    <slot>tooltip12()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1206</x>
-     <y>313</y>
+     <x>1228</x>
+     <y>330</y>
     </hint>
     <hint type="destinationlabel">
      <x>1409</x>
@@ -3009,8 +3023,8 @@
    <slot>tooltip8()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1222</x>
-     <y>745</y>
+     <x>1256</x>
+     <y>748</y>
     </hint>
     <hint type="destinationlabel">
      <x>1540</x>

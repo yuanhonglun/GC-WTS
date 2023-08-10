@@ -7,7 +7,7 @@ from method import Ui_MainWindow
 from get_collect_method_final import GetMethod
 from qt_material import apply_stylesheet
 import pandas as pd
-
+import images_rc
 
 class WorkerThread(QThread):
     finished = pyqtSignal(int)
@@ -275,7 +275,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, GetMethod):  # 继承 QMainWindow
             QMessageBox.about(
                 None,
                 'Help',
-                '一个RT示例文件存储在软件同目录下')
+                'An RT sample file has been stored in the same directory as the software')
         except:
             pass
 
@@ -288,7 +288,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, GetMethod):  # 继承 QMainWindow
             QMessageBox.about(
                 None,
                 'Help',
-                '一个namelist示例文件存储在软件同目录下')
+                'An compound list file has been stored in the same directory as the software')
         except:
             pass
 
