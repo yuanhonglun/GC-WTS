@@ -11,7 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>DataAnalyzer-WTS</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>icon.png</normaloff>icon.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_3" columnstretch="1,1">
@@ -53,12 +57,12 @@
             </property>
             <item>
              <property name="text">
-              <string>Choose RT(s)</string>
+              <string>s</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Choose RT(min)</string>
+              <string>min</string>
              </property>
             </item>
            </widget>
@@ -120,6 +124,9 @@ peak group:</string>
            <widget class="QTableWidget" name="tableWidget">
             <property name="styleSheet">
              <string notr="true"/>
+            </property>
+            <property name="dragEnabled">
+             <bool>true</bool>
             </property>
             <attribute name="horizontalHeaderCascadingSectionResizes">
              <bool>false</bool>

@@ -15,6 +15,9 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1064, 811)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        MainWindow.setWindowIcon(icon)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout_3 = QtWidgets.QGridLayout(self.centralwidget)
@@ -69,6 +72,7 @@ class Ui_MainWindow(object):
         self.gridLayout_4.setObjectName("gridLayout_4")
         self.tableWidget = QtWidgets.QTableWidget(self.frame_4)
         self.tableWidget.setStyleSheet("")
+        self.tableWidget.setDragEnabled(True)
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(0)
         self.tableWidget.setRowCount(0)
@@ -185,10 +189,10 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "DataAnalyzer-WTS"))
         self.label.setText(_translate("MainWindow", "RT unit:"))
-        self.comboBox_2.setItemText(0, _translate("MainWindow", "Choose RT(s)"))
-        self.comboBox_2.setItemText(1, _translate("MainWindow", "Choose RT(min)"))
+        self.comboBox_2.setItemText(0, _translate("MainWindow", "s"))
+        self.comboBox_2.setItemText(1, _translate("MainWindow", "min"))
         self.label_2.setText(_translate("MainWindow", "Only show identified\n"
 "peak group:"))
         self.label_3.setText(_translate("MainWindow", "Peak group ions number filter:"))

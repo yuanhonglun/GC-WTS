@@ -1,6 +1,6 @@
 import io
 import os
-
+import images_rc
 from PyQt5.QtCore import pyqtSignal, QThread
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 import pickle
@@ -17,7 +17,7 @@ from pyecharts.charts import Bar, Line, Grid
 from pyecharts import options as opts
 from Wizard import GoWizard
 from core0723 import DataAnalysis
-import images_rc
+
 
 
 class WorkerThread(QThread):
@@ -396,6 +396,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
                 self.mz = eval(all_match.loc[best_match_name.split("_")[0], "mz"])
                 self.intensity_s = eval(all_match.loc[best_match_name.split("_")[0], "intensity_s"])
                 self.intensity_l = eval(all_match.loc[best_match_name.split("_")[0], "intensity_l"])
+                self.mz_direct = eval(all_match.loc[best_match_name.split("_")[0], "mz_direct"])
                 self.intensity_s_direct = eval(all_match.loc[best_match_name.split("_")[0], "intensity_s_direct"])
                 self.intensity_l_direct = eval(all_match.loc[best_match_name.split("_")[0], "intensity_l_direct"])
                 self.draw_ms_picture(self.mz, self.intensity_s, self.intensity_l, best_match_name)
@@ -405,6 +406,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
                     self.mz = eval(all_match.loc[best_match_name, "mz"])
                     self.intensity_s = eval(all_match.loc[best_match_name, "intensity_s"])
                     self.intensity_l = eval(all_match.loc[best_match_name, "intensity_l"])
+                    self.mz_direct = eval(all_match.loc[best_match_name.split("_")[0], "mz_direct"])
                     self.intensity_s_direct = eval(all_match.loc[best_match_name.split("_")[0], "intensity_s_direct"])
                     self.intensity_l_direct = eval(all_match.loc[best_match_name.split("_")[0], "intensity_l_direct"])
                     self.draw_ms_picture(self.mz, self.intensity_s, self.intensity_l, best_match_name)
@@ -416,7 +418,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
     def ischange(self, bool):
         if bool:
             self.radioButton_2.setText("Spectra of apex point")
-            self.draw_ms_picture(self.mz, self.intensity_s_direct, self.intensity_l_direct, self.click_match)
+            self.draw_ms_picture(self.mz_direct, self.intensity_s_direct, self.intensity_l_direct, self.click_match)
         else:
             self.radioButton_2.setText("Spectra of peak group")
             self.draw_ms_picture(self.mz, self.intensity_s, self.intensity_l, self.click_match)
@@ -523,7 +525,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
         if line.empty == False:
             if line["All_match"].iloc[0].empty == False:
                 # all_match_df = line["All_match"].iloc[0].loc[:, ["Score", "Reference_RT", "Delta_RT"]].reset_index()
-                all_match_df = line["All_match"].iloc[0].iloc[:, [0, 6, 7]].reset_index()
+                all_match_df = line["All_match"].iloc[0].iloc[:, [0, 7, 8]].reset_index()
                 # print("all_match_df***************", all_match_df)
 
                 # 保留两位小数

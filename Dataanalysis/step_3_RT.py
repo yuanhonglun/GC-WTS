@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form_RT(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(857, 654)
+        Form.resize(934, 654)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         Form.setWindowIcon(icon)
@@ -290,9 +290,7 @@ class Ui_Form_RT(object):
         self.pushButton_11.setMinimumSize(QtCore.QSize(20, 20))
         self.pushButton_11.setMaximumSize(QtCore.QSize(20, 20))
         self.pushButton_11.setText("")
-        icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("../Combine/R-C.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_11.setIcon(icon2)
+        self.pushButton_11.setIcon(icon1)
         self.pushButton_11.setIconSize(QtCore.QSize(20, 20))
         self.pushButton_11.setObjectName("pushButton_11")
         self.gridLayout_2.addWidget(self.pushButton_11, 1, 2, 1, 1)
@@ -352,7 +350,7 @@ class Ui_Form_RT(object):
         self.pushButton_13.setObjectName("pushButton_13")
         self.gridLayout_2.addWidget(self.pushButton_13, 3, 2, 1, 1)
         self.label_16 = QtWidgets.QLabel(self.frame_4)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.label_16.sizePolicy().hasHeightForWidth())
@@ -480,7 +478,7 @@ class Ui_Form_RT(object):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "DataAnalyzer-WTS"))
         self.label.setText(_translate("Form", "Qualitative analysis"))
-        self.label_7.setText(_translate("Form", "RI window:"))
+        self.label_7.setText(_translate("Form", "RT window:"))
         self.doubleSpinBox_12.setPrefix(_translate("Form", "±"))
         self.doubleSpinBox_12.setSuffix(_translate("Form", "min"))
         self.label_8.setText(_translate("Form", "Level factor:"))

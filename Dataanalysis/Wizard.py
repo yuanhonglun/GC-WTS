@@ -13,7 +13,7 @@ from step_3 import Ui_Form_None
 from step_3_RT import Ui_Form_RT
 from step_3_RI import Ui_Form_RI
 import images_rc
-
+import pandas as pd
 
 class WizardPage1(QWizardPage, Ui_Form_Step1):
     def __init__(self, parent=None):

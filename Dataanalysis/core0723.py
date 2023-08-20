@@ -894,7 +894,7 @@ class DataAnalysis():
         #         peak_group_df.loc[len(peak_group_df)] = matched_wave.iloc[n]
         #matched_wave.to_csv("C:/Users/86724/Desktop/matcher_wave_1.csv")
         if group_method == 0:
-            matched_wave, peak_group_df = self.MSDIAL(matched_wave, wid, sigma)
+            matched_wave, peak_group_df = self.MSDIAL(matched_wave, wid, sigma, peak_dic, decon_peak_dic)
         elif group_method == 1:
             matched_wave, peak_group_df = self.AMDIS(matched_wave)
         #matched_wave.to_csv("C:/Users/86724/Desktop/matcher_wave_2.csv")
@@ -1015,7 +1015,7 @@ class DataAnalysis():
                 peak_group_df.loc[i, "Fiehn_RI"] = self.RT_to_Fiehn_RI_transform(rt_sample, standard_df)
         return peak_group_df
 
-    def MSDIAL(self, matched_wave, wid, sigma):
+    def MSDIAL(self, matched_wave, wid, sigma, peak_dic, decon_peak_dic):
         """
         MSDIAL找物质
         """
@@ -1037,9 +1037,20 @@ class DataAnalysis():
         for n in range(1, matched_wave.shape[0] - 1):
             if matched_wave.iloc[n, 5] > 0 and matched_wave.iloc[n, 5] - matched_wave.iloc[n - 1, 5] > 0 and \
                     matched_wave.iloc[n, 5] - matched_wave.iloc[n + 1, 5] > 0:
-                peak_group_df.loc[len(peak_group_df)] = matched_wave.iloc[n]
-        peak_group_df = peak_group_df.drop(peak_group_df[peak_group_df['SV'] == 0].index)
+                # n为peak gorup顶点所在行
+                n_left = n
+                n_right = n
+                while matched_wave.iloc[n_right, 5] >= matched_wave.iloc[n_right + 1, 5]:
+                    n_right += 1
+                while matched_wave.iloc[n_left, 5] >= matched_wave.iloc[n_left - 1, 5]:
+                    n_left -= 1
+                tmp_ions_df = pd.concat(matched_wave.iloc[n_left:n_right + 1, [4]]["ions"].tolist())
 
+                # matched_wave.iloc[n_left:n_right + 1, 4] = [pd.DataFrame() for i in range(n_right + 1 - n_left)]
+                matched_wave.at[matched_wave.index[n], 'ions'] = tmp_ions_df
+                peak_group_df.loc[len(peak_group_df)] = matched_wave.iloc[n]
+        #matched_wave.to_csv(r"C:\Users\86724\Desktop\matcher_wave_test1.csv")
+        peak_group_df = peak_group_df.drop(peak_group_df[peak_group_df['SV'] == 0].index)
 
         return matched_wave, peak_group_df
 
@@ -1783,6 +1794,8 @@ class DataAnalysis():
                             list(direct_compare_df_1['intensity_s_direct']))
                         results_df.loc[group_rt_s, "All_match"].loc[compound, "intensity_l_direct"] = str(
                             list(direct_compare_df_1['intensity_l_direct']))
+                        results_df.loc[group_rt_s, "All_match"].loc[compound, "mz_direct"] = str(list(direct_compare_df_1.index))
+
                         if retention_score_mode == "RI":
                             if 'Reference_RI' in score_df.columns:
                                 results_df.loc[group_rt_s, "All_match"].at[compound, "Reference_RI"] = score_df.loc[
@@ -2376,70 +2389,70 @@ class DataAnalysis():
         return total_result_pkl
 
 
-a = DataAnalysis()
-total_result_pkl = ''
-peak_group_pkl = ''
-filename = 'D:/work/GC方法/GC可视化/work/DataAnalysis/tomato0418.mzML'
-smooth_value = 5
-peak_filt_value = 10
-group_peak_factor = 1
-msp = 'D:/work/GC方法/GC可视化/work/DataAnalysis/Remove_Duplicates.msp'
-chooseinfo = "RT"
-RTRIinfo= 'D:/work/GC方法/GC可视化/work/DataAnalysis/New_RT_list.csv'
+# a = DataAnalysis()
+# total_result_pkl = ''
+# peak_group_pkl = ''
+# filename = 'D:/work/GC方法/GC可视化/work/DataAnalysis/tomato0418.mzML'
+# smooth_value = 5
+# peak_filt_value = 10
+# group_peak_factor = 1
+# msp = 'D:/work/GC方法/GC可视化/work/DataAnalysis/Remove_Duplicates.msp'
+# chooseinfo = "RT"
+# RTRIinfo= 'D:/work/GC方法/GC可视化/work/DataAnalysis/New_RT_list.csv'
+#
+#
+#
 
 
 
-
-
-
-page3none_match_weight = 0.3
-page3none_r_match_weight = 0.7
-page3none_group_weight = 0.2
-page3none_direct_weight = 0.8
-page3none_group_minimum_number_of_ions = 1
-page3none_sim_threshold = 0.3
-
-page3RT_search_wid = 1.5
-page3RT_match_weight = 0.3
-page3RT_r_match_weight = 0.7
-page3RT_group_weight = 0.2
-page3RT_direct_weight = 0.8
-page3RT_group_minimum_number_of_ions = 1
-page3RT_ri_participate = True
-page3RT_sim_threshold = 0.3
-page3RT_window = 0.30
-page3RT_level_factor = 0.05
-page3RT_max_penalty = 0.1
-page3RT_no_info_penalty = 0.05
-
-
-
-page3RI_search_wid = 150
-page3RI_match_weight = 0.7
-page3RI_r_match_weight = 0.3
-page3RI_group_weight = 0.2
-page3RI_direct_weight = 0.8
-page3RI_group_minimum_number_of_ions = 1
-page3RI_RI_max = 3000
-page3RI_ri_participate = True
-page3RI_sim_threshold = 0.4
-page3RI_window = 10
-page3RI_window_scale = 2
-page3RI_level_factor = 0.2
-page3RI_max_penalty = 0.4
-page3RI_no_info_penalty = 0.3
-page3RI_inaccurate_ri_threshold = 800
-page3RI_inaccurate_ri_level_factor = 0.01
-
-a.Main(total_result_pkl, peak_group_pkl, filename, smooth_value, peak_filt_value, group_peak_factor, msp, chooseinfo, RTRIinfo,
-             page3none_match_weight, page3none_r_match_weight, page3none_group_weight, page3none_direct_weight, page3none_group_minimum_number_of_ions, page3none_sim_threshold, page3RT_search_wid,
-       page3RT_match_weight, page3RT_r_match_weight, page3RT_group_weight, page3RT_direct_weight,
-       page3RT_group_minimum_number_of_ions, page3RT_ri_participate, page3RT_sim_threshold, page3RT_window,
-       page3RT_level_factor, page3RT_max_penalty, page3RT_no_info_penalty,
-       page3RI_search_wid, page3RI_match_weight,
-       page3RI_r_match_weight, page3RI_group_weight, page3RI_direct_weight, page3RI_group_minimum_number_of_ions,
-       page3RI_RI_max, page3RI_ri_participate, page3RI_sim_threshold, page3RI_window,
-       page3RI_window_scale, page3RI_level_factor, page3RI_max_penalty, page3RI_no_info_penalty,
-       page3RI_inaccurate_ri_threshold, page3RI_inaccurate_ri_level_factor
-       )
+# page3none_match_weight = 0.3
+# page3none_r_match_weight = 0.7
+# page3none_group_weight = 0.2
+# page3none_direct_weight = 0.8
+# page3none_group_minimum_number_of_ions = 1
+# page3none_sim_threshold = 0.3
+#
+# page3RT_search_wid = 1.5
+# page3RT_match_weight = 0.3
+# page3RT_r_match_weight = 0.7
+# page3RT_group_weight = 0.2
+# page3RT_direct_weight = 0.8
+# page3RT_group_minimum_number_of_ions = 1
+# page3RT_ri_participate = True
+# page3RT_sim_threshold = 0.3
+# page3RT_window = 0.30
+# page3RT_level_factor = 0.05
+# page3RT_max_penalty = 0.1
+# page3RT_no_info_penalty = 0.05
+#
+#
+#
+# page3RI_search_wid = 150
+# page3RI_match_weight = 0.7
+# page3RI_r_match_weight = 0.3
+# page3RI_group_weight = 0.2
+# page3RI_direct_weight = 0.8
+# page3RI_group_minimum_number_of_ions = 1
+# page3RI_RI_max = 3000
+# page3RI_ri_participate = True
+# page3RI_sim_threshold = 0.4
+# page3RI_window = 10
+# page3RI_window_scale = 2
+# page3RI_level_factor = 0.2
+# page3RI_max_penalty = 0.4
+# page3RI_no_info_penalty = 0.3
+# page3RI_inaccurate_ri_threshold = 800
+# page3RI_inaccurate_ri_level_factor = 0.01
+#
+# t = a.Main(total_result_pkl, peak_group_pkl, filename, smooth_value, peak_filt_value, group_peak_factor, msp, chooseinfo, RTRIinfo,
+#              page3none_match_weight, page3none_r_match_weight, page3none_group_weight, page3none_direct_weight, page3none_group_minimum_number_of_ions, page3none_sim_threshold, page3RT_search_wid,
+#        page3RT_match_weight, page3RT_r_match_weight, page3RT_group_weight, page3RT_direct_weight,
+#        page3RT_group_minimum_number_of_ions, page3RT_ri_participate, page3RT_sim_threshold, page3RT_window,
+#        page3RT_level_factor, page3RT_max_penalty, page3RT_no_info_penalty,
+#        page3RI_search_wid, page3RI_match_weight,
+#        page3RI_r_match_weight, page3RI_group_weight, page3RI_direct_weight, page3RI_group_minimum_number_of_ions,
+#        page3RI_RI_max, page3RI_ri_participate, page3RI_sim_threshold, page3RI_window,
+#        page3RI_window_scale, page3RI_level_factor, page3RI_max_penalty, page3RI_no_info_penalty,
+#        page3RI_inaccurate_ri_threshold, page3RI_inaccurate_ri_level_factor
+#        )
 
