@@ -2,8 +2,9 @@ import os
 import sys
 
 import pandas as pd
-from PyQt5.QtCore import pyqtSignal, QThread
-from PyQt5.QtWidgets import QMainWindow, QFileDialog, QMessageBox, QApplication
+from PyQt5.QtCore import pyqtSignal, QThread, Qt
+from PyQt5.QtWidgets import QMainWindow, QFileDialog, QMessageBox, QApplication, QDesktopWidget
+from PyQt5.QtGui import QGuiApplication
 from combine import Ui_MainWindow
 from combine_rt_msp_final import CombineRtMsp
 from qt_material import apply_stylesheet
@@ -14,7 +15,8 @@ class WorkerThread(QThread):
     finished = pyqtSignal(int)
 
     def __init__(self, all_msp_path, all_rt_path, RI_path, RIalertmin, RIalertmax,
-                 RI_threshold_value, ri_window_scale, RTmin, RTmax, RImin, RImax, check_RT, check_latin, out_path):
+                 RI_threshold_value, ri_window_scale, RTmin, RTmax, RImin, RImax, check_RT, check_latin, out_path,
+                 use_unknown, unknow_msp_path, unknow_rt_path, rt_window_unknown, similarity_score_threshold_unknown):
         super().__init__()
         self.all_msp_path = all_msp_path
         self.all_rt_path = all_rt_path
@@ -30,18 +32,29 @@ class WorkerThread(QThread):
         self.check_RT = check_RT
         self.check_latin = check_latin
         self.out_path = out_path
+        self.use_unknown = use_unknown
+        self.unknow_msp_path = unknow_msp_path
+        self.unknow_rt_path = unknow_rt_path
+        self.rt_window_unknown = rt_window_unknown
+        self.similarity_score_threshold_unknown = similarity_score_threshold_unknown
 
     def run(self):
         mymainwindow = MyMainWindow()
 
-        try:
-            mymainwindow.Main(self.all_msp_path, self.all_rt_path, self.RI_path, self.RIalertmin, self.RIalertmax,
+        # try:
+        #     mymainwindow.Main(self.all_msp_path, self.all_rt_path, self.RI_path, self.RIalertmin, self.RIalertmax,
+        #                       self.RI_threshold_value, self.ri_window_scale,
+        #                       self.RTmin, self.RTmax, self.RImin, self.RImax, self.check_RT, self.check_latin,
+        #                       self.out_path,self.use_unknown, self.unknow_msp_path, self.unknow_rt_path, self.rt_window_unknown, self.similarity_score_threshold_unknown)
+        #     self.finished.emit(0)
+        # except:
+        #     self.finished.emit(1)
+
+        mymainwindow.Main(self.all_msp_path, self.all_rt_path, self.RI_path, self.RIalertmin, self.RIalertmax,
                               self.RI_threshold_value, self.ri_window_scale,
                               self.RTmin, self.RTmax, self.RImin, self.RImax, self.check_RT, self.check_latin,
-                              self.out_path)
-            self.finished.emit(0)
-        except:
-            self.finished.emit(1)
+                              self.out_path,self.use_unknown, self.unknow_msp_path, self.unknow_rt_path, self.rt_window_unknown, self.similarity_score_threshold_unknown)
+        self.finished.emit(0)
 
 
 class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWindow类和 Ui_MainWindow界面类
@@ -53,6 +66,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWin
         self.progressBar.hide()
         self.frame_5.setHidden(True)
         self.listWidget.setHidden(True)
+        self.label_22.setHidden(True)
+        self.label_21.setHidden(True)
+        self.pushButton_16.setHidden(True)
+        self.pushButton_17.setHidden(True)
+        self.frame_19.setHidden(True)
         self.listWidget.itemDoubleClicked.connect(self.delete_item)
         self.listWidget_2.setHidden(True)
         self.listWidget_2.itemDoubleClicked.connect(self.delete_item_2)
@@ -73,7 +91,10 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWin
         self.RI_threshold_value = 40
         self.check_latin = False
         self.check_RT = False
+        self.use_unknown = False
         self.ri_window_scale = 5
+        self.rt_window_unknown = 2
+        self.similarity_score_threshold_unknown = 0.85
 
     def open_file1(self):
         '''
@@ -104,6 +125,37 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWin
         self.RI_path, _ = QFileDialog.getOpenFileName(self, 'Open RI File', './', 'All files (*.csv)')
         self.listWidget_3.setHidden(False)
         self.listWidget_3.addItem(os.path.basename(self.RI_path))
+
+    def is_use_unknown(self, bool):
+
+        self.use_unknown = bool
+        if self.use_unknown:
+            self.label_22.setHidden(False)
+            self.label_21.setHidden(False)
+            self.pushButton_16.setHidden(False)
+            self.pushButton_17.setHidden(False)
+            self.frame_19.setHidden(False)
+        else:
+            self.label_22.setHidden(True)
+            self.label_21.setHidden(True)
+            self.pushButton_16.setHidden(True)
+            self.pushButton_17.setHidden(True)
+            self.frame_19.setHidden(True)
+
+
+
+    def open_unknown_rt(self):
+        self.unknow_rt_path, _ = QFileDialog.getOpenFileName(self, 'Open RT File', './', 'All files (*.xlsx)')
+
+    def open_unknown_msp(self):
+        self.unknow_msp_path, _ = QFileDialog.getOpenFileName(self, 'Open MSP File', './', 'MSP files (*.msp)')
+
+    def rt_window_unknown(self, value):
+        self.rt_window_unknown = value
+
+    def similarity_score_threshold_unknown(self, value):
+        self.similarity_score_threshold_unknown = value
+
 
     def check1(self, bool):
         '''
@@ -249,6 +301,18 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWin
             'Help',
             'e. g. “.beta.” to “beta”       ')
 
+    def tooltip9(self):
+        QMessageBox.about(
+            None,
+            'Help',
+            'Target compound are compared for similarity with substances within the user-defined RT window when selecting qualitative ions      ')
+
+    def tooltip10(self):
+        QMessageBox.about(
+            None,
+            'Help',
+            'two spectra are considered distinguishable when similarity score below the threshold. default: 0.85')
+
     def run(self):
         self.frame_5.setHidden(False)
         self.progressBar.show()
@@ -257,8 +321,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWin
 
         self.worker_thread = WorkerThread(self.msp_input, self.rt_input, self.RI_path, self.RIalertmin, self.RIalertmax,
                                           self.RI_threshold_value, self.ri_window_scale, self.RTmin,
-                                          self.RTmax, self.RImin, self.RImax, self.check_RT, self.check_latin,
-                                          self.out_path)
+                                          self.RTmax, self.RImin, self.RImax, self.check_RT, self.check_latin,self.out_path,
+                                          self.use_unknown, self.unknow_msp_path, self.unknow_rt_path, self.rt_window_unknown, self.similarity_score_threshold_unknown)
         self.worker_thread.finished.connect(self.hide_progress_bar)
 
         self.worker_thread.start()
@@ -273,10 +337,20 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWin
         elif run_stat == 1:
             QMessageBox.critical(self, 'Error', 'Run Failed!')
 
+    def center(self):  # 定义一个函数使得窗口居中显示
+        # 获取屏幕坐标系
+        screen = QDesktopWidget().screenGeometry()
+        # 获取窗口坐标系
+        size = self.geometry()
+        newLeft = (screen.width() - size.width()) / 2
+        newTop = (screen.height() - size.height()) / 2
+        self.move(int(newLeft), int(newTop))
 
 if __name__ == '__main__':
+    QGuiApplication.setAttribute(Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
     app = QApplication(sys.argv)  # 在 QApplication 方法中使用，创建应用程序对象
     myWin = MyMainWindow()  # 实例化 MyMainWindow 类，创建主窗口
+    myWin.center()
     apply_stylesheet(app, theme='light_cyan_500.xml', invert_secondary=True)
     myWin.show()  # 在桌面显示控件 myWin
     sys.exit(app.exec_())  # 结束进程，退出程序
