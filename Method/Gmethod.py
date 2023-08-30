@@ -1,13 +1,16 @@
 import os
 import sys
-from PyQt5.QtCore import pyqtSignal, QThread
+
+from PyQt5 import QtCore
+from PyQt5.QtCore import pyqtSignal, QThread, QCoreApplication
 from PyQt5.QtWidgets import QMainWindow, QFileDialog, QMessageBox, QWidget, QTextEdit, QPushButton, QVBoxLayout, \
-    QApplication
+    QApplication, QDesktopWidget
 from method import Ui_MainWindow
 from get_collect_method_final import GetMethod
 from qt_material import apply_stylesheet
 import pandas as pd
 import images_rc
+from PyQt5.QtGui import QGuiApplication
 
 class WorkerThread(QThread):
     finished = pyqtSignal(int)
@@ -381,21 +384,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, GetMethod):  # 继承 QMainWindow
         self.progressBar.show()
 
         self.pushButton_4.setEnabled(False)
-        print("msp_path", self.msp_path)
-        print("rt_data_path", self.rt_data_path)
-        print("set_name_list", self.set_name_list)
-        print("name_list_path", self.name_list_path)
-        print("mz_min", self.mz_min)
-        print("mz_max", self.mz_max)
-        print("outpath", self.outpath)
-        print("rt_window", self.rt_window)
-        print("min_ion_intensity_percent", self.min_ion_intensity_percent)
-        print("min_ion_num", self.min_ion_num)
-        print("retention_time_max", self.retention_time_max)
-        print("sim_sig_max", self.sim_sig_max)
-        print("min_dwell_time", self.min_dwell_time)
-        print("min_point_per_s_limit", self.min_point_per_s_limit)
-        print("convert_to_ag_method", self.convert_to_ag_method)
+
 
         self.worker_thread = WorkerThread(self.msp_path, self.rt_data_path, self.set_name_list, self.name_list_path,
                                           self.mz_min, self.mz_max, self.outpath, self.rt_window,
@@ -421,6 +410,24 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, GetMethod):  # 继承 QMainWindow
         elif run_stat == 1:
             QMessageBox.critical(self, 'Error', 'Run Failed!')
 
+    def center(self):
+        # 获取屏幕的分辨率信息
+        screen = QDesktopWidget().availableGeometry()
+
+        # 获取窗口的大小
+        size = self.geometry()
+
+        # 计算窗口的左上角位置
+        x = (screen.width() - size.width()) // 2
+        y = (screen.height() - size.height()) // 2
+
+        # 如果分辨率太小，窗口显示在左上角
+        if screen.width() < size.width() or screen.height() < size.height():
+            x = 0
+            y = 0
+
+        # 移动窗口到指定位置
+        self.move(x, y)
 
 # class ChildWindow(QWidget):
 #
@@ -448,8 +455,10 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, GetMethod):  # 继承 QMainWindow
 
 
 if __name__ == '__main__':
+    QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
     app = QApplication(sys.argv)  # 在 QApplication 方法中使用，创建应用程序对象
     myWin = MyMainWindow()  # 实例化 MyMainWindow 类，创建主窗口
     apply_stylesheet(app, theme='light_cyan_500.xml', invert_secondary=True)
+    myWin.center()
     myWin.show()  # 在桌面显示控件 myWin
     sys.exit(app.exec_())  # 结束进程，退出程序
