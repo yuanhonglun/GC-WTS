@@ -625,7 +625,7 @@ class CombineRtMsp():
                                                 RI_alert_upper_limit,
                                                 RI_threshold_value, ri_window_scale, RT_lower_limit, RT_upper_limit,
                                                 RI_lower_limit, RI_upper_limit, check_RT)
-            #combine_df.to_excel(out_path + '/New_RT_list.xlsx', index=True)
+            combine_df.to_excel(out_path + '/New_RT_list.xlsx', index=True)
         finally:
             msp.close()
 

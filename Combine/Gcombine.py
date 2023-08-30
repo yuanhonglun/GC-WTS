@@ -2,7 +2,8 @@ import os
 import sys
 
 import pandas as pd
-from PyQt5.QtCore import pyqtSignal, QThread, Qt
+from PyQt5 import QtCore
+from PyQt5.QtCore import pyqtSignal, QThread, Qt, QCoreApplication
 from PyQt5.QtWidgets import QMainWindow, QFileDialog, QMessageBox, QApplication, QDesktopWidget
 from PyQt5.QtGui import QGuiApplication
 from combine import Ui_MainWindow
@@ -51,9 +52,10 @@ class WorkerThread(QThread):
         #     self.finished.emit(1)
 
         mymainwindow.Main(self.all_msp_path, self.all_rt_path, self.RI_path, self.RIalertmin, self.RIalertmax,
-                              self.RI_threshold_value, self.ri_window_scale,
-                              self.RTmin, self.RTmax, self.RImin, self.RImax, self.check_RT, self.check_latin,
-                              self.out_path,self.use_unknown, self.unknow_msp_path, self.unknow_rt_path, self.rt_window_unknown, self.similarity_score_threshold_unknown)
+                          self.RI_threshold_value, self.ri_window_scale,
+                          self.RTmin, self.RTmax, self.RImin, self.RImax, self.check_RT, self.check_latin,
+                          self.out_path, self.use_unknown, self.unknow_msp_path, self.unknow_rt_path,
+                          self.rt_window_unknown, self.similarity_score_threshold_unknown)
         self.finished.emit(0)
 
 
@@ -93,6 +95,10 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWin
         self.check_RT = False
         self.use_unknown = False
         self.ri_window_scale = 5
+        self.rt_window_unknown = 2
+        self.similarity_score_threshold_unknown = 0.85
+        self.unknow_msp_path = ''
+        self.unknow_rt_path = ''
         self.rt_window_unknown = 2
         self.similarity_score_threshold_unknown = 0.85
 
@@ -142,8 +148,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWin
             self.pushButton_17.setHidden(True)
             self.frame_19.setHidden(True)
 
-
-
     def open_unknown_rt(self):
         self.unknow_rt_path, _ = QFileDialog.getOpenFileName(self, 'Open RT File', './', 'All files (*.xlsx)')
 
@@ -155,7 +159,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWin
 
     def similarity_score_threshold_unknown(self, value):
         self.similarity_score_threshold_unknown = value
-
 
     def check1(self, bool):
         '''
@@ -321,8 +324,10 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWin
 
         self.worker_thread = WorkerThread(self.msp_input, self.rt_input, self.RI_path, self.RIalertmin, self.RIalertmax,
                                           self.RI_threshold_value, self.ri_window_scale, self.RTmin,
-                                          self.RTmax, self.RImin, self.RImax, self.check_RT, self.check_latin,self.out_path,
-                                          self.use_unknown, self.unknow_msp_path, self.unknow_rt_path, self.rt_window_unknown, self.similarity_score_threshold_unknown)
+                                          self.RTmax, self.RImin, self.RImax, self.check_RT, self.check_latin,
+                                          self.out_path,
+                                          self.use_unknown, self.unknow_msp_path, self.unknow_rt_path,
+                                          self.rt_window_unknown, self.similarity_score_threshold_unknown)
         self.worker_thread.finished.connect(self.hide_progress_bar)
 
         self.worker_thread.start()
@@ -337,17 +342,28 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWin
         elif run_stat == 1:
             QMessageBox.critical(self, 'Error', 'Run Failed!')
 
-    def center(self):  # 定义一个函数使得窗口居中显示
-        # 获取屏幕坐标系
-        screen = QDesktopWidget().screenGeometry()
-        # 获取窗口坐标系
+    def center(self):
+        # 获取屏幕的分辨率信息
+        screen = QDesktopWidget().availableGeometry()
+
+        # 获取窗口的大小
         size = self.geometry()
-        newLeft = (screen.width() - size.width()) / 2
-        newTop = (screen.height() - size.height()) / 2
-        self.move(int(newLeft), int(newTop))
+        print(screen)
+        # 计算窗口的左上角位置
+        x = (screen.width() - size.width()) // 2
+        y = (screen.height() - size.height()) // 2
+
+        # 如果分辨率太小，窗口显示在左上角
+        if screen.width() < size.width() or screen.height() < size.height():
+            x = 0
+            y = 0
+
+        # 移动窗口到指定位置
+        self.move(x, y)
+
 
 if __name__ == '__main__':
-    QGuiApplication.setAttribute(Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
+    QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
     app = QApplication(sys.argv)  # 在 QApplication 方法中使用，创建应用程序对象
     myWin = MyMainWindow()  # 实例化 MyMainWindow 类，创建主窗口
     myWin.center()

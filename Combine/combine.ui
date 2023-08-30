@@ -18,7 +18,7 @@
     <normaloff>icon.png</normaloff>icon.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
+   <layout class="QGridLayout" name="gridLayout" columnstretch="1,1">
     <item row="0" column="0">
      <widget class="QScrollArea" name="scrollArea">
       <property name="sizePolicy">
@@ -225,7 +225,7 @@
                     <string>Import RT list</string>
                    </property>
                    <property name="alignment">
-                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
                    </property>
                    <property name="wordWrap">
                     <bool>true</bool>
@@ -1075,13 +1075,13 @@
                   <widget class="QDoubleSpinBox" name="doubleSpinBox">
                    <property name="minimumSize">
                     <size>
-                     <width>100</width>
+                     <width>120</width>
                      <height>30</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>100</width>
+                     <width>120</width>
                      <height>30</height>
                     </size>
                    </property>
@@ -1147,13 +1147,13 @@
                   <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
                    <property name="minimumSize">
                     <size>
-                     <width>100</width>
+                     <width>120</width>
                      <height>30</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>100</width>
+                     <width>120</width>
                      <height>30</height>
                     </size>
                    </property>
@@ -1266,13 +1266,13 @@
                   <widget class="QSpinBox" name="spinBox_7">
                    <property name="minimumSize">
                     <size>
-                     <width>100</width>
+                     <width>120</width>
                      <height>30</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>100</width>
+                     <width>120</width>
                      <height>30</height>
                     </size>
                    </property>
@@ -1351,13 +1351,13 @@
                   <widget class="QSpinBox" name="spinBox_8">
                    <property name="minimumSize">
                     <size>
-                     <width>100</width>
+                     <width>120</width>
                      <height>30</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>100</width>
+                     <width>120</width>
                      <height>30</height>
                     </size>
                    </property>
@@ -1413,13 +1413,13 @@
                    <property name="minimumSize">
                     <size>
                      <width>0</width>
-                     <height>30</height>
+                     <height>0</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
                      <width>16777215</width>
-                     <height>30</height>
+                     <height>16777215</height>
                     </size>
                    </property>
                    <property name="font">
@@ -1534,13 +1534,13 @@
                    <property name="minimumSize">
                     <size>
                      <width>0</width>
-                     <height>30</height>
+                     <height>0</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
                      <width>16777215</width>
-                     <height>30</height>
+                     <height>16777215</height>
                     </size>
                    </property>
                    <property name="font">
@@ -1657,13 +1657,13 @@
                   <widget class="QSpinBox" name="spinBox_4">
                    <property name="minimumSize">
                     <size>
-                     <width>100</width>
+                     <width>120</width>
                      <height>30</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>100</width>
+                     <width>120</width>
                      <height>30</height>
                     </size>
                    </property>
@@ -1729,13 +1729,13 @@
                   <widget class="QSpinBox" name="spinBox_3">
                    <property name="minimumSize">
                     <size>
-                     <width>100</width>
+                     <width>120</width>
                      <height>30</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>100</width>
+                     <width>120</width>
                      <height>30</height>
                     </size>
                    </property>
@@ -1847,13 +1847,13 @@
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
-                        <height>50</height>
+                        <height>0</height>
                        </size>
                       </property>
                       <property name="maximumSize">
                        <size>
                         <width>16777215</width>
-                        <height>50</height>
+                        <height>16777215</height>
                        </size>
                       </property>
                       <property name="font">
@@ -1911,13 +1911,13 @@
                   <widget class="QDoubleSpinBox" name="doubleSpinBox_11">
                    <property name="minimumSize">
                     <size>
-                     <width>150</width>
+                     <width>200</width>
                      <height>30</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>150</width>
+                     <width>200</width>
                      <height>30</height>
                     </size>
                    </property>
@@ -1981,13 +1981,13 @@
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
-                        <height>50</height>
+                        <height>0</height>
                        </size>
                       </property>
                       <property name="maximumSize">
                        <size>
                         <width>16777215</width>
-                        <height>50</height>
+                        <height>16777215</height>
                        </size>
                       </property>
                       <property name="font">
@@ -2071,13 +2071,13 @@
                   <widget class="QDoubleSpinBox" name="doubleSpinBox_12">
                    <property name="minimumSize">
                     <size>
-                     <width>100</width>
+                     <width>120</width>
                      <height>30</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>100</width>
+                     <width>120</width>
                      <height>30</height>
                     </size>
                    </property>
@@ -2153,13 +2153,13 @@
                   <widget class="QSpinBox" name="spinBox_5">
                    <property name="minimumSize">
                     <size>
-                     <width>100</width>
+                     <width>120</width>
                      <height>30</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>60</width>
+                     <width>120</width>
                      <height>30</height>
                     </size>
                    </property>
@@ -2209,13 +2209,13 @@
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
-                        <height>50</height>
+                        <height>0</height>
                        </size>
                       </property>
                       <property name="maximumSize">
                        <size>
                         <width>16777215</width>
-                        <height>50</height>
+                        <height>16777215</height>
                        </size>
                       </property>
                       <property name="font">
@@ -2307,13 +2307,13 @@
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
-                        <height>50</height>
+                        <height>0</height>
                        </size>
                       </property>
                       <property name="maximumSize">
                        <size>
                         <width>16777215</width>
-                        <height>50</height>
+                        <height>16777215</height>
                        </size>
                       </property>
                       <property name="font">
@@ -2384,13 +2384,13 @@
                   <widget class="QSpinBox" name="spinBox_6">
                    <property name="minimumSize">
                     <size>
-                     <width>100</width>
+                     <width>120</width>
                      <height>30</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>60</width>
+                     <width>120</width>
                      <height>30</height>
                     </size>
                    </property>
