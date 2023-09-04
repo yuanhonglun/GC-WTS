@@ -12,35 +12,40 @@ import os
 import pymzml
 import gc
 import operator
+from copy import copy
 
 
 class DataAnalysis():
 
-    ##################
-
-    ##################
-    # 本段将目标物RT±0.3 min中目标物的离子提取出来
     def find_nearest(self, array, value):
+        """
+        Find the index of the nearest element to a given value in a sorted array.
+
+        Args:
+            array (numpy.ndarray): The sorted array in which to find the nearest element.
+            value (float): The value to which we want to find the nearest element.
+
+        Returns:
+            int: The index of the nearest element in the array.
+        """
         idx = np.searchsorted(array, value, side="left")
         if idx > 0 and (idx == len(array) or abs(value - array[idx - 1]) < abs(value - array[idx])):
             return idx - 1
         else:
             return idx
 
-    ########
-    # backup0215中第3部分原位置
-    ########
-
-    ##################
-
-    ##################
     def calulate_lwma(self, x, weights, no_smooth_number):
-        '''
-            该函数的作用就是为了解决处理首位点的list_sum问题。由于local_df_padding是在local_df首尾拼接了两个为0的Dataframe，且该Dataframe的index是从0
-            开始。思路就是取每次rolling得到的长度为n的series的index。如n=5，第一个rolling的index即为[0, 1, 899.554, 870.091, 870.628],切片拿到index[0]后
-            可以推算出list_sum的长度
-        '''
+        """
+        Calculate the weighted moving average (LWMA) for a given series 'x' using provided 'weights'.
 
+        Args:
+            x (pandas.Series): The series for which to calculate LWMA.
+            weights (list): The list of weights for the LWMA calculation.
+            no_smooth_number (int): The number of data points for smoothing.
+
+        Returns:
+            float: The calculated LWMA value.
+        """
         if isinstance(x.index[0], str):
             list_sum = sum(weights[no_smooth_number - int(x.index[0]):])
             return np.dot(x, weights) / list_sum
@@ -54,14 +59,30 @@ class DataAnalysis():
     ##################
 
     def validateTitle(self, title):
-        rstr = r"[\/\\\:\*\?\"\<\>\|]"  # '/ \ : * ? " < > |'
-        new_title = re.sub(rstr, "_", title)  # 替换为下划线
+        """
+        Validate and sanitize a title string by replacing special characters with underscores.
+
+        Args:
+            title (str): The input title string to be validated.
+
+        Returns:
+            str: The sanitized title string with special characters replaced by underscores.
+        """
+        rstr = r"[\/\\\:\*\?\"\<\>\|]"
+        new_title = re.sub(rstr, "_", title)
         return new_title
 
-    ##################
-    # 本段使用加权平均数平滑质谱图，使用了rolling、dot等快速方法可参考
-    # 已添加振寰编写的边界值平滑方法，但未验证是否准确
     def lwma(self, local_df, n):
+        """
+        Calculate the Linear Weighted Moving Average (LWMA) for each column in a DataFrame.
+
+        Args:
+            local_df (pd.DataFrame): The input DataFrame.
+            n (float): The window size for LWMA calculation.
+
+        Returns:
+            pd.DataFrame: The DataFrame containing LWMA values for each column.
+        """
         n = int(n)
         smooth_df = pd.DataFrame(columns=local_df.columns.values, index=local_df.index.values)
         list1 = [i for i in range(1, int((n + 1) / 2) + 1)]
@@ -69,28 +90,32 @@ class DataAnalysis():
         no_smooth_number = int((n - 1) / 2)
         tmp_df = pd.DataFrame(np.zeros((no_smooth_number, local_df.shape[1])), columns=list(local_df.columns))
         tmp_df = tmp_df.set_axis(list(map(str, list(tmp_df.index))))
-        # 将0矩阵axis变成字符串，判断是否为字符串
         local_df_padding = pd.concat([tmp_df, local_df, tmp_df])
         for ion in local_df.columns.values:
             smooth = local_df_padding[ion].rolling(window=n, min_periods=n, center=True).apply(self.calulate_lwma,
                                                                                                args=(
                                                                                                    weights,
-                                                                                                   no_smooth_number)).to_list()
-            # 此处window = 5, center = True时，即取某点及其前后各两点计算，min_periods = 1时，第一个点取其自己与后两点
-            # (n = 5)的情况下
+                                                                                                   no_smooth_number
+                                                                                               )).to_list()
+
             smooth_df[ion] = smooth[no_smooth_number:-no_smooth_number]
 
         smooth_df = smooth_df.dropna(axis=0, how='all')
 
         return smooth_df
 
-    ##################
-
-    ##################
-    # 本段计算出每个点的fd、sd和ad(amplitude difference)，部分点无法参与计算，暂时去掉
-    # 计算出fd等数据后，顺带计算出了ff、sf、af等噪音阈值，结果经excel确认是准确的
-    # np.median()取的中位数逻辑如下：如果序列是奇数，则取中位数，如果序列是偶数，则取中间两个数的平均值
     def derivative(self, smooth_df, m):
+        """
+        Calculate derivatives and noise characteristics for each column in a DataFrame.
+
+        Args:
+            smooth_df (pd.DataFrame): The input DataFrame containing smoothed data.
+            m (float): A threshold value for noise filtering.
+
+        Returns:
+            smooth_df (pd.DataFrame): The DataFrame containing derivatives and noise characteristics.
+            noise_df (pd.DataFrame): The DataFrame containing noise characteristics.
+        """
         noise_list = []
         noise_col = smooth_df.columns.values
         for ion in smooth_df.columns.values:
@@ -110,8 +135,6 @@ class DataAnalysis():
             neg_sd_1 = [x for x in neg_sd if np.isnan(x) == False]
             abs_ad_1 = [x for x in abs_ad if np.isnan(x) == False]
 
-            ##################
-            # 下面方法为取序列中小于最大值5%的数，取其中位数作为噪音阈值，经验证下列代码才是MSDIAL思路
             ff = np.median(np.asarray([i for i in abs_fd_1 if 0 < i < max(abs_fd_1) * 0.1]))
             sf = np.median(np.asarray([i for i in neg_sd_1 if i < 0 < abs(i) and abs(i) < max(neg_sd_1) * 0.1]))
             af = np.median(np.asarray([i for i in abs_ad_1 if 0 < i < max(abs_ad_1) * 0.1]))
@@ -119,11 +142,7 @@ class DataAnalysis():
             ff = max(ff, m)
             if af < m:
                 af = m
-            # 若ff和af接近0，则取m，参数可改
 
-            # noise_df.loc["ff", ion] = ff
-            # noise_df.loc["sf", ion] = sf
-            # noise_df.loc["af", ion] = af
             noise_tmp = [ff, sf, af]
             noise_list.append(noise_tmp)
             smooth_df = pd.concat([smooth_df, pd.DataFrame({str(ion) + "_fd": fd}, index=smooth_df.index)], axis=1)
@@ -141,25 +160,31 @@ class DataAnalysis():
 
         return smooth_df, noise_df
 
-    ##################
-
     def find_peak(self, ion_list, smooth_df, noise_df, filter_factor):
+        """
+        Find peaks and perform peak-related calculations.
+
+        Args:
+            ion_list (list): List of ions to process.
+            smooth_df (pd.DataFrame): The input DataFrame containing smoothed data.
+            noise_df (pd.DataFrame): The DataFrame containing noise characteristics.
+            filter_factor (float): A filtering factor for peak detection.
+
+        Returns:
+            peak_dic (dict): A dictionary containing peak information for each ion.
+            con_peak_dic (dict): A dictionary containing continuous peaks for each ion.
+            smooth_df_final (pd.DataFrame): The final smoothed DataFrame with baseline correction.
+        """
         peak_dic = {}
         con_peak_dic = {}
         NF = self.pre_de_redundancy_peak(smooth_df, ion_list)
-
-        # 本段采用了老写法，最好用rolling
         for ion in ion_list:
-            # print("ion = ", ion)
             peak_df = pd.DataFrame(columns=["left", "apex", "right", "SV"])
             ff = noise_df.loc["ff", ion]
             sf = noise_df.loc["sf", ion]
-            # af = noise_df.loc["af", ion]
             f_list = smooth_df[str(ion) + "_fd"].values.tolist()
-            # abs_f_list = smooth_df[str(ion) + "_abs_fd"].values.tolist()
             s_list = smooth_df[str(ion) + "_sd"].values.tolist()
             a_list = smooth_df[str(ion) + "_ad"].values.tolist()
-            # abs_a_list = smooth_df[str(ion) + "_abs_ad"].values.tolist()
             rt_list = smooth_df.index.values  # 改
             i_list = smooth_df[ion].values.tolist()
 
@@ -171,38 +196,25 @@ class DataAnalysis():
             aa = 1
             while m <= len(f_list) - 3:
                 peak_list = []
-                # len比最大index大1，所以减3
                 if aa != m:
                     aa = m
-                    if f_list[m] > ff * filter_factor and f_list[m + 1] > ff * filter_factor and i_list[m] > 0 and i_list[
-                        m + 1] > 0:
-                        # print("m = ", m)
+                    if (f_list[m] > ff * filter_factor and f_list[m + 1] > ff * filter_factor and i_list[m] > 0
+                            and i_list[m + 1] > 0):
                         w = m - 2
                         if w < 0:
                             w = 0
                         tmp_list = i_list[w: m + 3]
-                        # print("tmp_list = ", tmp_list)
                         u = tmp_list.index(i_list[m])
-                        # print("u = ", u)
                         q = tmp_list.index(min(tmp_list))
-                        # print("q = ", q)
                         p = m - (u - q)
-                        # print("p = ", p)
                         if i_list[p] == 0:
                             p = m
                             left = rt_list[p]
                         else:
                             left = rt_list[p]
-                            # 加上这个条件，如果5点法找最小点找到了0值，那么就用原左点m
                         peak_list.append(left)
-                        # peak_list.append(rt_list[m])
-                        # print("---------左", left)
 
                         for x in range(p + 1, len(f_list) - 3):
-                            # print("p+1 = ", p + 1)
-                            # print("len(f_list) - 3 = ", len(f_list) - 3)
-
-                            # 冲顶峰峰顶的判断条件
                             if f_list[x] == f_list[x + 1] == f_list[x + 2] == 0 and f_list[x + 3] != 0:
 
                                 peak_list.append(rt_list[x])
@@ -217,7 +229,6 @@ class DataAnalysis():
                                         u_1 = tmp_list.index(i_list[y])
                                         q_1 = tmp_list.index(min(tmp_list))
                                         p_1 = y - (u_1 - q_1)
-
                                         if i_list[p_1] == 0:
                                             right = rt_list[y]
                                             m = y
@@ -228,19 +239,14 @@ class DataAnalysis():
                                             right = rt_list[p_1]
                                             m = p_1
                                         peak_list.append(right)
-                                        # print("---------右", right)
-
                                         break
-
                                     elif i_list[y] < i_list[x] * 0.05:
                                         if rt_list[y] <= rt_list[x]:
                                             peak_list.append(rt_list[y + 1])
                                             m = y + 1
-                                            # print("---------右", rt_list[y+1])
                                         else:
                                             peak_list.append(rt_list[y])
                                             m = y
-                                            # print("---------右", rt_list[y])
                                         break
                                 break
                             elif x > len(f_list) - 6:
@@ -251,8 +257,6 @@ class DataAnalysis():
                             else:
                                 if f_list[x - 1] > 0 and s_list[x] < -1 * sf:
                                     if f_list[x] < 0 or f_list[x + 1] < 0:
-
-                                        # 找到顶点后，找其左右2点及本身，取最大值
                                         start_index = max(0, x - 2)
                                         end_index = min(len(i_list), x + 3)
                                         five_elements = i_list[start_index:end_index]
@@ -261,20 +265,15 @@ class DataAnalysis():
                                         # print(rt_list[n])
                                         peak_list.append(rt_list[n])
                                         index_list.append("peak_" + str(rt_list[n]))
-
                                         for y in range(n + 1, len(f_list) - 3):
                                             if f_list[y] > -ff * filter_factor and f_list[y + 1] > -ff * filter_factor:
                                                 w_1 = y + 3
                                                 if w_1 > len(rt_list) + 1:
                                                     w_1 = len(rt_list) + 1
                                                 tmp_list = i_list[y - 2: w_1]
-                                                # print("tmp_list = ", tmp_list)
                                                 u_1 = tmp_list.index(i_list[y])
-                                                # print("u_1 = ", u_1)
                                                 q_1 = tmp_list.index(min(tmp_list))
-                                                # print("q_1 = ", q_1)
                                                 p_1 = y - (u_1 - q_1)
-                                                # print("p_1 = ", p_1)
                                                 if i_list[p_1] == 0:
                                                     right = rt_list[y]
                                                     m = y
@@ -285,19 +284,15 @@ class DataAnalysis():
                                                     right = rt_list[p_1]
                                                     m = p_1
                                                 peak_list.append(right)
-
-                                                # print("---------右282", right)
                                                 break
 
                                             elif i_list[y] < i_list[n] * 0.05:
                                                 if rt_list[y] <= rt_list[n]:
                                                     peak_list.append(rt_list[y + 1])
                                                     m = y + 1
-                                                    # print("---------右289", rt_list[y+1])
                                                 else:
                                                     peak_list.append(rt_list[y])
                                                     m = y
-                                                    # print("---------右293", rt_list[y])
                                                 break
                                             elif y == len(f_list) - 4:
                                                 peak_list.append(rt_list[y])
@@ -315,47 +310,13 @@ class DataAnalysis():
 
             print(total_list)
 
-            # 补充一个index_list作为行索引
-            # 之后dataframe要添加一个空的SV列[[]]
             peak_df = pd.DataFrame(total_list, columns=["left", "apex", "right"], index=index_list)
-            # peak_df.to_excel('./results/peak/{}.xlsx'.format(str(ion) + "_raw_peak"))
             peak_df = self.trailing_peak_filtration(peak_df, smooth_df, ion)
-            # peak_df.to_excel('./results/peak/{}.xlsx'.format(str(ion) + "_filtered_peak"))
-            # ##################画图#########################
-            # for peak in peak_df.index.values:
-            #     # print("debug_plot_ion = ", ion)
-            #     apex_rt = peak_df.loc[peak, "apex"]
-            #     apex_i = smooth_df.loc[apex_rt, ion]
-            #     left_rt = peak_df.loc[peak, "left"]
-            #     left_i = smooth_df.loc[left_rt, ion]
-            #     right_rt = peak_df.loc[peak, "right"]
-            #     right_i = smooth_df.loc[right_rt, ion]
-            #     # print("debug_axe", apex_rt, apex_i, left_rt, left_i, right_rt, right_i)
-            #     x = np.asarray(rt_list)
-            #     y = np.asarray(i_list)
-            #     ax = plt.axes()
-            #     ax.plot(x, y, 'o')
-            #     ax.set(xlabel="RT", ylabel="Intensity", title=ion)
-            #     plt.annotate("*", (left_rt, left_i), xytext=(left_rt, left_i))
-            #     plt.annotate("*", (apex_rt, apex_i), xytext=(apex_rt, apex_i))
-            #     plt.annotate("*", (right_rt, right_i), xytext=(right_rt, right_i))
-            #     plt.ylim(min(left_i, right_i) * 0.8, apex_i * 1.5)
-            #     plt.xlim(left_rt - 5, right_rt + 5)
-            #     plt.savefig('./results/peak/{}.png'.format(str(ion) + "_" + str(apex_rt)))
-            #     plt.show()
-            # ##################画图#########################
-            ###基线矫正
             fb = 'smooth_df_final' in dir()
-            if fb == False:
-                from copy import copy  # 改
+            if not fb:
                 smooth_df_final = copy(smooth_df.applymap(lambda x: x if x >= 0 else 0))
-            # smooth_df_final.to_excel('./results/smooth_df_final_before_ba.xlsx')
             smooth_df_final = self.baseline_correction(peak_df, smooth_df, ion, smooth_df_final)
-            # smooth_df_final.to_excel('./results/smooth_df_final_after_ba.xlsx')
             peak_df = self.de_redundancy_peak(smooth_df_final, smooth_df, peak_df, NF, ion)
-
-            #########################################################
-            ###3点抛物线校正
             rt_list = rt_list.tolist()
             for peak in peak_df.index.values:
                 apex_rt = float(peak_df.loc[peak, "apex"])
@@ -367,48 +328,18 @@ class DataAnalysis():
                 apex_right_rt = float(rt_list[apex_rt_index + 1])
                 apex_right_i = float(smooth_df_final.loc[apex_right_rt, ion])
 
-                # 顶点及左右两点，共三点拟合抛物线，抛物线一阶导数为0的点为新顶点，计算出新的三点
                 new_apex_rt, new_apex_i = self.second_order_fit_X(
                     apex_left_rt, apex_left_i, apex_rt, apex_i, apex_right_rt, apex_right_i)
-
-                # 拟合后现将原来点的响应替换为nan
-                # smooth_df_final.loc[apex_left_rt, ion] = np.nan
                 smooth_df_final.loc[apex_rt, ion] = np.nan
-                # smooth_df_final.loc[apex_right_rt, ion] = np.nan
-
-                # 再填入拟合后的点，会使RT轴多出新点，其他离子在这些点的响应均为nan，但后续计算dropna会去掉
-                # smooth_df_final.loc[new_apex_left_rt, ion] = new_apex_left_i
                 smooth_df_final.loc[new_apex_rt, ion] = new_apex_i
-                # smooth_df_final.loc[new_apex_rt, ion] = apex_i
-                # smooth_df_final.loc[new_apex_right_rt, ion] = new_apex_right_i
-
                 smooth_df_final.sort_index(inplace=True)
-
-                # 最后将peak_df里的apex替换掉
                 peak_df.loc[peak, "apex"] = new_apex_rt
-
                 left_rt = peak_df.loc[peak, "left"]
-                left_i = smooth_df_final.loc[left_rt, ion]
                 right_rt = peak_df.loc[peak, "right"]
-                right_i = smooth_df_final.loc[right_rt, ion]
                 x_df = smooth_df_final.loc[left_rt: right_rt, ion]
                 x_df = x_df.dropna(axis=0, how="any")
-                # print("x_df = ", x_df)
-                y = x_df.values  # 改
-                # ax = plt.axes()
-                # plt.plot(x_df.index, y, 'o')
-                # ax.set(xlabel="RT", ylabel="Intensity", title=ion)
-                # plt.annotate("*", (left_rt, left_i), xytext=(left_rt, left_i))
-                # plt.annotate("*", (new_apex_rt, new_apex_i), xytext=(new_apex_rt, new_apex_i))
-                # plt.annotate("*", (right_rt, right_i), xytext=(right_rt, right_i))
-                # plt.ylim(min(left_i, right_i) * 0.8, apex_i * 1.5)
-                # plt.xlim(left_rt - 5, right_rt + 5)
-                # #plt.savefig('./results/peak/{}.png'.format(str(ion) + "_" + str(apex_rt) + "_adjusted_apex_RT"))
-                # plt.close()
                 del x_df, apex_left_rt, apex_right_rt
                 gc.collect()
-            # smooth_df_final.to_excel('./results/smooth_df_final_after_3_point.xlsx')
-            # # peak_df.to_excel('./results/peak/{}.xlsx'.format(str(ion) + "_baseline_adjusted_peak"))
             ##################
 
             ##################
@@ -504,6 +435,17 @@ class DataAnalysis():
 
     def trailing_peak_filtration(self, peak_df, smooth_df, ion):
         """
+        Filter trailing peaks and identify incorrectly located peaks.
+
+        Args:
+            peak_df (pd.DataFrame): DataFrame containing peak information.
+            smooth_df (pd.DataFrame): The input DataFrame containing smoothed data.
+            ion (str): Ion identifier.
+
+        Returns:
+            peak_df (pd.DataFrame): DataFrame with filtered peaks.
+        """
+        """
         删除拖尾峰和识别左右错误的峰
         """
         for peak in peak_df.index.values:
@@ -528,30 +470,19 @@ class DataAnalysis():
     ##找精确apex RT并拟合顶点及两边点的RT和intensity
     def second_order_fit_X(self, x1, y1, x2, y2, x3, y3):
         if x1 < x2 < x3 and y2 > y1 and y2 > y3:
-
             X = np.array([x1, x2, x3])
             Y = np.array([y1, y2, y3])
             coef = np.polyfit(X, Y, 2)
             x2_new = (-coef[1]) / (2 * coef[0])
-
             if x1 < x2_new < x3:
                 y2_new = coef[0] * (x2_new ** 2) + coef[1] * x2_new + coef[2]
                 if y2_new > y1 and y2_new > y3 and y2_new <= 1.5 * y2:
-                    # 部分峰型奇怪的峰，拟合后y2_new会过大，这种情况返回原值
-                    # 判断系数是1.5，此处修改
                     y2_new = y2_new
                 else:
                     y2_new = y2
             else:
                 x2_new = x2
                 y2_new = y2
-            # delta_x = x2_new - x2
-            # x1_new = x1 + delta_x
-            # x3_new = x3 + delta_x
-            # y1_new = coef[0] * (x1_new ** 2) + coef[1] * x1_new + coef[2]
-            # y3_new = coef[0] * (x3_new ** 2) + coef[1] * x3_new + coef[2]
-
-            # return x1_new, y1_new, x2_new, y2_new, x3_new, y3_new
             return x2_new, y2_new
 
         else:
@@ -594,6 +525,18 @@ class DataAnalysis():
         return y_list
 
     def decon(self, ion_list, smooth_df_final, con_peak_dic):
+        """
+        Deconvolve peaks in the ion list.
+
+        Args:
+            ion_list (list): List of ions to process.
+            smooth_df_final (pd.DataFrame): Smoothed data.
+            con_peak_dic (dict): Dictionary of con_peak DataFrames.
+
+        Returns:
+            dict: Dictionary containing deconvolved peaks for each ion.
+            pd.DataFrame: Deconvolved data.
+        """
         # 3点校正后，高斯拟合出来的峰，其apex_RT与原峰（已3点校正）基本一致，不需要再次3点校正
 
         decon_peak_dic = {}
@@ -797,6 +740,25 @@ class DataAnalysis():
 
     def group_peak(self, peak_dic, decon_peak_dic, smooth_df, smooth_df_final, decon_data_df, wid, sigma, bin_num,
                    group_method):
+        """
+        Group peaks based on specified criteria.
+
+        Args:
+            peak_dic (dict): Dictionary containing peak information.
+            decon_peak_dic (dict): Dictionary containing deconvolved peak information.
+            smooth_df (pd.DataFrame): Smoothed data.
+            smooth_df_final (pd.DataFrame): Final smoothed data.
+            decon_data_df (pd.DataFrame): Deconvolved data.
+            wid (float): Width parameter.
+            sigma (float): Sigma parameter.
+            bin_num (int): Number of bins.
+            group_method (int): Grouping method identifier (0 for MSDIAL, 1 for AMDIS).
+
+        Returns:
+            pd.DataFrame: Matched wave data.
+            pd.DataFrame: Peak group data.
+            pd.DataFrame: Quantitative results.
+        """
         quant_result_df = pd.DataFrame(columns=['Peak_group', 'Ion', "Relative_Peak_Area", "Peak_Height"])
         # 注意数据中有3套RT，使用时不要混淆：smooth_df raw RT, smooth_df_final 3点校正RT, peak_group_df, 切分RT
         rt_list = smooth_df.index.values.tolist()
@@ -832,17 +794,14 @@ class DataAnalysis():
 
                         matched_wave.at[matched_wave.index[i], "SV"] += peak_dic[ion].loc[peak, "SV"]
 
-                        # 找最小的left
                         if matched_wave.iloc[i, 2] == 0:
                             matched_wave.iloc[i, 2] = left
                         elif matched_wave.iloc[i, 2] > left:
                             matched_wave.iloc[i, 2] = left
-                        # 找最大的right
                         if matched_wave.iloc[i, 3] == 0:
                             matched_wave.iloc[i, 3] = right
                         elif matched_wave.iloc[i, 3] < right:
                             matched_wave.iloc[i, 3] = right
-                            # ion list append当前ion
                         matched_wave.iloc[i, 4].loc[ion, "intensity"] = smooth_df_final.loc[apex, ion]
 
                         break
@@ -870,36 +829,11 @@ class DataAnalysis():
                         matched_wave.iloc[i, 4].loc[ion, "intensity"] = decon_data_df.loc[apex_1, peak_1]
 
                         break
-        # print(matched_wave)
 
-        # sg_list = []
-        # for n in range(0, wid * 2 + 1):
-        #     sg_list.append((1 - (pow(((-wid + n) / sigma), 2))) * (math.exp(-0.5 * pow(((-wid + n) / sigma), 2))))
-
-        # # lambda x:后的函数确认无误
-        # matched_wave["gauss_SV"] = matched_wave["SV"].rolling(window=wid * 2 + 1, min_periods=wid * 2 + 1,
-        #                                                       center=True).apply(
-        #     lambda x: sum(np.multiply(np.asarray(x), np.asarray(sg_list)))).to_list()
-        # matched_wave = matched_wave.dropna(axis=0, how="any")
-        # matched_wave.plot(kind="line", y=["SV", "gauss_SV"])
-        # plt.savefig('./results/group/{}.jpg'.format("matched_wave"))
-        # plt.show()
-
-        # # peak_group_df = pd.DataFrame(index=matched_wave.index)
-        # peak_group_df = pd.DataFrame(columns=matched_wave.columns)
-        # # print("debug_peak_group_df = ", peak_group_df)
-        # for n in range(1, matched_wave.shape[0] - 1):
-        #     if matched_wave.iloc[n, 5] > 0 and matched_wave.iloc[n, 5] - matched_wave.iloc[n - 1, 5] > 0 and \
-        #             matched_wave.iloc[n, 5] - matched_wave.iloc[n + 1, 5] > 0:
-        #         peak_group_df.loc[len(peak_group_df)] = matched_wave.iloc[n]
-        #matched_wave.to_csv("C:/Users/86724/Desktop/matcher_wave_1.csv")
         if group_method == 0:
             matched_wave, peak_group_df = self.MSDIAL(matched_wave, wid, sigma, peak_dic, decon_peak_dic)
         elif group_method == 1:
             matched_wave, peak_group_df = self.AMDIS(matched_wave)
-        #matched_wave.to_csv("C:/Users/86724/Desktop/matcher_wave_2.csv")
-        #peak_group_df.to_csv("C:/Users/86724/Desktop/peak_group_df_1.csv")
-        ##########
         for group, row in peak_group_df.iterrows():
             quant_df = row["ions"]
             quant_df_index = quant_df.index.tolist()
@@ -924,8 +858,8 @@ class DataAnalysis():
                     col = int(str(row["rt"]).split('.')[0])
                     print(decon_data_df.filter(like=f"{Quant_Ion}_peak_{col}"))
                     sliced_df = decon_data_df.loc[
-                        (decon_data_df.index >= row["left"]) & (decon_data_df.index <= row["right"]),
-                            :]
+                                (decon_data_df.index >= row["left"]) & (decon_data_df.index <= row["right"]),
+                                :]
                     sliced_df = sliced_df.filter(like=f"{Quant_Ion}_peak_{col}")  # todo: rt时间不匹配，无法正确识别。
                     if sliced_df.empty == False:
                         peak_group_df.loc[group, "Relative_Peak_Area"] = sliced_df.iloc[:, 0].sum()
@@ -995,7 +929,7 @@ class DataAnalysis():
             # plt.close()
         # matched_wave.to_excel('./results/group/matched_wave.xlsx')
         # peak_group_df.to_excel('./peak_group_df.xlsx')
-        #peak_group_df.to_csv("C:/Users/86724/Desktop/peak_group_df_2.csv")
+        # peak_group_df.to_csv("C:/Users/86724/Desktop/peak_group_df_2.csv")
         return matched_wave, peak_group_df, quant_result_df
 
     def peak_group_df_add_retention_infor(self, peak_group_df, RI_Presentation, standard_df, RI_min, RI_max):
@@ -1049,7 +983,7 @@ class DataAnalysis():
                 # matched_wave.iloc[n_left:n_right + 1, 4] = [pd.DataFrame() for i in range(n_right + 1 - n_left)]
                 matched_wave.at[matched_wave.index[n], 'ions'] = tmp_ions_df
                 peak_group_df.loc[len(peak_group_df)] = matched_wave.iloc[n]
-        #matched_wave.to_csv(r"C:\Users\86724\Desktop\matcher_wave_test1.csv")
+        # matched_wave.to_csv(r"C:\Users\86724\Desktop\matcher_wave_test1.csv")
         peak_group_df = peak_group_df.drop(peak_group_df[peak_group_df['SV'] == 0].index)
 
         return matched_wave, peak_group_df
@@ -1106,6 +1040,16 @@ class DataAnalysis():
         return [regex.sub('', string) for string in lst if isinstance(string, str)]
 
     def read_msp(self, msp):
+        """
+        Read data from an MSP file and parse it into a dictionary.
+
+        Args:
+            msp (str): The path to the MSP file.
+
+        Returns:
+            dict: A compounds' dictionary containing parsed data from the MSP file.
+            pd.DataFrame: Compounds' RI information.
+        """
         msp_file = open(msp, "r")
         list_1 = msp_file.readlines()
         # print(list_1)
@@ -1547,6 +1491,37 @@ class DataAnalysis():
                                   inaccurate_ri_threshold,
                                   inaccurate_ri_level_factor
                                   ):
+        """
+        Perform peak group identification based on provided parameters.
+
+        Args:
+            peak_group_df (pd.DataFrame): DataFrame containing peak group information.
+            smooth_df (pd.DataFrame): DataFrame with smoothed data.
+            smooth_df_final (pd.DataFrame): Final smoothed data.
+            meta (dict): Metadata containing ion intensity information.
+            RT_df (pd.DataFrame): DataFrame with retention time data.
+            decon_peak_dic: Deconvoluted peak data.
+            decon_data_df: Deconvoluted data DataFrame.
+            peak_group_search: Parameter for peak group search.
+            match_weight: Weight for matching.
+            r_match_weight: Weight for reverse matching.
+            search_wid: Search width.
+            retention_score_mode: Retention score mode.
+            window: Window parameter.
+            window_scale: Scaling factor for the window.
+            level_factor: Level factor for scoring.
+            max_penalty: Maximum penalty for scoring.
+            no_info_penalty: Penalty for missing information.
+            minimum_number_of_ions: Minimum number of ions for scoring.
+            sim_threshold: Similarity threshold.
+            group_weight: Weight for group matching.
+            direct_weight: Weight for direct matching.
+            inaccurate_ri_threshold: Threshold for inaccurate retention index (RI).
+            inaccurate_ri_level_factor: Level factor for inaccurate RI.
+
+        Returns:
+            pd.DataFrame: DataFrame containing the results of peak group identification.
+        """
 
         results_df = pd.DataFrame(index=peak_group_df["rt"].values.tolist(),
                                   columns=["Best_match_name", "Best_match", "All_match", "All_match_list", "Quant_Ion",
@@ -1794,7 +1769,8 @@ class DataAnalysis():
                             list(direct_compare_df_1['intensity_s_direct']))
                         results_df.loc[group_rt_s, "All_match"].loc[compound, "intensity_l_direct"] = str(
                             list(direct_compare_df_1['intensity_l_direct']))
-                        results_df.loc[group_rt_s, "All_match"].loc[compound, "mz_direct"] = str(list(direct_compare_df_1.index))
+                        results_df.loc[group_rt_s, "All_match"].loc[compound, "mz_direct"] = str(
+                            list(direct_compare_df_1.index))
 
                         if retention_score_mode == "RI":
                             if 'Reference_RI' in score_df.columns:
@@ -1872,7 +1848,7 @@ class DataAnalysis():
         results_df.drop(results_df.columns[1], axis=1, inplace=True)
         # if not species_pool.empty:
         #     results_df = species_pool_opt(results_df, species_pool)
-        #results_df.to_excel('./final_results.xlsx')
+        # results_df.to_excel('./final_results.xlsx')
 
         return results_df
 
@@ -2106,7 +2082,7 @@ class DataAnalysis():
             ##################
             # yuannote：此处是Re-analysis——All processing的接口，如果点击All processing，那么就删除total_result.pkl、peak_group.pkl
             # 以及qualitative_and_quantitative_analysis.pkl，从这里重新分析，注意后续的参数也要重新读取
-            #peak_group_filename = peak_group_pkl  # liunote
+            # peak_group_filename = peak_group_pkl  # liunote
             peak_group_result = None
 
             # if os.path.exists(peak_group_filename):
@@ -2118,10 +2094,10 @@ class DataAnalysis():
                 smooth_df, smooth_df_final, decon_peak_dic, decon_data_df, peak_group_df, quant_result_df, df = peak_group_pkl
                 peak_group_result = peak_group_pkl
 
-            #if peak_group_result is None:
-                # yuannote: 此处是file-opendata接口
-                # 读取所输入文件的后缀名，或要求用户选择数据类型：如果是mzML，则用read_data_mzML函数
-                # 如果是cdf，则用read_data函数
+            # if peak_group_result is None:
+            # yuannote: 此处是file-opendata接口
+            # 读取所输入文件的后缀名，或要求用户选择数据类型：如果是mzML，则用read_data_mzML函数
+            # 如果是cdf，则用read_data函数
             else:
                 # filename = 'tomato0418.mzML'
                 if isinstance(filename, pd.DataFrame):
@@ -2145,7 +2121,7 @@ class DataAnalysis():
                 decon_peak_dic, decon_data_df = self.decon(ion_list, smooth_df_final, con_peak_dic)
                 peak_dic, decon_peak_dic = self.calculate_sv(smooth_df_final, peak_dic, decon_data_df, decon_peak_dic)
                 # yuannote: group_peak里倒数第二个数字：0.5（bin_num)，对应的是向导页面1里的峰聚类灵敏度
-                #smooth_df.to_csv("C:/Users/86724/Desktop/smooth_df.csv")
+                # smooth_df.to_csv("C:/Users/86724/Desktop/smooth_df.csv")
                 matched_wave, peak_group_df, quant_result_df = self.group_peak(peak_dic, decon_peak_dic, smooth_df,
                                                                                smooth_df_final,
                                                                                decon_data_df, 5,
@@ -2388,7 +2364,6 @@ class DataAnalysis():
         # return peak_group_df, qualitative_and_quantitative_analysis_result, smooth_df
         return total_result_pkl
 
-
 # a = DataAnalysis()
 # total_result_pkl = ''
 # peak_group_pkl = ''
@@ -2402,7 +2377,6 @@ class DataAnalysis():
 #
 #
 #
-
 
 
 # page3none_match_weight = 0.3
@@ -2455,4 +2429,3 @@ class DataAnalysis():
 #        page3RI_window_scale, page3RI_level_factor, page3RI_max_penalty, page3RI_no_info_penalty,
 #        page3RI_inaccurate_ri_threshold, page3RI_inaccurate_ri_level_factor
 #        )
-
