@@ -16,9 +16,6 @@ class GetMethod():
         return list_1
 
     def is_number(self, s):
-        """
-        判断字符串 s 是否为数字
-        """
         pattern = r'^[-+]?(\d+(\.\d*)?|\.\d+)([eE][-+]?\d+)?$'
         return bool(re.match(pattern, s))
 
@@ -159,6 +156,19 @@ class GetMethod():
         return composite_score
 
     def calculate_similarity(self, target_name, df, n, fr_factor):
+        """
+        Calculate the similarity scores between the target compound and all compounds in the DataFrame.
+
+        Args:
+            target_name (str): The name of the target compound.
+            df (pd.DataFrame): The DataFrame containing compound data.
+            n (int): The number of top similar compounds to return.
+            fr_factor (float): The factor used in the weighted dot product distance calculation.
+
+        Returns:
+            pd.DataFrame: A DataFrame containing similarity scores for each compound.
+
+        """
         result_df = pd.DataFrame(columns=["Score"])
         first_col = df.loc[target_name]
         for compound in df.index.values:
@@ -178,6 +188,21 @@ class GetMethod():
                                                      df, similarity_threshold,
                                                      fr_factor,
                                                      n):
+        """
+        Calculate the average similarity score and the difference count for a targeted compound using specified ion combinations.
+
+        Args:
+            targeted_compound (str): The name of the targeted compound.
+            ion_combination (list): List of ion combinations for similarity calculation.
+            df (pd.DataFrame): The DataFrame containing compound data.
+            similarity_threshold (float): The similarity threshold for considering compounds as similar.
+            fr_factor (float): The factor used in the weighted dot product distance calculation.
+            n (int): The number of top similar compounds to consider.
+
+        Returns:
+            pd.DataFrame: A DataFrame containing difference counts and average similarity scores for each ion combination.
+
+        """
         # 此处输入的df是已将丰度40以下的响应归零，且去掉目标物响应为0列的df
         # print("debug ion_combination = ", ion_combination)
         difference_count_df = pd.DataFrame(columns=["Diff_Count", "Similar_Compound_Ave_Score"])
@@ -217,6 +242,19 @@ class GetMethod():
         return difference_count_df
 
     def calculate_combination_score(self, combination_df, targeted_compound, temp_df, prefer_mz_threshold):
+        """
+        Calculate the combination score for ion combinations in a DataFrame.
+
+        Args:
+            combination_df (pd.DataFrame): DataFrame containing ion combinations.
+            targeted_compound (str): The name of the targeted compound.
+            temp_df (pd.DataFrame): Temporary DataFrame containing compound data.
+            prefer_mz_threshold (int): The preferred m/z threshold.
+
+        Returns:
+            pd.DataFrame: DataFrame with combination scores added.
+
+        """
         for index, row in combination_df.iterrows():
             ion_list = re.findall("\d+\.?\d*", index)
             ion_list = list(map(int, ion_list))
@@ -231,6 +269,17 @@ class GetMethod():
         return combination_df
 
     def calculate_solo_compound_combination_score(self, matrix_1, prefer_mz_threshold):
+        """
+        Calculate the combination score for solo compounds in a DataFrame.
+
+        Args:
+            matrix_1 (pd.DataFrame): DataFrame containing solo compound data.
+            prefer_mz_threshold (int): The preferred m/z threshold.
+
+        Returns:
+            pd.DataFrame: DataFrame with combination scores added and sorted by score.
+
+        """
         matrix_1['ion'] = matrix_1['ion'].apply(lambda x: 1 if x < prefer_mz_threshold else x)
         # matrix_1.to_excel(r".\matrix_1_阈值校正后.xlsx", index=True)
         matrix_1['com_score'] = matrix_1.apply(lambda row: pow(row.iloc[0], 0.5) * pow(row.iloc[1], 3), axis=1)
