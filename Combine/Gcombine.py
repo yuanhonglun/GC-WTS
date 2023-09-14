@@ -348,7 +348,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWin
 
         # 获取窗口的大小
         size = self.geometry()
-        print(screen)
+
         # 计算窗口的左上角位置
         x = (screen.width() - size.width()) // 2
         y = (screen.height() - size.height()) // 2

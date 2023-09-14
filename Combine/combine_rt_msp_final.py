@@ -14,11 +14,17 @@ class CombineRtMsp():
             msp_path (list): List of MSP file paths to be merged.
             out_path (str): Output directory path for the combined MSP file.
         """
+
+        # 定义要查找的文件后缀
         file_extension = '/*.msp'
+
+        # 查找文件并将它们合并到一个总文件中
         with open(out_path + '/combine_data.msp', 'w+') as outfile:
             for filename in msp_path:
                 with open(filename) as infile:
                     outfile.write(infile.read())
+                # 在每个文件之间添加分隔符
+                # outfile.write('\n')
         outfile.close()
 
     def group_cmp_inf(self, lines):
@@ -207,6 +213,38 @@ class CombineRtMsp():
             None
 
         """
+        # # 定义要读取的文件后缀
+        # if file_suffixes is None:
+        #     file_suffixes = [".xlsx", ".txt", ".csv"]
+        #
+        # # 定义合并后的文件名
+        # if merged_file_name is None:
+        #     merged_file_name = "combine_RT_file.xlsx"
+        # # 定义一个空的DataFrame对象
+        # merged_df = pd.DataFrame()
+        #
+        # # 遍历所有文件后缀，并读取所有符合后缀的文件
+        # for file_suffix in file_suffixes:
+        #     # 获取当前目录下所有符合后缀的文件路径
+        #     file_paths = glob.glob(rt_path + "/*" + file_suffix)
+        #     print(rt_path + "/*" + file_suffix)
+        #     # 遍历所有符合后缀的文件，并将它们读取到DataFrame对象中
+        #     for file_path in file_paths:
+        #
+        #         if file_suffix == ".xlsx":
+        #             df = pd.read_excel(file_path)
+        #         elif file_suffix == ".txt":
+        #             df = pd.read_csv(file_path, sep="\t")
+        #         elif file_suffix == ".csv":
+        #             df = pd.read_csv(file_path)
+        #         merged_df = pd.concat([merged_df, df], ignore_index=True)
+        #
+        #         # 删除已经合并的文件
+        #         # os.remove(file_path)
+        #
+        # # 将合并后的数据写入Excel文件中
+        # merged_df.to_excel(rt_path + '/' + merged_file_name, index=False)
+
         merged_df = pd.DataFrame()
         if merged_file_name is None:
             merged_file_name = "combine_RT_file.xlsx"
@@ -354,7 +392,9 @@ class CombineRtMsp():
         RI_df = pd.DataFrame(columns=['Name', 'RI_msp'])
         for j in range(len(group_inf_idx) - 1):
             group_inf = lines[group_inf_idx[j]:group_inf_idx[j + 1]]
-            prefixes = [r'SemiStdNP=\d+', r'RI:\d+\n']
+            # 定义要匹配的字符串前缀
+            prefixes = [r'SemiStdNP=\d+', r'RI:\d+\n', r'Any=\d+']
+            # 定义正则表达式
             pattern = "|".join(prefixes)
             for string in group_inf:
                 if 'Name:' in string:
@@ -390,8 +430,9 @@ class CombineRtMsp():
                     combine_df.loc[i, "RT"] = self.Kovats_RI_to_RT_transform(combine_df_row[2], standard_df,
                                                                         RT_lower_limit,
                                                                         RT_upper_limit)
+        # combine_df.sort_values(by="RT", inplace=True, ascending=True)
         combine_df = combine_df.drop_duplicates(subset=['Name'], keep='first')
-        print('The number of substances containing RI after deduplication：', combine_df.shape[0])
+        print('去重后含有RI物质的数量：', combine_df.shape[0])
         combine_df = combine_df.sort_values(by="RT", ascending=True)
         combine_df.set_index(['Name'], inplace=True)
         combine_df.dropna(how='all', subset=['RT', 'RI_msp'], inplace=True)
@@ -433,6 +474,10 @@ class CombineRtMsp():
         Returns:
             float: Transformed RT value for the sample.
         """
+        # if RT_lower_limit is None:
+        #     RT_lower_limit = 0
+        # if RT_upper_limit is None:
+        #     RT_upper_limit = 68.8
         prev_rows = standard_df.loc[(standard_df['RI'] < ri_sample)].tail(1)
         next_rows = standard_df.loc[(standard_df['RI'] > ri_sample)].head(1)
         if prev_rows.shape[0] == 0:
@@ -466,8 +511,12 @@ class CombineRtMsp():
         Returns:
             float: Transformed Kovats RI value for the sample.
         """
+        # if RI_lower_limit is None:
+        #     RI_lower_limit = 0
+        # if RI_upper_limit is None:
+        #     RI_upper_limit = 3000
         if np.isnan(rt_sample):
-            return "The content of the retention time actually detected was not retrieved"
+            return "未检索到实测rt内容"
         prev_rows = standard_df.loc[(standard_df['RT (min)'] < rt_sample)].tail(1)
         next_rows = standard_df.loc[(standard_df['RT (min)'] >= rt_sample)].head(1)
         if prev_rows.shape[0] == 0:
@@ -593,22 +642,50 @@ class CombineRtMsp():
         Returns:
             float: The composite score representing the distance.
         """
+
+        # print("debug compare_df = ")
+        # print(compare_df)
         m_q = pd.Series(compare_df.index)
         m_q = m_q.astype(float)
+        # m_q是df的index，是输入的离子
+        # print("debug m_q = ")
+        # print(m_q)
         i_q = np.array(compare_df.iloc[:, 0])
+        # i_q是df的第一列，是实测响应
+        # 后续i_q与m_q要相乘，只有array或Series才可以相乘，因此要把df转为array
+        # print("debug i_q = ")
+        # print(i_q)
         i_r = np.array(compare_df.iloc[:, 1])
+        # i_r是df的第二列，是lib响应
+        # print("debug i_r = ")
+        # print(i_r)
         k = 0.5
+        # NIST的k=0.5，改为1可提高丰度比的权重
         l = 2
         w_q = np.power(i_q, k) * np.power(m_q, l)
+        # print("debug w_q = ")
+        # print(w_q)
+        # print(type(w_q))
         w_r = np.power(i_r, k) * np.power(m_q, l)
+        # print("debug w_r = ")
+        # print(w_r)
+
+        # 如果组某离子或所有离子读数为0，该步也可正常计算
         ss = self.dot_product_distance(w_q, w_r)
+        # print("debug ss = ", ss)
         shared_spec = np.vstack((i_q, i_r))
         shared_spec = pd.DataFrame(shared_spec)
         shared_spec = shared_spec.loc[:, (shared_spec != 0).all(axis=0)]
+        # print("debug_shared_spec = ", shared_spec)
+        # 取共有离子
         m = int(shared_spec.shape[1])
+        # print("debug_m = ", m)
+        # 如果要提高丰度比的权重，即增加m，那么要在该处：composite_score = ((NU*ss) + (m*ave_FR)) / (NU + m)增加m，因为下面有个m是否大于等于2的判断
         if m >= fr_factor:
             FR = 0
             for i in range(1, m):
+                # df.iat中，行数在前，列数在后，取值时0是第一行/列，因此range是1到n
+                # range中1, n,包含1，但不包含n，最大n-1
                 s = (shared_spec.iat[0, i] / shared_spec.iat[0, (i - 1)]) * (
                         shared_spec.iat[1, (i - 1)] / shared_spec.iat[1, i])
                 if s > 1:
@@ -616,6 +693,7 @@ class CombineRtMsp():
                 FR = FR + s
             ave_FR = FR / (m - 1)
             NU = int(len(compare_df))
+            # 原array中行数是物质包含的离子数
             composite_score = ((NU * ss) + (m * ave_FR)) / (NU + m)
         else:
             composite_score = ss
@@ -651,7 +729,8 @@ class CombineRtMsp():
                 data = np.empty((0, 2))
                 RT_data = pd.DataFrame(data, columns=['Name', 'RT'])
             RT_data, error_df = self.Remove_Duplicates_RT(msp, RT_data, out_path, check_latin)
-        finally:
+            msp.close()
+        except:
             msp.close()
         msp = open(path_rt, "r")
         try:
@@ -661,7 +740,8 @@ class CombineRtMsp():
                                                 RI_threshold_value, ri_window_scale, RT_lower_limit, RT_upper_limit,
                                                 RI_lower_limit, RI_upper_limit, check_RT)
             combine_df.to_excel(out_path + '/New_RT_list.xlsx', index=True)
-        finally:
+            msp.close()
+        except:
             msp.close()
 
 
@@ -710,7 +790,8 @@ class CombineRtMsp():
                         data = np.empty((0, 2))
                         RT_data = pd.DataFrame(data, columns=['Name', 'RT'])
                     RT_data, error_df = self.Remove_Duplicates_RT(msp, RT_data, out_path, check_latin)
-                finally:
+                    msp.close()
+                except:
                     msp.close()
                 msp = open(path_rt, "r")
                 for i in add_unknown_list:
@@ -722,7 +803,8 @@ class CombineRtMsp():
                                                    RI_threshold_value, ri_window_scale, RT_lower_limit, RT_upper_limit,
                                                    RI_lower_limit, RI_upper_limit, check_RT)
                     combine_df.to_excel(out_path + '/New_RT_list.xlsx', index=True)
-                finally:
+                    msp.close()
+                except:
                     msp.close()
 
         os.remove(out_path + "/combine_data.msp")
