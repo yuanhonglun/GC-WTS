@@ -86,33 +86,33 @@ class WorkerThread(QThread):
 
     def run(self):
         self.mymainwindow = MyMainWindow()
-        try:
-            all_pkl = self.mymainwindow.Main(self.total_result_pkl, self.peak_group_pkl, self.filename, self.smooth_value,
-                                             self.peak_filt_value, self.group_peak_factor, self.msp, self.chooseinfo,
-                                             self.RTRIinfo,
-                                             self.page3none_match_weight, self.page3none_r_match_weight,
-                                             self.page3none_group_weight, self.page3none_direct_weight,
-                                             self.page3none_group_minimum_number_of_ions, self.page3none_sim_threshold,
-                                             self.page3RT_search_wid,
-                                             self.page3RT_match_weight, self.page3RT_r_match_weight,
-                                             self.page3RT_group_weight, self.page3RT_direct_weight,
-                                             self.page3RT_group_minimum_number_of_ions, self.page3RT_ri_participate,
-                                             self.page3RT_sim_threshold, self.page3RT_window,
-                                             self.page3RT_level_factor, self.page3RT_max_penalty,
-                                             self.page3RT_no_info_penalty,
-                                             self.page3RI_search_wid, self.page3RI_match_weight,
-                                             self.page3RI_r_match_weight, self.page3RI_group_weight,
-                                             self.page3RI_direct_weight, self.page3RI_group_minimum_number_of_ions,
-                                             self.page3RI_RI_max, self.page3RI_ri_participate, self.page3RI_sim_threshold,
-                                             self.page3RI_window,
-                                             self.page3RI_window_scale, self.page3RI_level_factor, self.page3RI_max_penalty,
-                                             self.page3RI_no_info_penalty,
-                                             self.page3RI_inaccurate_ri_threshold, self.page3RI_inaccurate_ri_level_factor)
 
-            self.all_df_signal.emit(all_pkl)
-            self.finished.emit(0)
-        except:
-            self.finished.emit(1)
+        all_pkl = self.mymainwindow.Main(self.total_result_pkl, self.peak_group_pkl, self.filename, self.smooth_value,
+                                         self.peak_filt_value, self.group_peak_factor, self.msp, self.chooseinfo,
+                                         self.RTRIinfo,
+                                         self.page3none_match_weight, self.page3none_r_match_weight,
+                                         self.page3none_group_weight, self.page3none_direct_weight,
+                                         self.page3none_group_minimum_number_of_ions, self.page3none_sim_threshold,
+                                         self.page3RT_search_wid,
+                                         self.page3RT_match_weight, self.page3RT_r_match_weight,
+                                         self.page3RT_group_weight, self.page3RT_direct_weight,
+                                         self.page3RT_group_minimum_number_of_ions, self.page3RT_ri_participate,
+                                         self.page3RT_sim_threshold, self.page3RT_window,
+                                         self.page3RT_level_factor, self.page3RT_max_penalty,
+                                         self.page3RT_no_info_penalty,
+                                         self.page3RI_search_wid, self.page3RI_match_weight,
+                                         self.page3RI_r_match_weight, self.page3RI_group_weight,
+                                         self.page3RI_direct_weight, self.page3RI_group_minimum_number_of_ions,
+                                         self.page3RI_RI_max, self.page3RI_ri_participate, self.page3RI_sim_threshold,
+                                         self.page3RI_window,
+                                         self.page3RI_window_scale, self.page3RI_level_factor, self.page3RI_max_penalty,
+                                         self.page3RI_no_info_penalty,
+                                         self.page3RI_inaccurate_ri_threshold, self.page3RI_inaccurate_ri_level_factor)
+
+        self.all_df_signal.emit(all_pkl)
+        self.finished.emit(0)
+        # except:
+        #     self.finished.emit(1)
 
 class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWindow类和 Ui_MainWindow界面类
     def __init__(self, parent=None):
@@ -130,13 +130,14 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
         self.vboxlayout1 = QHBoxLayout(self.widget)
         self.browser1 = QWebEngineView()
         self.resize(1400, 900)
+
         layout = QVBoxLayout(self.frame_7)
         self.group_info = QTableWidget(self)
         layout.addWidget(self.group_info)
         self.menuRe_analysis.setEnabled(False)
         self.progressBar.setRange(0, 0)
         self.progressBar.hide()
-        self.radioButton_2.setHidden(True)
+        self.widget_2.setHidden(True)
 
     def add_group_peak_table(self, peak_group_df, qualitative_and_quantitative_analysis_result, choose,
                              show_qualitative, ion_num):
@@ -159,105 +160,74 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
         qualitative_and_quantitative_analysis_result_tmp = qualitative_and_quantitative_analysis_result_tmp.iloc[:,
                                                            [0, 7]]
 
-        if show_qualitative:
-            merge_df = pd.merge(peak_group_df_tmp.iloc[:, [0]], qualitative_and_quantitative_analysis_result_tmp,
-                                how="inner",
+
+        if "Kovats_RI" in peak_group_df_tmp.columns:
+            merge_df = pd.merge(peak_group_df_tmp.iloc[:, [0, 9]], qualitative_and_quantitative_analysis_result_tmp,
+                                how="left",
                                 on="rt")
-            merge_df = merge_df[merge_df['Best_match_name'] != 'Unknown']
 
-            # merge_df.to_csv("C:/Users/86724/Desktop/merge_df1.csv")
-            if choose == "min":
-                merge_df["rt"] = np.round(merge_df["rt"].astype(np.float64) / 60, decimals=2)
-            if len(merge_df.index) != 0:
-                self.tableWidget.setRowCount(merge_df.shape[0])
-                self.tableWidget.setColumnCount(5)
-                self.tableWidget.setHorizontalHeaderLabels(["RT", "Identification result", "Quant ion", "Area", "Height"])
+            merge_df["Kovats_RI"] = merge_df["Kovats_RI"].astype(int)
+            if show_qualitative:
+                merge_df = merge_df[merge_df['Best_match_name'] != 'Unknown']
 
-                for row in range(merge_df.shape[0]):
-                    if choose == "min":
-
-                        son_choose_ion_df = self.choose_ion_df[
-                            np.round(self.choose_ion_df["Peak_group"].astype(np.float64) / 60, decimals=2) ==
-                            merge_df.iloc[row, 0]]
-                    else:
-                        son_choose_ion_df = self.choose_ion_df[
-                            self.choose_ion_df["Peak_group"] == merge_df.iloc[row, 0]]
-                    combo_box = QComboBox()
-
-                    ion_list = list(son_choose_ion_df["Ion"])
-                    if choose == "min":
-                        default_ion = peak_group_df_tmp[
-                            np.round(peak_group_df_tmp["rt"].astype(np.float64) / 60, decimals=2) == merge_df.iloc[
-                                row, 0]].iloc[0, 8]
-                    else:
-                        default_ion = peak_group_df_tmp[
-                            np.round(peak_group_df_tmp["rt"].astype(np.float64), decimals=2) == merge_df.iloc[
-                                row, 0]].iloc[0, 8]
-                    ion_list.remove(int(default_ion))
-                    ion_list.insert(0, int(default_ion))
-                    for i in ion_list:
-                        combo_box.addItem(str(i))
-                    combo_box.activated[str].connect(self.change_ion)
-
-                    self.tableWidget.setCellWidget(row, 2, combo_box)
-
-                    self.tableWidget.setItem(row, 3, QTableWidgetItem(str('{:.2e}'.format(
-                        son_choose_ion_df.loc[son_choose_ion_df["Ion"] == default_ion].iloc[0, 2]))))
-                    self.tableWidget.setItem(row, 4, QTableWidgetItem(str('{:.2e}'.format(
-                        son_choose_ion_df.loc[son_choose_ion_df["Ion"] == default_ion].iloc[0, 3]))))
-
-                    for col in range(merge_df.shape[1]):
-                        self.tableWidget.setItem(row, col, QTableWidgetItem(str(merge_df.iloc[row, col])))
-
+            self.tableWidget.setRowCount(merge_df.shape[0])
+            self.tableWidget.setColumnCount(6)
+            self.tableWidget.setHorizontalHeaderLabels(
+                ["RT", "RI", "best_match", "Quant Ion", "Area", "Height"])
+            flag = 3
         else:
+
             merge_df = pd.merge(peak_group_df_tmp.iloc[:, [0]], qualitative_and_quantitative_analysis_result_tmp,
                                 how="left",
                                 on="rt")
-            # merge_df.to_csv("C:/Users/86724/Desktop/ccccc.csv")
-            if choose == "min":
-                merge_df["rt"] = np.round(merge_df["rt"].astype(np.float64) / 60, decimals=2)
-
+            if show_qualitative:
+                merge_df = merge_df[merge_df['Best_match_name'] != 'Unknown']
             self.tableWidget.setRowCount(merge_df.shape[0])
             self.tableWidget.setColumnCount(5)
             self.tableWidget.setHorizontalHeaderLabels(
                 ["RT", "best_match", "Quant Ion", "Area", "Height"])
+            flag = 2
+        if choose == "min":
+            merge_df["rt"] = np.round(merge_df["rt"].astype(np.float64) / 60, decimals=2)
 
-            for row in range(merge_df.shape[0]):
-                if choose == "min":
 
-                    son_choose_ion_df = self.choose_ion_df[
-                        np.round(self.choose_ion_df["Peak_group"].astype(np.float64) / 60, decimals=2) == merge_df.iloc[
-                            row, 0]]
-                else:
-                    son_choose_ion_df = self.choose_ion_df[
-                        self.choose_ion_df["Peak_group"] == merge_df.iloc[row, 0]]
 
-                combo_box = QComboBox()
+        for row in range(merge_df.shape[0]):
+            if choose == "min":
 
-                ion_list = list(son_choose_ion_df["Ion"])
-                if choose == "min":
-                    default_ion = peak_group_df_tmp[
-                        np.round(peak_group_df_tmp["rt"].astype(np.float64) / 60, decimals=2) == merge_df.iloc[
-                            row, 0]].iloc[0, 8]
-                else:
-                    default_ion = peak_group_df_tmp[
-                        np.round(peak_group_df_tmp["rt"].astype(np.float64), decimals=2) == merge_df.iloc[row, 0]].iloc[
-                        0, 8]
-                ion_list.remove(int(default_ion))
-                ion_list.insert(0, int(default_ion))
-                for i in ion_list:
-                    combo_box.addItem(str(i))
-                combo_box.activated[str].connect(self.change_ion)
+                son_choose_ion_df = self.choose_ion_df[
+                    np.round(self.choose_ion_df["Peak_group"].astype(np.float64) / 60, decimals=2) == merge_df.iloc[
+                        row, 0]]
+            else:
+                son_choose_ion_df = self.choose_ion_df[
+                    self.choose_ion_df["Peak_group"] == merge_df.iloc[row, 0]]
 
-                self.tableWidget.setCellWidget(row, 2, combo_box)
+            combo_box = QComboBox()
 
-                self.tableWidget.setItem(row, 3, QTableWidgetItem(
-                    str('{:.2e}'.format(son_choose_ion_df.loc[son_choose_ion_df["Ion"] == default_ion].iloc[0, 2]))))
-                self.tableWidget.setItem(row, 4, QTableWidgetItem(
-                    str('{:.2e}'.format(son_choose_ion_df.loc[son_choose_ion_df["Ion"] == default_ion].iloc[0, 3]))))
+            ion_list = list(son_choose_ion_df["Ion"])
+            if choose == "min":
+                default_ion = peak_group_df_tmp[
+                    np.round(peak_group_df_tmp["rt"].astype(np.float64) / 60, decimals=2) == merge_df.iloc[
+                        row, 0]].iloc[0, 8]
+            else:
+                default_ion = peak_group_df_tmp[
+                    np.round(peak_group_df_tmp["rt"].astype(np.float64), decimals=2) == merge_df.iloc[row, 0]].iloc[
+                    0, 8]
+            ion_list.remove(int(default_ion))
+            ion_list.insert(0, int(default_ion))
+            for i in ion_list:
+                combo_box.addItem(str(i))
+            combo_box.activated[str].connect(lambda item: self.change_ion(item, flag))
 
-                for col in range(merge_df.shape[1]):
-                    self.tableWidget.setItem(row, col, QTableWidgetItem(str(merge_df.iloc[row, col])))
+            self.tableWidget.setCellWidget(row, flag, combo_box)
+
+            self.tableWidget.setItem(row, flag+1, QTableWidgetItem(
+                str('{:.2e}'.format(son_choose_ion_df.loc[son_choose_ion_df["Ion"] == default_ion].iloc[0, 2]))))
+            self.tableWidget.setItem(row, flag+2, QTableWidgetItem(
+                str('{:.2e}'.format(son_choose_ion_df.loc[son_choose_ion_df["Ion"] == default_ion].iloc[0, 3]))))
+
+            for col in range(merge_df.shape[1]):
+                self.tableWidget.setItem(row, col, QTableWidgetItem(str(merge_df.iloc[row, col])))
 
         self.tableWidget.setCurrentCell(0, 0)
         self.tableWidget.clicked.connect(self.click_group_peak)
@@ -268,7 +238,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
         self.click_group_peak(index)
         self.click_group_info_table(index)
 
-    def change_ion(self, item):
+    def change_ion(self, item, flag):
         # self.tableWidget.setItem(0, 0, QTableWidgetItem("sss"))
         row = self.tableWidget.currentRow()
         if self.choose == "min":
@@ -283,8 +253,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
 
         new_area = '{:.2e}'.format(float(line["Relative_Peak_Area"]))
         new_height = '{:.2e}'.format(float(line["Peak_Height"]))
-        self.tableWidget.setItem(row, 3, QTableWidgetItem(str(new_area)))
-        self.tableWidget.setItem(row, 4, QTableWidgetItem(str(new_height)))
+        self.tableWidget.setItem(row, flag+1, QTableWidgetItem(str(new_area)))
+        self.tableWidget.setItem(row, flag+2, QTableWidgetItem(str(new_height)))
 
     def click_group_peak(self, item):
 
@@ -297,13 +267,17 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
         # print("round(self.peak_group_df.rt, 2)", round(self.peak_group_df.rt, 2))
         # print("self.peak_group_df.rt", self.peak_group_df.rt)
         if self.choose == "min":
-            line = self.peak_group_df[np.round(self.peak_group_df.rt.astype(np.float64) / 60, decimals=2) == round(
+            tmp = self.peak_group_df.copy()
+            tmp["rt"] = np.round(tmp["rt"].astype(np.float64), decimals=2).to_list()
+            line = tmp[np.round(tmp.rt.astype(np.float64) / 60, decimals=2) == round(
                 float(self.choose_peak_group), 2)]
+
+            del tmp
         else:
             line = self.peak_group_df[
                 np.round(self.peak_group_df.rt.astype(np.float64), decimals=2) == round(float(self.choose_peak_group),
                                                                                         2)]
-        # print("line***********", line)
+
         left = float(line["left"])
         right = float(line["right"])
         ions = line["ions"].iloc[0]
@@ -376,12 +350,18 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
         self.vboxlayout.addWidget(self.browser)
 
         ##画初始ms比对图
-        self.radioButton_2.setHidden(False)
+        self.widget_2.setHidden(False)
         self.radioButton_2.setChecked(False)
         if self.choose == "min":
-            qua_line = self.qualitative_and_quantitative_analysis_result[
-                np.around(self.qualitative_and_quantitative_analysis_result.index / 60, decimals=2) == float(
+            tmp = self.qualitative_and_quantitative_analysis_result.copy()
+            tmp.index = np.round(tmp.index.astype(np.float64), decimals=2).to_list()
+            qua_line = tmp[
+                np.around(tmp.index / 60, decimals=2) == float(
                     self.choose_peak_group)]
+
+            del tmp
+
+
         else:
             qua_line = self.qualitative_and_quantitative_analysis_result[
                 np.around(self.qualitative_and_quantitative_analysis_result.index, decimals=2) == float(
@@ -412,6 +392,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
                     self.mz_direct = eval(all_match.loc[best_match_name.split("_")[0], "mz_direct"])
                     self.intensity_s_direct = eval(all_match.loc[best_match_name.split("_")[0], "intensity_s_direct"])
                     self.intensity_l_direct = eval(all_match.loc[best_match_name.split("_")[0], "intensity_l_direct"])
+
                     self.draw_ms_picture(self.mz, self.intensity_s, self.intensity_l, best_match_name)
 
 
@@ -430,24 +411,31 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
         self.radioButton_2.setChecked(False)
         row = item.row()  # 行数，0开始
         self.click_match = self.group_info.item(row, 0).text()
-        if self.choose == "min":
-            qua_line = self.qualitative_and_quantitative_analysis_result[
-                np.around(self.qualitative_and_quantitative_analysis_result.index / 60, decimals=2) == float(
-                    self.choose_peak_group)]
-        else:
-            qua_line = self.qualitative_and_quantitative_analysis_result[
-                np.around(self.qualitative_and_quantitative_analysis_result.index, decimals=2) == float(
-                    self.choose_peak_group)]
-        # print("qua_line***************", qua_line)
-        all_match = qua_line["All_match"].iloc[0]
-        self.mz = eval(all_match.loc[self.click_match, "mz"])
 
-        self.intensity_s = eval(all_match.loc[self.click_match, "intensity_s"])
-        self.intensity_l = eval(all_match.loc[self.click_match, "intensity_l"])
-        self.intensity_s_direct = eval(all_match.loc[self.click_match, "intensity_s_direct"])
-        self.intensity_l_direct = eval(all_match.loc[self.click_match, "intensity_l_direct"])
+        if self.click_match != "NA":
+            if self.choose == "min":
 
-        self.draw_ms_picture(self.mz, self.intensity_s, self.intensity_l, self.click_match)
+                tmp = self.qualitative_and_quantitative_analysis_result.copy()
+                tmp.index = np.round(tmp.index.astype(np.float64), decimals=2).to_list()
+                qua_line = tmp[
+                    np.around(tmp.index / 60, decimals=2) == float(
+                        self.choose_peak_group)]
+
+                del tmp
+            else:
+                qua_line = self.qualitative_and_quantitative_analysis_result[
+                    np.around(self.qualitative_and_quantitative_analysis_result.index, decimals=2) == float(
+                        self.choose_peak_group)]
+            # print("qua_line***************", qua_line)
+            all_match = qua_line["All_match"].iloc[0]
+            self.mz = eval(all_match.loc[self.click_match, "mz"])
+
+            self.intensity_s = eval(all_match.loc[self.click_match, "intensity_s"])
+            self.intensity_l = eval(all_match.loc[self.click_match, "intensity_l"])
+            self.intensity_s_direct = eval(all_match.loc[self.click_match, "intensity_s_direct"])
+            self.intensity_l_direct = eval(all_match.loc[self.click_match, "intensity_l_direct"])
+
+            self.draw_ms_picture(self.mz, self.intensity_s, self.intensity_l, self.click_match)
 
     def draw_ms_picture(self, mz, intensity_s, intensity_l, name):
 
@@ -517,10 +505,15 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
         row = item.row()
         choose_peak_group = self.tableWidget.item(row, 0).text()
         if self.choose == "min":
-            line = self.qualitative_and_quantitative_analysis_result[np.around(
-                pd.Series(self.qualitative_and_quantitative_analysis_result.index,
-                          index=self.qualitative_and_quantitative_analysis_result.index) / 60, decimals=2) == float(
+
+            tmp = self.qualitative_and_quantitative_analysis_result.copy()
+            tmp.index = np.round(tmp.index.astype(np.float64), decimals=2).to_list()
+            line = tmp[np.around(
+                pd.Series(tmp.index,
+                          index=tmp.index) / 60, decimals=2) == float(
                 choose_peak_group)]
+
+            del tmp
         else:
             line = self.qualitative_and_quantitative_analysis_result[np.around(
                 pd.Series(self.qualitative_and_quantitative_analysis_result.index,
@@ -529,16 +522,38 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
         if line.empty == False:
             if line["All_match"].iloc[0].empty == False:
                 # all_match_df = line["All_match"].iloc[0].loc[:, ["Score", "Reference_RT", "Delta_RT"]].reset_index()
-                all_match_df = line["All_match"].iloc[0].iloc[:, [0, 7, 8]].reset_index()
+
+                try:
+                    all_match_df = line["All_match"].iloc[0].iloc[:, [0, 7, 8]].reset_index()
+                    chooseinfo =all_match_df.columns[2]
                 # print("all_match_df***************", all_match_df)
-
-                # 保留两位小数
+                except:
+                    all_match_df = line["All_match"].iloc[0].iloc[:, [0]].reset_index()
+                    chooseinfo = ''
                 all_match_df['Score'] = all_match_df['Score'].astype('float64')
-                all_match_df = all_match_df.round({'Score': 2, 'Reference_RT': 2, 'Delta_RT': 2})
+                if chooseinfo == 'Reference_RT':
+                    # RT保留两位小数
+                    all_match_df = all_match_df.round({'Score': 2, 'Reference_RT': 2, 'Delta_RT': 2})
+                    self.group_info.setColumnCount(4)
+                    self.group_info.setRowCount(all_match_df.shape[0])
+                    self.group_info.setHorizontalHeaderLabels(['Name', 'Score', 'RT', 'ΔRT'])
+                elif chooseinfo == 'Reference_RI':
 
-                self.group_info.setColumnCount(4)
-                self.group_info.setRowCount(all_match_df.shape[0])
-                self.group_info.setHorizontalHeaderLabels(['Name', 'Score', 'RT/RI', 'ΔRT/RI'])
+
+                    all_match_df = all_match_df.round({'Score': 2})
+                    all_match_df['Reference_RI'] = all_match_df['Reference_RI'].astype(int)
+                    all_match_df['Delta_RI'] = all_match_df['Delta_RI'].astype(int)
+                    self.group_info.setColumnCount(4)
+                    self.group_info.setRowCount(all_match_df.shape[0])
+                    self.group_info.setHorizontalHeaderLabels(['Name', 'Score', 'RI', 'ΔRI'])
+
+                else:
+                    all_match_df = all_match_df.round({'Score': 2, 'Reference_RI': 0, 'Delta_RI': 0})
+                    self.group_info.setColumnCount(4)
+                    self.group_info.setRowCount(all_match_df.shape[0])
+                    self.group_info.setHorizontalHeaderLabels(['Name', 'Score', 'RT/RI', 'ΔRT/RI'])
+
+
 
                 for row in range(all_match_df.shape[0]):
                     for col in range(all_match_df.shape[1]):
@@ -631,6 +646,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
     def get_parm(self, parm):
         # parm["group_peak_factor"] = 1
         self.parm_list = list(parm.values())
+
         self.parm_list.insert(0, self.input_file)  # 插入mzML或cdf路径
         self.parm_list = [self.total_result_pkl, self.peak_group_pkl] + self.parm_list
         # print(self.parm_list)
@@ -722,6 +738,30 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):  # 继承 QMainWin
             QMessageBox.information(self, 'Success', 'Run successfully!')
         elif run_stat == 1:
             QMessageBox.critical(self, 'Error', 'Run Failed!')
+
+    def export_msp(self, item):
+        tmp = self.peak_group_df.copy()
+        if self.choose == "min":
+
+
+            tmp["rt"] = np.round(tmp["rt"].astype(np.float64), decimals=2).to_list()
+            idx = tmp[np.round(tmp.rt.astype(np.float64) / 60, decimals=2) == round(
+                float(self.choose_peak_group), 2)].index.item()
+            del tmp
+        else:
+            tmp["rt"] = np.round(tmp["rt"].astype(np.float64), decimals=2).to_list()
+            idx = tmp[
+                np.around(tmp.rt, decimals=2) == round(float(self.choose_peak_group), 2)].index.item()
+
+        msp_df = self.peak_group_df.ions.values[idx]
+        # 将DataFrame保存为以空格分隔的文本文件，并添加额外的文本信息
+        _out1 = QFileDialog.getExistingDirectory(None, "Select Output File Path", './')
+        with open(_out1 + "/Group_" + str(self.choose_peak_group) + ".msp", 'w') as file:
+            file.write(f"Name: Group_{self.choose_peak_group}\n")
+            file.write(f"Num peaks: {msp_df.shape[0]}\n")
+            msp_df.to_csv(file, sep=' ', index=True, header=False, line_terminator='\n')
+
+
 
     def save(self):
         _out = QFileDialog.getExistingDirectory(None, "Select Output File Path", './')

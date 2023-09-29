@@ -16,7 +16,7 @@ class Ui_Form_Step2(object):
         Form.setObjectName("Form")
         Form.resize(688, 552)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("../Combine/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(":/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         Form.setWindowIcon(icon)
         self.gridLayout_2 = QtWidgets.QGridLayout(Form)
         self.gridLayout_2.setObjectName("gridLayout_2")

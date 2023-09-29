@@ -579,14 +579,22 @@ class DataAnalysis():
             apex_i = smooth_df.loc[apex_rt, ion]
             left_rt = peak_df.loc[peak, "left"]
             left_i = smooth_df.loc[left_rt, ion]
+            left_left_i = smooth_df.shift(1).loc[left_rt, ion]
             right_rt = peak_df.loc[peak, "right"]
             right_i = smooth_df.loc[right_rt, ion]
+            right_right_i = smooth_df.shift(-1).loc[right_rt, ion]
             if left_rt < apex_rt < right_rt:
                 if right_i > 0.85 * apex_i or left_i > 0.85 * apex_i:
                     peak_df = peak_df.drop(peak, axis=0)
                 else:
                     pass
             else:
+                peak_df = peak_df.drop(peak, axis=0)
+
+            if left_i == 0 and left_left_i == 0:
+                peak_df = peak_df.drop(peak, axis=0)
+
+            if right_i == 0 and right_right_i == 0:
                 peak_df = peak_df.drop(peak, axis=0)
 
         return peak_df
@@ -1643,9 +1651,9 @@ class DataAnalysis():
     def score_correct(self, compare_df_1, r_match_compare_df, MS_score, R_MS_score):
 
         if compare_df_1.shape[0] == 1:
-            MS_score = MS_score*0.75
+            MS_score = MS_score*0.6
         elif compare_df_1.shape[0] == 2:
-            MS_score = MS_score * 0.88
+            MS_score = MS_score * 0.7
         elif compare_df_1.shape[0] == 3:
             MS_score = MS_score * 0.94
         elif compare_df_1.shape[0] == 4:
@@ -1752,9 +1760,9 @@ class DataAnalysis():
                 elif 'Fiehn_RI' in peak_group_df.columns:
                     if not isinstance(peak_group_df.loc[group, "Fiehn_RI"], str):
                         group_ri = float(peak_group_df.loc[group, "Fiehn_RI"])
-                if group_ri < 600:
+                if group_ri < RT_df["RI"].min():
                     left_idx = self.find_nearest(RT_df["RI"].values.tolist(), 0)
-                    right_idx = self.find_nearest(RT_df["RI"].values.tolist(), 600)
+                    right_idx = self.find_nearest(RT_df["RI"].values.tolist(), RT_df["RI"].min())
                 else:
                     left_idx = self.find_nearest(RT_df["RI"].values.tolist(), group_ri - search_wid)
                     # print("left = ", left_idx)
@@ -1850,6 +1858,7 @@ class DataAnalysis():
 
                     MS_score = self.weighted_dot_product_distance(compare_df_1)
                     R_MS_score = self.weighted_dot_product_distance(r_match_compare_df)
+
                     R_direct_MS_score = self.weighted_dot_product_distance(R_direct_compare_df_1)
                     score_df.loc[compound, "MS_score"] = MS_score
                     score_df.loc[compound, "R_MS_score"] = R_MS_score
@@ -1923,39 +1932,20 @@ class DataAnalysis():
                         score = 0
 
                     elif len(row["ions"]) == 1:
-
-                        score = R_direct_MS_score - Retention_score
+                        score = (MS_score * match_weight + R_MS_score * r_match_weight) / (match_weight + r_match_weight) * 0.6 - Retention_score
 
                     elif len(row["ions"]) == 2:
-                        if MS_score <= 0.2:
-                            score = (MS_score * 0.1 + R_direct_MS_score * 0.9) - Retention_score
+                        score = (MS_score * match_weight + R_MS_score * r_match_weight) / (match_weight + r_match_weight) * 0.7 - Retention_score
 
-                        elif R_MS_score <= 0.2:
-                            score = (R_MS_score * 0.1 + R_direct_MS_score * 0.9) - Retention_score
+                    elif len(row["ions"]) == 3:
+                        score = (MS_score * match_weight + R_MS_score * r_match_weight) / (match_weight + r_match_weight) * 0.94 - Retention_score
 
-                        else:
-                            group_score = (match_weight * MS_score + r_match_weight * R_MS_score) / (
-                                    match_weight + r_match_weight)
-                            score = ((group_score * 0.05 + R_direct_MS_score * 0.95) / (
-                                    group_weight + direct_weight)) - Retention_score
+                    elif len(row["ions"]) == 4:
+                        score = (MS_score * match_weight + R_MS_score * r_match_weight) / (match_weight + r_match_weight) * 0.97 - Retention_score
 
                     else:
-
-                        if MS_score <= 0.2:
-
-                            score = (MS_score * 0.9 + R_direct_MS_score * 0.1) - Retention_score
-
-                        elif R_MS_score <= 0.2:
-
-                            score = (R_MS_score * 0.9 + R_direct_MS_score * 0.1) - Retention_score
-
-                            # 如果MS_score或R_MS_score过低，则使其更大程度降低最终打分，这个是根据score_df比对非靶结果得出的经验
-
-                        else:
-                            group_score = (match_weight * MS_score + r_match_weight * R_MS_score) / (
-                                    match_weight + r_match_weight)
-                            score = ((group_score * group_weight + R_direct_MS_score * direct_weight) / (
-                                    group_weight + direct_weight)) - Retention_score
+                        score = (MS_score * match_weight + R_MS_score * r_match_weight) / (
+                                    match_weight + r_match_weight) - Retention_score
 
                     # Rmatch和match得分权重此处修改
 
@@ -2319,6 +2309,7 @@ class DataAnalysis():
                     elif filename.endswith(".cdf"):
                         df = self.read_data(filename)
                 RT_max = max(df.index) / 60
+
                 # yuannote: lwma里的5是向导页面1里的平滑系数
                 smooth_df = self.lwma(df, smooth_value)  # liunote
                 # yuannote: derivative里的10是指当ff等参数接近0时，用10替换，该参数默认10即可，不做输入接口
@@ -2340,11 +2331,13 @@ class DataAnalysis():
                 # yuannote：peak_group_df就是“软件任务栏下方的界面”中，“列1”框里要显示的数据
                 # 其中：“只显示已定性group（打钩）”和“显示group的最少离子数"只改变在可视化界面显示的数据，不改变数据
                 # 怎么改变在ppt里有，如果不清楚问我
+
                 del peak_dic, noise_df
 
                 peak_group_result = smooth_df, smooth_df_final, decon_peak_dic, decon_data_df, peak_group_df, quant_result_df, df
                 # with open(peak_group_filename, "wb") as f:
                 #     pickle.dump(peak_group_result, f)
+
             gc.collect()
             # yuannote：此处是Re-analysis——Identification的接口，如果点击Identification，
             # 那么就从读取已有的peak_group.pkl，删除已有的qualitative_and_quantitative_analysis.pkl和total_result.pkl
