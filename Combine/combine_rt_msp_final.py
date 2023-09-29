@@ -401,7 +401,7 @@ class CombineRtMsp():
                     RI_list = [string.replace('Name: ', '')]
                 if matches := re.findall(pattern, string):
                     RI_list.extend([int(re.findall(r"\d+", match)[0]) for match in matches])
-                    # print(RI_list)
+                    RI_list = RI_list[0:2]
                     RI_df.loc[len(RI_df.index)] = RI_list
         RI_df['Name'] = RI_df['Name'].str.rstrip('\n')
 
@@ -721,6 +721,7 @@ class CombineRtMsp():
         path_rt = out_path + "/Remove_Duplicates.msp"
 
         msp = open(path_rt, "r")
+        RT_data = pd.DataFrame(columns=['Name', 'RT'])
         try:
             RT_data_file = out_path + "/combine_RT_file.xlsx"
             if os.path.exists(RT_data_file):
@@ -733,16 +734,14 @@ class CombineRtMsp():
         except:
             msp.close()
         msp = open(path_rt, "r")
-        try:
-            standard_df = pd.read_csv(ri_path, sep=",")
-            combine_df = self.inspection_result(path_rt, RT_data, standard_df, RI_alert_lower_limit,
-                                                RI_alert_upper_limit,
-                                                RI_threshold_value, ri_window_scale, RT_lower_limit, RT_upper_limit,
-                                                RI_lower_limit, RI_upper_limit, check_RT)
-            combine_df.to_excel(out_path + '/New_RT_list.xlsx', index=True)
-            msp.close()
-        except:
-            msp.close()
+
+        standard_df = pd.read_csv(ri_path, sep=",")
+        combine_df = self.inspection_result(path_rt, RT_data, standard_df, RI_alert_lower_limit,
+                                            RI_alert_upper_limit,
+                                            RI_threshold_value, ri_window_scale, RT_lower_limit, RT_upper_limit,
+                                            RI_lower_limit, RI_upper_limit, check_RT)
+        combine_df.to_excel(out_path + '/New_RT_list.xlsx', index=True)
+
 
 
         if use_unknown:
