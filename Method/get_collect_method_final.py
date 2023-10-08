@@ -316,29 +316,21 @@ class GetMethod():
         error_df = pd.DataFrame(columns=["error"])
         meta_1 = self.read_msp(msp)
 
-        matrix_file = "matrix.xlsx"
-        matrix = None
-        if os.path.exists(matrix_file):
-            matrix = pd.read_excel(r"./matrix.xlsx", header=0, index_col=0)
+        matrix = pd.DataFrame()
+        for name, dic in meta_1.items():
+            b = {name: dic}
+            y = pd.DataFrame.from_dict(b).T
+            matrix = pd.concat([matrix, y], axis=0, join='outer').fillna(0)
 
-        if matrix is None:
-            matrix = pd.DataFrame()
-            for name, dic in meta_1.items():
-                b = {name: dic}
-                y = pd.DataFrame.from_dict(b).T
-                matrix = pd.concat([matrix, y], axis=0, join='outer').fillna(0)
+        for col_name in list(matrix):
+            if type(col_name) not in [float, int, np.float64, np.int64] and col_name.isdigit() == False:
+                #print(col_name)
+                matrix.drop(columns=col_name, inplace=True)
+                # 删除不是数字的列
 
-            for col_name in list(matrix):
-                if type(col_name) not in [float, int, np.float64, np.int64] and col_name.isdigit() == False:
-                    #print(col_name)
-                    matrix.drop(columns=col_name, inplace=True)
-                    # 删除不是数字的列
-
-            for ion in list(matrix):
-                if int(ion) < mz_min or int(ion) > mz_max:
-                    matrix.drop(columns=ion, inplace=(True))
-
-            matrix.to_excel(r".\matrix.xlsx", index=True)
+        for ion in list(matrix):
+            if int(ion) < mz_min or int(ion) > mz_max:
+                matrix.drop(columns=ion, inplace=(True))
 
         matrix_name = matrix.index.tolist()
 
