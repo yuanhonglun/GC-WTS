@@ -164,6 +164,14 @@ class WizardPage3None(QWizardPage, Ui_Form_None):
         self.setupUi(self)
         ui = Ui_Form_None()
 
+        #隐藏Peak group search score weight和Direct search score weight
+        self.label_8.setHidden(True)
+        self.label_6.setHidden(True)
+        self.doubleSpinBox_5.setHidden(True)
+        self.doubleSpinBox_6.setHidden(True)
+        self.pushButton_11.setHidden(True)
+        self.pushButton_12.setHidden(True)
+
     def slot1(self):
         QMessageBox.about(
             None,
@@ -209,6 +217,14 @@ class WizardPage3RT(QWizardPage, Ui_Form_RT):
         self.doubleSpinBox_8.setEnabled(True)
         self.doubleSpinBox_9.setEnabled(True)
         self.radioButton.clicked.connect(self.choose1)
+
+        # 隐藏Peak group search score weight和Direct search score weight
+        self.label_16.setHidden(True)
+        self.label_17.setHidden(True)
+        self.doubleSpinBox_6.setHidden(True)
+        self.doubleSpinBox_10.setHidden(True)
+        self.pushButton_14.setHidden(True)
+        self.pushButton_15.setHidden(True)
 
     def choose1(self, bool):
 
@@ -302,6 +318,14 @@ class WizardPage3RI(QWizardPage, Ui_Form_RI):
         self.doubleSpinBox_13.setEnabled(True)
         self.spinBox_12.setEnabled(True)
         self.radioButton.clicked.connect(self.choose)
+
+        # 隐藏Peak group search score weight和Direct search score weight
+        self.label_16.setHidden(True)
+        self.label_17.setHidden(True)
+        self.doubleSpinBox_6.setHidden(True)
+        self.doubleSpinBox_10.setHidden(True)
+        self.pushButton_18.setHidden(True)
+        self.pushButton_19.setHidden(True)
 
     def choose(self, bool):
 

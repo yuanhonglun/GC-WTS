@@ -189,7 +189,7 @@ class DataAnalysis():
 
     ##################
 
-    def find_peak(self, ion_list, smooth_df, noise_df, filter_factor):
+    def find_peak(self, ion_list, smooth_df, noise_df, filter_factor, df):
         """
         Find peaks and perform peak-related calculations.
 
@@ -234,8 +234,9 @@ class DataAnalysis():
                 # len比最大index大1，所以减3
                 if aa != m:
                     aa = m
-                    if f_list[m] > ff * filter_factor and f_list[m + 1] > ff * filter_factor and i_list[m] > 0 and i_list[
-                        m + 1] > 0:
+                    if f_list[m] > ff * filter_factor and f_list[m + 1] > ff * filter_factor and i_list[m] > 0 and \
+                            i_list[
+                                m + 1] > 0:
                         # print("m = ", m)
                         w = m - 2
                         if w < 0:
@@ -370,17 +371,17 @@ class DataAnalysis():
                     else:
                         m += 1
                 else:
-                    #print('find_peak_error')
+                    # print('find_peak_error')
                     break
 
-            #print(total_list)
+            # print(total_list)
 
             # 补充一个index_list作为行索引
             # 之后dataframe要添加一个空的SV列[[]]
             peak_df = pd.DataFrame(total_list, columns=["left", "apex", "right"], index=index_list)
             # peak_df.to_excel('./peak/{}.xlsx'.format(str(ion) + "_raw_peak"))
-            peak_df = self.trailing_peak_filtration(peak_df, smooth_df, ion)
-            # peak_df.to_excel('./results/peak/{}.xlsx'.format(str(ion) + "_filtered_peak"))
+            peak_df = self.trailing_peak_filtration(peak_df, df, ion)
+            # peak_df.to_excel('./peak/{}.xlsx'.format(str(ion) + "_filtered_peak"))
             # ##################画图#########################
             # for peak in peak_df.index.values:
             #     # print("debug_plot_ion = ", ion)
@@ -562,43 +563,37 @@ class DataAnalysis():
 
         return peak_dic, con_peak_dic, smooth_df_final
 
-    def trailing_peak_filtration(self, peak_df, smooth_df, ion):
+    def trailing_peak_filtration(self, peak_df, raw_df, ion):
         """
         Filter trailing peaks and identify incorrectly located peaks.
 
         Args:
             peak_df (pd.DataFrame): DataFrame containing peak information.
-            smooth_df (pd.DataFrame): The input DataFrame containing smoothed data.
+            raw_df (pd.DataFrame): The input DataFrame containing raw data.
             ion (str): Ion identifier.
 
         Returns:
             peak_df (pd.DataFrame): DataFrame with filtered peaks.
         """
         for peak in peak_df.index.values:
-            apex_rt = peak_df.loc[peak, "apex"]
-            apex_i = smooth_df.loc[apex_rt, ion]
-            left_rt = peak_df.loc[peak, "left"]
-            left_i = smooth_df.loc[left_rt, ion]
-            left_left_i = smooth_df.shift(1).loc[left_rt, ion]
-            right_rt = peak_df.loc[peak, "right"]
-            right_i = smooth_df.loc[right_rt, ion]
-            right_right_i = smooth_df.shift(-1).loc[right_rt, ion]
-            if left_rt < apex_rt < right_rt:
-                if right_i > 0.85 * apex_i or left_i > 0.85 * apex_i:
-                    peak_df = peak_df.drop(peak, axis=0)
-                else:
-                    pass
-            else:
-                if peak in peak_df.index:
-                    peak_df = peak_df.drop(peak, axis=0)
-
-            if left_i == 0 and left_left_i == 0:
-                if peak in peak_df.index:
-                    peak_df = peak_df.drop(peak, axis=0)
-
-            if right_i == 0 and right_right_i == 0:
-                if peak in peak_df.index:
-                    peak_df = peak_df.drop(index=peak)
+            try:
+                apex_rt = peak_df.loc[peak, "apex"]
+                apex_i = raw_df.loc[apex_rt, ion]
+                left_rt = peak_df.loc[peak, "left"]
+                left_i = raw_df.loc[left_rt, ion]
+                left_left_i = raw_df.shift(1).loc[left_rt, ion]
+                right_left_i = raw_df.shift(-1).loc[left_rt, ion]
+                right_rt = peak_df.loc[peak, "right"]
+                right_i = raw_df.loc[right_rt, ion]
+                right_right_i = raw_df.shift(-1).loc[right_rt, ion]
+                left_right_i = raw_df.shift(1).loc[right_rt, ion]
+                if left_rt < apex_rt < right_rt:
+                    if right_i > 0.85 * apex_i or left_i > 0.85 * apex_i:
+                        peak_df = peak_df.drop(peak, axis=0)
+                    elif right_left_i == 0 or left_left_i == 0 or left_right_i == 0 or right_right_i == 0:
+                        peak_df = peak_df.drop(peak, axis=0)
+            except KeyError:
+                pass
 
         return peak_df
 
@@ -1002,19 +997,19 @@ class DataAnalysis():
         #     if matched_wave.iloc[n, 5] > 0 and matched_wave.iloc[n, 5] - matched_wave.iloc[n - 1, 5] > 0 and \
         #             matched_wave.iloc[n, 5] - matched_wave.iloc[n + 1, 5] > 0:
         #         peak_group_df.loc[len(peak_group_df)] = matched_wave.iloc[n]
-        #matched_wave.to_csv("C:/Users/86724/Desktop/matcher_wave_1.csv")
+        # matched_wave.to_csv("C:/Users/86724/Desktop/matcher_wave_1.csv")
         if group_method == 0:
             matched_wave, peak_group_df = self.MSDIAL(matched_wave, wid, sigma, peak_dic, decon_peak_dic)
         elif group_method == 1:
             matched_wave, peak_group_df = self.AMDIS(matched_wave)
-        #matched_wave.to_csv("C:/Users/86724/Desktop/matcher_wave_2.csv")
-        #peak_group_df.to_csv("C:/Users/86724/Desktop/peak_group_df_1.csv")
+        # matched_wave.to_csv("C:/Users/86724/Desktop/matcher_wave_2.csv")
+        # peak_group_df.to_csv("C:/Users/86724/Desktop/peak_group_df_1.csv")
         ##########
         for group, row in peak_group_df.iterrows():
             quant_df = row["ions"]
             quant_df_index = quant_df.index.tolist()
             Quant_Ion = int(quant_df_index[0])
-            #print(Quant_Ion)
+            # print(Quant_Ion)
             if row["rt"] in decon_data_df.index.values and decon_data_df.loc[
                 row["rt"], lambda d: d.columns.str.contains(f'{Quant_Ion}_peak')].isnull().values.all() == False:
                 Quant_Ion_try_list = []
@@ -1032,10 +1027,10 @@ class DataAnalysis():
                         peak_group_df.loc[group, "Quant_Ion"] = int(Quant_Ion_try)
                 if not Quant_Ion_try_list:
                     col = int(str(row["rt"]).split('.')[0])
-                    #print(decon_data_df.filter(like=f"{Quant_Ion}_peak_{col}"))
+                    # print(decon_data_df.filter(like=f"{Quant_Ion}_peak_{col}"))
                     sliced_df = decon_data_df.loc[
-                        (decon_data_df.index >= row["left"]) & (decon_data_df.index <= row["right"]),
-                            :]
+                                (decon_data_df.index >= row["left"]) & (decon_data_df.index <= row["right"]),
+                                :]
                     sliced_df = sliced_df.filter(like=f"{Quant_Ion}_peak_{col}")  # todo: rt时间不匹配，无法正确识别。
                     if sliced_df.empty == False:
                         peak_group_df.loc[group, "Relative_Peak_Area"] = sliced_df.iloc[:, 0].sum()
@@ -1105,7 +1100,7 @@ class DataAnalysis():
             # plt.close()
         # matched_wave.to_excel('./results/group/matched_wave.xlsx')
         # peak_group_df.to_excel('./peak_group_df.xlsx')
-        #peak_group_df.to_csv("C:/Users/86724/Desktop/peak_group_df_2.csv")
+        # peak_group_df.to_csv("C:/Users/86724/Desktop/peak_group_df_2.csv")
         return matched_wave, peak_group_df, quant_result_df
 
     def peak_group_df_add_retention_infor(self, peak_group_df, RI_Presentation, standard_df, RI_min, RI_max):
@@ -1153,7 +1148,7 @@ class DataAnalysis():
                 while matched_wave.iloc[n_left, 5] >= matched_wave.iloc[n_left - 1, 5]:
                     n_left -= 1
                 tmp_ions_df = pd.concat(matched_wave.iloc[n_left:n_right + 1, [4]]["ions"].tolist())
-                #去重
+                # 去重
                 tmp_ions_df.sort_values('intensity', ascending=False, inplace=True)
                 duplicate_index = tmp_ions_df.index.duplicated()
                 tmp_ions_df = tmp_ions_df[~duplicate_index]
@@ -1163,7 +1158,6 @@ class DataAnalysis():
                 peak_group_df.loc[len(peak_group_df)] = matched_wave.iloc[n]
 
         peak_group_df = peak_group_df.drop(peak_group_df[peak_group_df['SV'] == 0].index)
-
 
         return matched_wave, peak_group_df
 
@@ -1491,7 +1485,7 @@ class DataAnalysis():
                 # print("debug_m = ", m)
             all_NF_list.extend(NF_list)
         NF = median(all_NF_list)
-        #print('Noise_factor = ', NF)
+        # print('Noise_factor = ', NF)
 
         return NF
 
@@ -1650,11 +1644,10 @@ class DataAnalysis():
             match_compare_df.loc[index, 'intensity_s'] = A / (1 + w * A)
         return match_compare_df
 
-
     def score_correct(self, compare_df_1, r_match_compare_df, MS_score, R_MS_score):
 
         if compare_df_1.shape[0] == 1:
-            MS_score = MS_score*0.6
+            MS_score = MS_score * 0.6
         elif compare_df_1.shape[0] == 2:
             MS_score = MS_score * 0.7
         elif compare_df_1.shape[0] == 3:
@@ -1665,7 +1658,7 @@ class DataAnalysis():
             MS_score = MS_score
 
         if r_match_compare_df.shape[0] == 1:
-            R_MS_score = R_MS_score*0.75
+            R_MS_score = R_MS_score * 0.75
         elif r_match_compare_df.shape[0] == 2:
             R_MS_score = R_MS_score * 0.88
         elif r_match_compare_df.shape[0] == 3:
@@ -1741,7 +1734,6 @@ class DataAnalysis():
         results_df["All_match"] = [pd.DataFrame(columns=["Score"]) for i in range(len(results_df))]
         results_df["All_match_list"] = [[] for i in range(len(results_df))]
 
-
         for group, row in peak_group_df.iterrows():
 
             score_df = pd.DataFrame()
@@ -1796,7 +1788,6 @@ class DataAnalysis():
 
             if peak_group_search == 1:
                 compare_df = row["ions"]
-
 
                 # else:
                 n = self.find_nearest(smooth_df.index.values.tolist(), group_rt_s)
@@ -1926,29 +1917,33 @@ class DataAnalysis():
 
                     if match_weight + r_match_weight == 0 or group_weight + direct_weight == 0:
 
-                        #print("score_weight_error")
+                        # print("score_weight_error")
 
                         break
 
-                    elif MS_score * R_MS_score * R_direct_MS_score == 0:
+                    elif MS_score * R_MS_score == 0:
                         # 如果MS_score或R_MS或R_direct_MS_score任意一个为0，那么score直接等于0，这个是根据score_df比对非靶结果得出的经验
                         score = 0
 
                     elif len(row["ions"]) == 1:
-                        score = (MS_score * match_weight + R_MS_score * r_match_weight) / (match_weight + r_match_weight) * 0.6 - Retention_score
+                        score = (MS_score * match_weight + R_MS_score * r_match_weight) / (
+                                    match_weight + r_match_weight) * 0.6 - Retention_score
 
                     elif len(row["ions"]) == 2:
-                        score = (MS_score * match_weight + R_MS_score * r_match_weight) / (match_weight + r_match_weight) * 0.7 - Retention_score
+                        score = (MS_score * match_weight + R_MS_score * r_match_weight) / (
+                                    match_weight + r_match_weight) * 0.7 - Retention_score
 
                     elif len(row["ions"]) == 3:
-                        score = (MS_score * match_weight + R_MS_score * r_match_weight) / (match_weight + r_match_weight) * 0.94 - Retention_score
+                        score = (MS_score * match_weight + R_MS_score * r_match_weight) / (
+                                    match_weight + r_match_weight) * 0.94 - Retention_score
 
                     elif len(row["ions"]) == 4:
-                        score = (MS_score * match_weight + R_MS_score * r_match_weight) / (match_weight + r_match_weight) * 0.97 - Retention_score
+                        score = (MS_score * match_weight + R_MS_score * r_match_weight) / (
+                                    match_weight + r_match_weight) * 0.97 - Retention_score
 
                     else:
                         score = (MS_score * match_weight + R_MS_score * r_match_weight) / (
-                                    match_weight + r_match_weight) - Retention_score
+                                match_weight + r_match_weight) - Retention_score
 
                     # Rmatch和match得分权重此处修改
 
@@ -1970,7 +1965,8 @@ class DataAnalysis():
                             list(direct_compare_df_1['intensity_s_direct']))
                         results_df.loc[group_rt_s, "All_match"].loc[compound, "intensity_l_direct"] = str(
                             list(direct_compare_df_1['intensity_l_direct']))
-                        results_df.loc[group_rt_s, "All_match"].loc[compound, "mz_direct"] = str(list(direct_compare_df_1.index))
+                        results_df.loc[group_rt_s, "All_match"].loc[compound, "mz_direct"] = str(
+                            list(direct_compare_df_1.index))
 
                         if retention_score_mode == "RI":
                             if 'Reference_RI' in score_df.columns:
@@ -1996,7 +1992,7 @@ class DataAnalysis():
 
             # score_df.to_excel('./results/score/{}.xlsx'.format(str(group_rt_s) + "_score_df"))
 
-            #print(group_rt_s, "Done")
+            # print(group_rt_s, "Done")
             # print(results_list)
             # 取所有结果中得分最高的结果
             if results_df.loc[group_rt_s, "All_match"].shape[0] > 0:
@@ -2010,7 +2006,6 @@ class DataAnalysis():
             else:
                 results_df.loc[group_rt_s, "Best_match_name"] = "Unknown"
 
-
             if len(score_df) > 0:
                 results_df = self.New_Compound(group_rt_s, row, score_df, results_df,
                                                minimum_number_of_ions, sim_threshold)
@@ -2023,7 +2018,7 @@ class DataAnalysis():
                 "Relative_Peak_Area"]
                 results_df.loc[group_rt_s, "Peak_Height"] = peak_group_df.loc[group, "Peak_Height"]
                 results_df.loc[group_rt_s, "Quant_Ion"] = peak_group_df.loc[group, "Quant_Ion"]
-        #print(group_rt_s, "Done")
+        # print(group_rt_s, "Done")
         # 不同group结果相同时，取得分最高的结果，其余结果记为XXX_analogue
         results_df_filtered = pd.DataFrame(index=results_df.index, columns=["Name", "Score"])
         for index, row1 in results_df.iterrows():
@@ -2052,7 +2047,7 @@ class DataAnalysis():
         results_df.drop(results_df.columns[1], axis=1, inplace=True)
         # if not species_pool.empty:
         #     results_df = species_pool_opt(results_df, species_pool)
-        #results_df.to_excel('./final_results.xlsx')
+        # results_df.to_excel('./final_results.xlsx')
 
         return results_df
 
@@ -2263,7 +2258,7 @@ class DataAnalysis():
         # yuannote: RI最小值默认为0，不做输入窗口
 
         RI_min = 0
-        #peak_group_df = pd.DataFrame()  # liunote return需要
+        # peak_group_df = pd.DataFrame()  # liunote return需要
         qualitative_and_quantitative_analysis_result = pd.DataFrame()
         smooth_df = pd.DataFrame()
         # total_result.pkl是否有存在必要？该处需修改，后面再说
@@ -2286,7 +2281,7 @@ class DataAnalysis():
             ##################
             # yuannote：此处是Re-analysis——All processing的接口，如果点击All processing，那么就删除total_result.pkl、peak_group.pkl
             # 以及qualitative_and_quantitative_analysis.pkl，从这里重新分析，注意后续的参数也要重新读取
-            #peak_group_filename = peak_group_pkl  # liunote
+            # peak_group_filename = peak_group_pkl  # liunote
             peak_group_result = None
 
             # if os.path.exists(peak_group_filename):
@@ -2298,10 +2293,10 @@ class DataAnalysis():
                 smooth_df, smooth_df_final, decon_peak_dic, decon_data_df, peak_group_df, quant_result_df, df = peak_group_pkl
                 peak_group_result = peak_group_pkl
 
-            #if peak_group_result is None:
-                # yuannote: 此处是file-opendata接口
-                # 读取所输入文件的后缀名，或要求用户选择数据类型：如果是mzML，则用read_data_mzML函数
-                # 如果是cdf，则用read_data函数
+            # if peak_group_result is None:
+            # yuannote: 此处是file-opendata接口
+            # 读取所输入文件的后缀名，或要求用户选择数据类型：如果是mzML，则用read_data_mzML函数
+            # 如果是cdf，则用read_data函数
             else:
                 # filename = 'tomato0418.mzML'
                 if isinstance(filename, pd.DataFrame):
@@ -2322,11 +2317,11 @@ class DataAnalysis():
                 # del df
                 # yuannote: find_peak里的10是是向导页面1里的峰过滤系数
                 peak_dic, con_peak_dic, smooth_df_final = self.find_peak(ion_list, smooth_df, noise_df,
-                                                                         peak_filt_value)  # todo:1 -> 10 #liunote
+                                                                         peak_filt_value, df)  # todo:1 -> 10 #liunote
                 decon_peak_dic, decon_data_df = self.decon(ion_list, smooth_df_final, con_peak_dic)
                 peak_dic, decon_peak_dic = self.calculate_sv(smooth_df_final, peak_dic, decon_data_df, decon_peak_dic)
                 # yuannote: group_peak里倒数第二个数字：0.5（bin_num)，对应的是向导页面1里的峰聚类灵敏度
-                #smooth_df.to_csv("C:/Users/86724/Desktop/smooth_df.csv")
+                # smooth_df.to_csv("C:/Users/86724/Desktop/smooth_df.csv")
                 matched_wave, peak_group_df, quant_result_df = self.group_peak(peak_dic, decon_peak_dic, smooth_df,
                                                                                smooth_df_final,
                                                                                decon_data_df, 5,
@@ -2369,14 +2364,21 @@ class DataAnalysis():
                     # yuannote：这个if表示向导页面2，基于保留信息分析数据选择RT时，读取了RT信息，进到了“RT-向导页面3”
                     # 如果向导页面2，基于保留信息分析数据选择RT时，未读取RT信息，则不能进行下一步，要求必须读取，ppt里有标注
 
-                    RT_df = pd.read_csv(RT_df_filename, sep=",", index_col=0)
+                    try:
+                        RT_df = pd.read_csv(RT_df_filename, sep=",", index_col=0)
+                    except UnicodeDecodeError:
+                        try:
+                            RT_df = pd.read_csv(RT_df_filename, sep=",", index_col=0 , encoding='gbk')
+                        except UnicodeDecodeError as e:
+                            print("Error:", e)
+
                     duplicated_index = RT_df[RT_df.index.duplicated()].index
 
                     error_df = RT_df.loc[duplicated_index, :].copy()
 
                     RT_df = RT_df[~RT_df.index.duplicated(keep='first')]
-                    #print("duplicated name in RT_list:")
-                    #print(error_df)
+                    # print("duplicated name in RT_list:")
+                    # print(error_df)
 
                     # 不排序的话find_nearest有问题
                     RT_df = RT_df.sort_values(by='RT', ascending=True)
@@ -2437,7 +2439,14 @@ class DataAnalysis():
                     # yuannote：这个if表示向导页面2，基于保留信息分析数据选择RI时，读取了RI信息，进到了“RI-向导页面3”
                     # 如果向导页面2，基于保留信息分析数据选择RI时，未读取RI信息，则不能进行下一步，要求必须读取，ppt里有标注
 
-                    standard_df = pd.read_csv(RI_data_filename, sep=",")
+                    try:
+                        standard_df = pd.read_csv(RI_data_filename, sep=",")
+                    except UnicodeDecodeError:
+                        try:
+                            standard_df = pd.read_csv(RI_data_filename, sep="," , encoding='gbk')
+                        except UnicodeDecodeError as e:
+                            print("Error:", e)
+
                     # yuannote: 这里对应RI-向导页面3-定性参数-最大保留指数
                     RI_max = page3RI_RI_max  # liunote
 
@@ -2449,8 +2458,8 @@ class DataAnalysis():
                     error_df = RI_df.loc[duplicated_index, :].copy()
 
                     RI_df = RI_df[~RI_df.index.duplicated(keep='first')]
-                    #print("duplicated name in RI_list:")
-                    #print(error_df)
+                    # print("duplicated name in RI_list:")
+                    # print(error_df)
 
                     # 不排序的话find_nearest有问题
                     RI_df = RI_df.sort_values(by='RI', ascending=True)
@@ -2557,7 +2566,7 @@ class DataAnalysis():
 
             total_result = (peak_group_result, qualitative_and_quantitative_analysis_result)
 
-            # with open(r"C:\Users\86724\Desktop\total_result_test.pkl", "wb") as f:  # liunote
+            # with open(r"D:/68min番茄/test_result_test.pkl", "wb") as f:  # liunote
             #     pickle.dump(total_result, f)
 
         total_result_pkl = pickle.dumps(total_result)
@@ -2567,75 +2576,69 @@ class DataAnalysis():
         # peak_group_df = pd.read_csv(r"C:\Users\86724\Desktop\peak_group_df.csv", index_col=0)
         # qualitative_and_quantitative_analysis_result = pd.read_csv(r"C:\Users\86724\Desktop\qualitative_and_quantitative_analysis_result.csv", index_col=0)
         # smooth_df = pd.read_csv(r"C:\Users\86724\Desktop\smooth_df.csv", index_col=0)
-        #print("All_Done")
+        # print("All_Done")
         # return peak_group_df, qualitative_and_quantitative_analysis_result, smooth_df
         return total_result_pkl
 
 
-a = DataAnalysis()
-total_result_pkl = ''
-peak_group_pkl = ''
-filename = 'D:/GC_all_20230623/0908\DataAnalysis/tomato0512.mzML'
-smooth_value = 5
-peak_filt_value = 10
-group_peak_factor = 1
-msp = 'D:/GC_all_20230623/0908\DataAnalysis/Remove_Duplicates.msp'
-chooseinfo = "RI"
-RTRIinfo= 'D:/GC_all_20230623/0908\DataAnalysis/RI-230629.csv'
-
-
-
-
-
-
-page3none_match_weight = 0.3
-page3none_r_match_weight = 0.7
-page3none_group_weight = 0.2
-page3none_direct_weight = 0.8
-page3none_group_minimum_number_of_ions = 1
-page3none_sim_threshold = 0.3
-
-page3RT_search_wid = 1.5
-page3RT_match_weight = 0.3
-page3RT_r_match_weight = 0.7
-page3RT_group_weight = 0.2
-page3RT_direct_weight = 0.8
-page3RT_group_minimum_number_of_ions = 1
-page3RT_ri_participate = True
-page3RT_sim_threshold = 0.3
-page3RT_window = 0.30
-page3RT_level_factor = 0.05
-page3RT_max_penalty = 0.1
-page3RT_no_info_penalty = 0.05
-
-
-
-page3RI_search_wid = 150
-page3RI_match_weight = 0.7
-page3RI_r_match_weight = 0.3
-page3RI_group_weight = 0.2
-page3RI_direct_weight = 0.8
-page3RI_group_minimum_number_of_ions = 1
-page3RI_RI_max = 3000
-page3RI_ri_participate = True
-page3RI_sim_threshold = 0.4
-page3RI_window = 10
-page3RI_window_scale = 2
-page3RI_level_factor = 0.2
-page3RI_max_penalty = 0.4
-page3RI_no_info_penalty = 0.3
-page3RI_inaccurate_ri_threshold = 800
-page3RI_inaccurate_ri_level_factor = 0.01
-
-t = a.Main(total_result_pkl, peak_group_pkl, filename, smooth_value, peak_filt_value, group_peak_factor, msp, chooseinfo, RTRIinfo,
-             page3none_match_weight, page3none_r_match_weight, page3none_group_weight, page3none_direct_weight, page3none_group_minimum_number_of_ions, page3none_sim_threshold, page3RT_search_wid,
-       page3RT_match_weight, page3RT_r_match_weight, page3RT_group_weight, page3RT_direct_weight,
-       page3RT_group_minimum_number_of_ions, page3RT_ri_participate, page3RT_sim_threshold, page3RT_window,
-       page3RT_level_factor, page3RT_max_penalty, page3RT_no_info_penalty,
-       page3RI_search_wid, page3RI_match_weight,
-       page3RI_r_match_weight, page3RI_group_weight, page3RI_direct_weight, page3RI_group_minimum_number_of_ions,
-       page3RI_RI_max, page3RI_ri_participate, page3RI_sim_threshold, page3RI_window,
-       page3RI_window_scale, page3RI_level_factor, page3RI_max_penalty, page3RI_no_info_penalty,
-       page3RI_inaccurate_ri_threshold, page3RI_inaccurate_ri_level_factor
-       )
-
+# a = DataAnalysis()
+# total_result_pkl = ''
+# peak_group_pkl = ''
+# filename = 'D:/68min番茄/fanqie-68min-WT.mzML'
+# smooth_value = 5
+# peak_filt_value = 10
+# group_peak_factor = 1
+# msp = 'D:/68min番茄/Remove_Duplicates(4).msp'
+# chooseinfo = "RI"
+# RTRIinfo = 'D:/68min番茄/RI-230629.csv'
+#
+# page3none_match_weight = 0.3
+# page3none_r_match_weight = 0.7
+# page3none_group_weight = 0.2
+# page3none_direct_weight = 0.8
+# page3none_group_minimum_number_of_ions = 1
+# page3none_sim_threshold = 0.3
+#
+# page3RT_search_wid = 1.5
+# page3RT_match_weight = 0.3
+# page3RT_r_match_weight = 0.7
+# page3RT_group_weight = 0.2
+# page3RT_direct_weight = 0.8
+# page3RT_group_minimum_number_of_ions = 1
+# page3RT_ri_participate = True
+# page3RT_sim_threshold = 0.3
+# page3RT_window = 0.30
+# page3RT_level_factor = 0.05
+# page3RT_max_penalty = 0.1
+# page3RT_no_info_penalty = 0.05
+#
+# page3RI_search_wid = 150
+# page3RI_match_weight = 0.7
+# page3RI_r_match_weight = 0.3
+# page3RI_group_weight = 0.2
+# page3RI_direct_weight = 0.8
+# page3RI_group_minimum_number_of_ions = 1
+# page3RI_RI_max = 3000
+# page3RI_ri_participate = True
+# page3RI_sim_threshold = 0.4
+# page3RI_window = 10
+# page3RI_window_scale = 2
+# page3RI_level_factor = 0.2
+# page3RI_max_penalty = 0.4
+# page3RI_no_info_penalty = 0.3
+# page3RI_inaccurate_ri_threshold = 800
+# page3RI_inaccurate_ri_level_factor = 0.01
+#
+# t = a.Main(total_result_pkl, peak_group_pkl, filename, smooth_value, peak_filt_value, group_peak_factor, msp,
+#            chooseinfo, RTRIinfo,
+#            page3none_match_weight, page3none_r_match_weight, page3none_group_weight, page3none_direct_weight,
+#            page3none_group_minimum_number_of_ions, page3none_sim_threshold, page3RT_search_wid,
+#            page3RT_match_weight, page3RT_r_match_weight, page3RT_group_weight, page3RT_direct_weight,
+#            page3RT_group_minimum_number_of_ions, page3RT_ri_participate, page3RT_sim_threshold, page3RT_window,
+#            page3RT_level_factor, page3RT_max_penalty, page3RT_no_info_penalty,
+#            page3RI_search_wid, page3RI_match_weight,
+#            page3RI_r_match_weight, page3RI_group_weight, page3RI_direct_weight, page3RI_group_minimum_number_of_ions,
+#            page3RI_RI_max, page3RI_ri_participate, page3RI_sim_threshold, page3RI_window,
+#            page3RI_window_scale, page3RI_level_factor, page3RI_max_penalty, page3RI_no_info_penalty,
+#            page3RI_inaccurate_ri_threshold, page3RI_inaccurate_ri_level_factor
+#            )

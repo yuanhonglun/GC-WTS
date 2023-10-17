@@ -89,7 +89,7 @@ class Ui_Form_Step1(object):
         self.pushButton_6.setToolTip("")
         self.pushButton_6.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("../Combine/R-C.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap(":/R-C.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_6.setIcon(icon1)
         self.pushButton_6.setIconSize(QtCore.QSize(20, 20))
         self.pushButton_6.setObjectName("pushButton_6")
