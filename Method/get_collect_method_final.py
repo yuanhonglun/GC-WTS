@@ -312,7 +312,15 @@ class GetMethod():
              point_per_s, convert_to_ag_method):
 
         msp = msp_path
-        RT_data = pd.read_csv(rt_data_path, index_col=0)
+
+        try:
+            RT_data = pd.read_csv(rt_data_path, index_col=0)
+        except UnicodeDecodeError:
+            try:
+                RT_data = pd.read_csv(rt_data_path, index_col=0, encoding='gbk')
+            except UnicodeDecodeError as e:
+                print("Error:", e)
+
         error_df = pd.DataFrame(columns=["error"])
         meta_1 = self.read_msp(msp)
 
@@ -331,6 +339,8 @@ class GetMethod():
         for ion in list(matrix):
             if int(ion) < mz_min or int(ion) > mz_max:
                 matrix.drop(columns=ion, inplace=(True))
+
+
 
         matrix_name = matrix.index.tolist()
 
