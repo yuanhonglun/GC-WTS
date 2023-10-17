@@ -42,21 +42,17 @@ class WorkerThread(QThread):
     def run(self):
         mymainwindow = MyMainWindow()
 
-        # try:
-        #     mymainwindow.Main(self.all_msp_path, self.all_rt_path, self.RI_path, self.RIalertmin, self.RIalertmax,
-        #                       self.RI_threshold_value, self.ri_window_scale,
-        #                       self.RTmin, self.RTmax, self.RImin, self.RImax, self.check_RT, self.check_latin,
-        #                       self.out_path,self.use_unknown, self.unknow_msp_path, self.unknow_rt_path, self.rt_window_unknown, self.similarity_score_threshold_unknown)
-        #     self.finished.emit(0)
-        # except:
-        #     self.finished.emit(1)
+        try:
+            mymainwindow.Main(self.all_msp_path, self.all_rt_path, self.RI_path, self.RIalertmin, self.RIalertmax,
+                              self.RI_threshold_value, self.ri_window_scale,
+                              self.RTmin, self.RTmax, self.RImin, self.RImax, self.check_RT, self.check_latin,
+                              self.out_path, self.use_unknown, self.unknow_msp_path, self.unknow_rt_path,
+                              self.rt_window_unknown, self.similarity_score_threshold_unknown)
+            self.finished.emit(0)
+        except:
+            self.finished.emit(1)
 
-        mymainwindow.Main(self.all_msp_path, self.all_rt_path, self.RI_path, self.RIalertmin, self.RIalertmax,
-                          self.RI_threshold_value, self.ri_window_scale,
-                          self.RTmin, self.RTmax, self.RImin, self.RImax, self.check_RT, self.check_latin,
-                          self.out_path, self.use_unknown, self.unknow_msp_path, self.unknow_rt_path,
-                          self.rt_window_unknown, self.similarity_score_threshold_unknown)
-        self.finished.emit(0)
+
 
 
 class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWindow类和 Ui_MainWindow界面类
@@ -321,20 +317,27 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):  # 继承 QMainWin
             'two spectra are considered distinguishable when similarity score below the threshold. default: 0.85')
 
     def run(self):
-        self.frame_5.setHidden(False)
-        self.progressBar.show()
 
-        self.pushButton_4.setEnabled(False)
+        if self.out_path == '':
+            QMessageBox.critical(
+                None,
+                'Error',
+                'Please choose the out dictionary！')
+        else:
+            self.frame_5.setHidden(False)
+            self.progressBar.show()
 
-        self.worker_thread = WorkerThread(self.msp_input, self.rt_input, self.RI_path, self.RIalertmin, self.RIalertmax,
-                                          self.RI_threshold_value, self.ri_window_scale, self.RTmin,
-                                          self.RTmax, self.RImin, self.RImax, self.check_RT, self.check_latin,
-                                          self.out_path,
-                                          self.use_unknown, self.unknow_msp_path, self.unknow_rt_path,
-                                          self.rt_window_unknown, self.similarity_score_threshold_unknown)
-        self.worker_thread.finished.connect(self.hide_progress_bar)
+            self.pushButton_4.setEnabled(False)
 
-        self.worker_thread.start()
+            self.worker_thread = WorkerThread(self.msp_input, self.rt_input, self.RI_path, self.RIalertmin, self.RIalertmax,
+                                              self.RI_threshold_value, self.ri_window_scale, self.RTmin,
+                                              self.RTmax, self.RImin, self.RImax, self.check_RT, self.check_latin,
+                                              self.out_path,
+                                              self.use_unknown, self.unknow_msp_path, self.unknow_rt_path,
+                                              self.rt_window_unknown, self.similarity_score_threshold_unknown)
+            self.worker_thread.finished.connect(self.hide_progress_bar)
+
+            self.worker_thread.start()
 
     def hide_progress_bar(self, run_stat):
         self.frame_5.setHidden(True)

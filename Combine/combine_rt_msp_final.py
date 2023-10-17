@@ -256,8 +256,16 @@ class CombineRtMsp():
                 df = pd.read_csv(file_path, sep="\t")
                 merged_df = pd.concat([merged_df, df], ignore_index=True)
             elif file_path.split(".")[-1] == "csv":
-                df = pd.read_csv(file_path)
-                merged_df = pd.concat([merged_df, df], ignore_index=True)
+
+                try:
+                    df = pd.read_csv(file_path)
+                    merged_df = pd.concat([merged_df, df], ignore_index=True)
+                except UnicodeDecodeError:
+                    try:
+                        df = pd.read_csv(file_path, encoding='gbk')
+                        merged_df = pd.concat([merged_df, df], ignore_index=True)
+                    except UnicodeDecodeError as e:
+                        print("Error:", e)
 
             # 删除已经合并的文件
             # os.remove(file_path)
@@ -735,14 +743,18 @@ class CombineRtMsp():
             msp.close()
         msp = open(path_rt, "r")
 
-        standard_df = pd.read_csv(ri_path, sep=",")
-        combine_df = self.inspection_result(path_rt, RT_data, standard_df, RI_alert_lower_limit,
-                                            RI_alert_upper_limit,
-                                            RI_threshold_value, ri_window_scale, RT_lower_limit, RT_upper_limit,
-                                            RI_lower_limit, RI_upper_limit, check_RT)
-        combine_df.to_excel(out_path + '/New_RT_list.xlsx', index=True)
-
-
+        try:
+            standard_df = pd.read_csv(ri_path, sep=",")
+            combine_df = self.inspection_result(path_rt, RT_data, standard_df, RI_alert_lower_limit,
+                                                RI_alert_upper_limit,
+                                                RI_threshold_value, ri_window_scale, RT_lower_limit, RT_upper_limit,
+                                                RI_lower_limit, RI_upper_limit, check_RT)
+            combine_df.to_csv(out_path + '/New_RT_list.csv', index=True)
+        except:
+            if rt_path != [] and ri_path != '':
+                RT_data.to_csv(out_path + '/New_RT_list.csv', index=True)
+            elif rt_path != [] and ri_path == '':
+                RT_data.to_csv(out_path + '/New_RT_list.csv', index=True)
 
         if use_unknown:
             meta = self.read_msp(out_path + "/Remove_Duplicates.msp")
@@ -789,6 +801,7 @@ class CombineRtMsp():
                         data = np.empty((0, 2))
                         RT_data = pd.DataFrame(data, columns=['Name', 'RT'])
                     RT_data, error_df = self.Remove_Duplicates_RT(msp, RT_data, out_path, check_latin)
+
                     msp.close()
                 except:
                     msp.close()
@@ -801,11 +814,14 @@ class CombineRtMsp():
                                                    RI_alert_upper_limit,
                                                    RI_threshold_value, ri_window_scale, RT_lower_limit, RT_upper_limit,
                                                    RI_lower_limit, RI_upper_limit, check_RT)
-                    combine_df.to_excel(out_path + '/New_RT_list.xlsx', index=True)
+                    combine_df.to_csv(out_path + '/New_RT_list.csv', index=True)
                     msp.close()
                 except:
                     msp.close()
-
+                    if rt_path != [] and ri_path != '':
+                        RT_data.to_csv(out_path + '/New_RT_list.csv', index=True)
+                    elif rt_path != [] and ri_path == '':
+                        RT_data.to_csv(out_path + '/New_RT_list.csv', index=True)
         os.remove(out_path + "/combine_data.msp")
         os.remove(out_path + "/combine_RT_file.xlsx")
 
