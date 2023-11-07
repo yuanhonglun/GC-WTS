@@ -14,17 +14,11 @@ class CombineRtMsp():
             msp_path (list): List of MSP file paths to be merged.
             out_path (str): Output directory path for the combined MSP file.
         """
-
-        # 定义要查找的文件后缀
         file_extension = '/*.msp'
-
-        # 查找文件并将它们合并到一个总文件中
         with open(out_path + '/combine_data.msp', 'w+') as outfile:
             for filename in msp_path:
                 with open(filename) as infile:
                     outfile.write(infile.read())
-                # 在每个文件之间添加分隔符
-                # outfile.write('\n')
         outfile.close()
 
     def group_cmp_inf(self, lines):
@@ -79,10 +73,6 @@ class CombineRtMsp():
         while del_com > 0:
             del lines[del_list[del_com - 1]:del_list[del_com]]
             del_com = del_com - 2
-        # with open('./del_none_ion_cpm.msp', 'w+') as f:
-        #     for p in lines:
-        #         f.write(p)
-        # f.close()
         return lines, error_df
 
     def Replace_Greek_numbers(self, lines):
@@ -102,7 +92,6 @@ class CombineRtMsp():
         for i in range(len(lines)):
             for old_str, new_str in replacements.items():
                 lines[i] = lines[i].replace(old_str, new_str)
-                # 将msp库中.alpha.等统一改为alpha
         return lines
 
     def find_insert_position(self, lst, num):
@@ -131,16 +120,9 @@ class CombineRtMsp():
             pd.DataFrame: Updated error information DataFrame.
 
         """
-        # 使用列表推导式和startswith()方法选出以"CAS"开头的字符串
         cas_strings = [s for s in lines if s.startswith('CAS')]
-
-        # 对于选出来的字符串，使用replace()方法删除其中的破折号
         cas_strings_without_dash = [s.replace('-', '') for s in cas_strings]
-
-        # 使用正则表达式提取每个字符串中的第一组连续的数字，并将其转换为整数
         cas_numbers = [int(re.findall(r'\d+', s)[0]) for s in cas_strings_without_dash]
-
-        # 找到每个"CAS"字符串在原来的列表中的索引
         cas_indices = [i for i, s in enumerate(lines) if s in cas_strings]
 
         j_list = sorted(set(cas_numbers))
@@ -167,8 +149,6 @@ class CombineRtMsp():
             if del_com < len(lines):
                 del lines[del_list[del_com - 1]:del_list[del_com]]
             del_com = del_com - 2
-        # print('去重后的物质数量：', len(self.group_cmp_inf(lines)))
-
         group_inf_idx = self.group_cmp_inf(lines)
         del_list_n = []
         n_all_list = [lines[s].replace('Name: ', '') for s in group_inf_idx[:-1]]
@@ -213,38 +193,6 @@ class CombineRtMsp():
             None
 
         """
-        # # 定义要读取的文件后缀
-        # if file_suffixes is None:
-        #     file_suffixes = [".xlsx", ".txt", ".csv"]
-        #
-        # # 定义合并后的文件名
-        # if merged_file_name is None:
-        #     merged_file_name = "combine_RT_file.xlsx"
-        # # 定义一个空的DataFrame对象
-        # merged_df = pd.DataFrame()
-        #
-        # # 遍历所有文件后缀，并读取所有符合后缀的文件
-        # for file_suffix in file_suffixes:
-        #     # 获取当前目录下所有符合后缀的文件路径
-        #     file_paths = glob.glob(rt_path + "/*" + file_suffix)
-        #     print(rt_path + "/*" + file_suffix)
-        #     # 遍历所有符合后缀的文件，并将它们读取到DataFrame对象中
-        #     for file_path in file_paths:
-        #
-        #         if file_suffix == ".xlsx":
-        #             df = pd.read_excel(file_path)
-        #         elif file_suffix == ".txt":
-        #             df = pd.read_csv(file_path, sep="\t")
-        #         elif file_suffix == ".csv":
-        #             df = pd.read_csv(file_path)
-        #         merged_df = pd.concat([merged_df, df], ignore_index=True)
-        #
-        #         # 删除已经合并的文件
-        #         # os.remove(file_path)
-        #
-        # # 将合并后的数据写入Excel文件中
-        # merged_df.to_excel(rt_path + '/' + merged_file_name, index=False)
-
         merged_df = pd.DataFrame()
         if merged_file_name is None:
             merged_file_name = "combine_RT_file.xlsx"
@@ -266,9 +214,6 @@ class CombineRtMsp():
                         merged_df = pd.concat([merged_df, df], ignore_index=True)
                     except UnicodeDecodeError as e:
                         print("Error:", e)
-
-            # 删除已经合并的文件
-            # os.remove(file_path)
 
         merged_df.to_excel(out_path + '/' + merged_file_name, index=False)
 
@@ -293,41 +238,37 @@ class CombineRtMsp():
                 float(row[1])
             except Exception:
                 RT_data.drop(index=index_1, inplace=True)
-                error_df.loc[len(error_df)] = [row[0], row[1], "WARNING: The RT value is out of the valid range.", np.nan]
+                error_df.loc[len(error_df)] = [row[0], row[1], "WARNING: The RT value is out of the valid range.",
+                                               np.nan]
         RT_data['RT'] = RT_data['RT'].astype('float')
-        # print("去掉有误RT后长度", len(RT_data))
-
         replacements = {".alpha.": "alpha", ".beta.": "beta", ".gamma.": "gamma", ".delta.": "delta",
                         ".omega.": "omega", ".tau.": "tau"}
         if check_latin:
             for i in range(RT_data.shape[0]):
                 for old_str, new_str in replacements.items():
                     RT_data.iloc[i, 0] = RT_data.iloc[i, 0].replace(old_str, new_str)
-                    # 将RT列表中.alpha.等统一改为alpha
-
         lines = msp.readlines()
         new_list = [item.replace('NAME:', 'Name:') for item in lines]
         lines = [item.replace("Num peaks:", "Num Peaks:") for item in new_list]
         lines = self.Replace_Greek_numbers(lines)
-
         name_df = pd.DataFrame(columns=["Name", "Index"])
         for i in lines:
             if "Name" in i:
                 name_df.loc[len(name_df)] = [i.split("Name:")[1].strip(), lines.index(i)]
         name_df = name_df.drop_duplicates(subset=['Name'], keep='first')
-
         synon_df = pd.DataFrame(columns=["Synon", "Index"])
         for i in lines:
             if "Synon" in i:
                 synon_df.loc[len(synon_df)] = [i.split("Synon:")[1].strip(), lines.index(i)]
-
         name_index_list = name_df["Index"].values.tolist()
         for index_1, row in RT_data.iterrows():
             if row[0] not in name_df["Name"].values.tolist():
                 # print(row[0], "不在NIST首名列表")
                 if row[0] not in synon_df["Synon"].values.tolist():
                     # print(row[0], "不在NIST库")
-                    error_df.loc[len(error_df)] = [row[0], row[1], "WARNING: The compound was not found in the provided MSP file.", np.nan]
+                    error_df.loc[len(error_df)] = [row[0], row[1],
+                                                   "WARNING: The compound was not found in the provided MSP file.",
+                                                   np.nan]
                     RT_data.drop(index=index_1, inplace=True)
                 else:
                     temp_list = []
@@ -335,38 +276,30 @@ class CombineRtMsp():
                     if temp_list := [
                         x for x in name_index_list if x < synon_index
                     ]:
-                        # print(row[0], "在同义名列表")
-                        # print("*"*30)
-                        # print("改名前", row[0])
                         name_index = max(temp_list)
-                        error_df.loc[len(error_df)] = [row[0], row[1], "WARNING: The synonym name has been changed to NIST Preferred Name.",
+                        error_df.loc[len(error_df)] = [row[0], row[1],
+                                                       "WARNING: The synonym name has been changed to NIST Preferred Name.",
                                                        name_df.loc[
                                                            name_df["Index"] == name_index, "Name"].values.tolist()[
                                                            0]]
-                        # print(name_df.loc[name_df["Index"] == name_index, "Name"])
                         RT_data.loc[index_1, "Name"] = \
                             name_df.loc[name_df["Index"] == name_index, "Name"].values.tolist()[
                                 0]
                     else:
-                        error_df.loc[len(error_df)] = [row[0], row[1], "WARNING: The synonym was not found in the synonym database.", np.nan]
+                        error_df.loc[len(error_df)] = [row[0], row[1],
+                                                       "WARNING: The synonym was not found in the synonym database.",
+                                                       np.nan]
                         RT_data.drop(index=index_1, inplace=True)
-        # print("去掉不在msp库物质长度", len(RT_data))
-
         duplicated_names = RT_data[RT_data.duplicated(['Name'], keep="first")]['Name']
         for name in duplicated_names:
             rt_values = RT_data.loc[RT_data['Name'] == name, 'RT'].tolist()
-            name_rt_df = pd.DataFrame({'Name': [name] * len(rt_values), 'RT': rt_values, "Error": "This compound already exists in the database. Duplicates are not allowed."})
+            name_rt_df = pd.DataFrame({'Name': [name] * len(rt_values), 'RT': rt_values,
+                                       "Error": "This compound already exists in the database. Duplicates are not allowed."})
             error_df = pd.concat([error_df, name_rt_df], ignore_index=True)
 
         error_df.sort_values(by="Name", inplace=True, ascending=True)
         RT_data = RT_data.drop_duplicates(subset=['Name'], keep='first')
         RT_data = RT_data.sort_values(by="RT", ascending=True)
-
-        # print("去掉重复名字长度", len(RT_data))
-
-        # RT_data.to_excel(r"./{}.xlsx".format("New_RT_list"), index=True)
-        # error_df.to_excel('./Error_info.xlsx', index=True)
-
         return RT_data, error_df
 
     def inspection_result(self, path_rt, RT_data, standard_df, RI_alert_lower_limit, RI_alert_upper_limit,
@@ -400,9 +333,7 @@ class CombineRtMsp():
         RI_df = pd.DataFrame(columns=['Name', 'RI_msp'])
         for j in range(len(group_inf_idx) - 1):
             group_inf = lines[group_inf_idx[j]:group_inf_idx[j + 1]]
-            # 定义要匹配的字符串前缀
             prefixes = [r'SemiStdNP=\d+', r'RI:\d+\n', r'Any=\d+']
-            # 定义正则表达式
             pattern = "|".join(prefixes)
             for string in group_inf:
                 if 'Name:' in string:
@@ -420,7 +351,8 @@ class CombineRtMsp():
 
         combine_df['Alert'] = combine_df.apply(
             lambda row: self.alert_ri_offset_is_too_large(row['RI_msp'], row['RI_input'], RI_alert_lower_limit,
-                                                          RI_alert_upper_limit, RI_threshold_value, ri_window_scale), axis=1)
+                                                          RI_alert_upper_limit, RI_threshold_value, ri_window_scale),
+            axis=1)
 
         combine_df = combine_df[['Name', 'RT', 'RI_msp', 'RI_input', 'Alert']]
 
@@ -432,22 +364,21 @@ class CombineRtMsp():
             if combine_df.loc[i, "Alert"] == "RI_offset_is_too_large":
                 if check_RT == False:
                     combine_df.loc[i, "RT_in_silico"] = self.Kovats_RI_to_RT_transform(combine_df_row[2], standard_df,
-                                                                                  RT_lower_limit,
-                                                                                  RT_upper_limit)
+                                                                                       RT_lower_limit,
+                                                                                       RT_upper_limit)
                 elif check_RT == True:
                     combine_df.loc[i, "RT"] = self.Kovats_RI_to_RT_transform(combine_df_row[2], standard_df,
-                                                                        RT_lower_limit,
-                                                                        RT_upper_limit)
-        # combine_df.sort_values(by="RT", inplace=True, ascending=True)
+                                                                             RT_lower_limit,
+                                                                             RT_upper_limit)
         combine_df = combine_df.drop_duplicates(subset=['Name'], keep='first')
-        # print('The number of substances containing RI after deduplication：', combine_df.shape[0])
         combine_df = combine_df.sort_values(by="RT", ascending=True)
         combine_df.set_index(['Name'], inplace=True)
         combine_df.dropna(how='all', subset=['RT', 'RI_msp'], inplace=True)
 
         return combine_df
 
-    def alert_ri_offset_is_too_large(self, RI_msp, RI_input, RI_alert_lower_limit, RI_alert_upper_limit, RI_threshold_value,
+    def alert_ri_offset_is_too_large(self, RI_msp, RI_input, RI_alert_lower_limit, RI_alert_upper_limit,
+                                     RI_threshold_value,
                                      ri_window_scale):
         """
         Check if the RI offset is too large.
@@ -482,10 +413,6 @@ class CombineRtMsp():
         Returns:
             float: Transformed RT value for the sample.
         """
-        # if RT_lower_limit is None:
-        #     RT_lower_limit = 0
-        # if RT_upper_limit is None:
-        #     RT_upper_limit = 68.8
         prev_rows = standard_df.loc[(standard_df['RI'] < ri_sample)].tail(1)
         next_rows = standard_df.loc[(standard_df['RI'] > ri_sample)].head(1)
         if prev_rows.shape[0] == 0:
@@ -519,10 +446,6 @@ class CombineRtMsp():
         Returns:
             float: Transformed Kovats RI value for the sample.
         """
-        # if RI_lower_limit is None:
-        #     RI_lower_limit = 0
-        # if RI_upper_limit is None:
-        #     RI_upper_limit = 3000
         if np.isnan(rt_sample):
             return "The content of the retention time actually detected was not retrieved"
         prev_rows = standard_df.loc[(standard_df['RT (min)'] < rt_sample)].tail(1)
@@ -557,26 +480,19 @@ class CombineRtMsp():
         """
         msp_file = open(msp_file, "r")
         list_1 = msp_file.readlines()
-        # print(list_1)
         new_list = [item.replace('NAME:', 'Name:') for item in list_1]
         list_1 = [item.replace("Num peaks:", "Num Peaks:") for item in new_list]
-        # print(list_1)
         lists = str(list_1)
         lines = lists.split("Name: ")
         meta = {}
         for l in lines:
             line1 = l.strip().split("\\n")
-            # print(line1)
             name_1 = line1[0]
-            # print("name = ", name_1)
             line2 = l.strip().split("Num Peaks:")
             ion_intens_dic = {}
-            # print("line2 = ", line2)
             if len(line2) > 1:
                 if ';' in line2[1]:
-                    # 使用正则表达式匹配数字对
                     matches = re.findall(r"(\d+) (\d+);", line2[1])
-                    # 创建字典
                     ion_intens_dic = {}
                     for key, value in matches:
                         key = round(float(key))
@@ -590,7 +506,6 @@ class CombineRtMsp():
                     line3 = line2[1].split("\\n', '")[1:-2]
                     for ion in line3:
                         ion1 = ion.split("\\t")
-                        # print("ion1 = ", ion1)
                         if len(ion1) == 2 and self.is_number(ion1[0]) and self.is_number(ion1[1]):
                             key = round(float(ion1[0]))
                             value = float(ion1[1])
@@ -602,7 +517,6 @@ class CombineRtMsp():
                     line3 = line2[1].split("\\n', '")[1:-2]
                     for ion in line3:
                         ion1 = ion.split(" ")
-                        # print("ion1 = ", ion1)
                         if len(ion1) == 2 and self.is_number(ion1[0]) and self.is_number(ion1[1]):
                             key = round(float(ion1[0]))
                             value = float(ion1[1])
@@ -612,7 +526,6 @@ class CombineRtMsp():
                                 ion_intens_dic[key] = value
                 else:
                     print('WARNING: The file format cannot be recognized at the moment.')
-                    # print("ion_intens_dic = ", ion_intens_dic)
             meta[name_1] = ion_intens_dic
 
         return meta
@@ -650,50 +563,22 @@ class CombineRtMsp():
         Returns:
             float: The composite score representing the distance.
         """
-
-        # print("debug compare_df = ")
-        # print(compare_df)
         m_q = pd.Series(compare_df.index)
         m_q = m_q.astype(float)
-        # m_q是df的index，是输入的离子
-        # print("debug m_q = ")
-        # print(m_q)
         i_q = np.array(compare_df.iloc[:, 0])
-        # i_q是df的第一列，是实测响应
-        # 后续i_q与m_q要相乘，只有array或Series才可以相乘，因此要把df转为array
-        # print("debug i_q = ")
-        # print(i_q)
         i_r = np.array(compare_df.iloc[:, 1])
-        # i_r是df的第二列，是lib响应
-        # print("debug i_r = ")
-        # print(i_r)
         k = 0.5
-        # NIST的k=0.5，改为1可提高丰度比的权重
         l = 2
         w_q = np.power(i_q, k) * np.power(m_q, l)
-        # print("debug w_q = ")
-        # print(w_q)
-        # print(type(w_q))
         w_r = np.power(i_r, k) * np.power(m_q, l)
-        # print("debug w_r = ")
-        # print(w_r)
-
-        # 如果组某离子或所有离子读数为0，该步也可正常计算
         ss = self.dot_product_distance(w_q, w_r)
-        # print("debug ss = ", ss)
         shared_spec = np.vstack((i_q, i_r))
         shared_spec = pd.DataFrame(shared_spec)
         shared_spec = shared_spec.loc[:, (shared_spec != 0).all(axis=0)]
-        # print("debug_shared_spec = ", shared_spec)
-        # 取共有离子
         m = int(shared_spec.shape[1])
-        # print("debug_m = ", m)
-        # 如果要提高丰度比的权重，即增加m，那么要在该处：composite_score = ((NU*ss) + (m*ave_FR)) / (NU + m)增加m，因为下面有个m是否大于等于2的判断
         if m >= fr_factor:
             FR = 0
             for i in range(1, m):
-                # df.iat中，行数在前，列数在后，取值时0是第一行/列，因此range是1到n
-                # range中1, n,包含1，但不包含n，最大n-1
                 s = (shared_spec.iat[0, i] / shared_spec.iat[0, (i - 1)]) * (
                         shared_spec.iat[1, (i - 1)] / shared_spec.iat[1, i])
                 if s > 1:
@@ -701,7 +586,6 @@ class CombineRtMsp():
                 FR = FR + s
             ave_FR = FR / (m - 1)
             NU = int(len(compare_df))
-            # 原array中行数是物质包含的离子数
             composite_score = ((NU * ss) + (m * ave_FR)) / (NU + m)
         else:
             composite_score = ss
@@ -710,7 +594,8 @@ class CombineRtMsp():
 
     def Main(self, msp_path, rt_path, ri_path, RI_alert_lower_limit, RI_alert_upper_limit,
              RI_threshold_value, ri_window_scale, RT_lower_limit, RT_upper_limit, RI_lower_limit, RI_upper_limit,
-             check_RT, check_latin, out_path, use_unknown, unknow_msp_path, unknow_rt_path, rt_window_unknown, similarity_score_threshold_unknown):
+             check_RT, check_latin, out_path, use_unknown, unknow_msp_path, unknow_rt_path, rt_window_unknown,
+             similarity_score_threshold_unknown):
         self.combine_msp_file(msp_path, out_path)
 
         path_msp = out_path + "/combine_data.msp"
@@ -771,7 +656,8 @@ class CombineRtMsp():
                 rt = row[1]
 
                 window_minute_name = combine_df[
-                    (combine_df.iloc[:, 0] >= rt - rt_window_unknown) & (combine_df.iloc[:, 0] <= rt + rt_window_unknown)].index
+                    (combine_df.iloc[:, 0] >= rt - rt_window_unknown) & (
+                                combine_df.iloc[:, 0] <= rt + rt_window_unknown)].index
                 unknow_ms_df = pd.DataFrame(list(unknow_meta[name].items()), columns=['ion', 'intensity'])
                 name_index = unknow_lines.index("Name: " + name + "\n")
                 next_name_index = unknow_group_inf_idx[unknow_group_inf_idx.index(name_index) + 1]
@@ -811,9 +697,10 @@ class CombineRtMsp():
                 try:
                     standard_df = pd.read_csv(ri_path, sep=",")
                     combine_df = self.inspection_result(path_rt, RT_data, standard_df, RI_alert_lower_limit,
-                                                   RI_alert_upper_limit,
-                                                   RI_threshold_value, ri_window_scale, RT_lower_limit, RT_upper_limit,
-                                                   RI_lower_limit, RI_upper_limit, check_RT)
+                                                        RI_alert_upper_limit,
+                                                        RI_threshold_value, ri_window_scale, RT_lower_limit,
+                                                        RT_upper_limit,
+                                                        RI_lower_limit, RI_upper_limit, check_RT)
                     combine_df.to_csv(out_path + '/New_RT_list.csv', index=True)
                     msp.close()
                 except:
@@ -824,25 +711,3 @@ class CombineRtMsp():
                         RT_data.to_csv(out_path + '/New_RT_list.csv', index=True)
         os.remove(out_path + "/combine_data.msp")
         os.remove(out_path + "/combine_RT_file.xlsx")
-
-# a = CombineRtMsp()
-#
-# msp_path = ["../combine_input/NIST示例库.msp", "../combine_input/安捷伦示例库.MSP"]
-# rt_path = ["../combine_input/New_RT_list_0323.xlsx"]
-# ri_path = "../combine_input/0413.csv"
-# RI_alert_lower_limit = 600
-# RI_alert_upper_limit = 2000
-# RI_threshold_value = 40
-# ri_window_scale = 5
-# RT_lower_limit = 0
-# RT_upper_limit = 68.8
-# RI_lower_limit = 0
-# RI_upper_limit = 3000
-# check_RT = True
-# check_latin = True
-# out_path = "../combine_input/results"
-#
-# a.Main(msp_path, rt_path, ri_path, RI_alert_lower_limit, RI_alert_upper_limit,
-#              RI_threshold_value, ri_window_scale, RT_lower_limit, RT_upper_limit, RI_lower_limit, RI_upper_limit,
-#              check_RT, check_latin, out_path)
-# print("all done")
