@@ -333,7 +333,7 @@ class CombineRtMsp():
         RI_df = pd.DataFrame(columns=['Name', 'RI_msp'])
         for j in range(len(group_inf_idx) - 1):
             group_inf = lines[group_inf_idx[j]:group_inf_idx[j + 1]]
-            prefixes = [r'SemiStdNP=\d+', r'RI:\d+\n', r'Any=\d+']
+            prefixes = [r'SemiStdNP=\d+', r'RI:\d+\n', r'Any=\d+', r'RETENTIONINDEX: \d+\.\d+']
             pattern = "|".join(prefixes)
             for string in group_inf:
                 if 'Name:' in string:
