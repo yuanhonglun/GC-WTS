@@ -945,6 +945,18 @@ class DataAnalysis():
                                 ion_intens_dic[key] = max(ion_intens_dic[key], value)
                             else:
                                 ion_intens_dic[key] = value
+                        elif ':' in ion:
+                            pattern = re.compile(r'(\d+):(\d+)')
+                            matches = pattern.findall(ion)
+                            ion_intens_dic = {}
+                            for key, value in matches:
+                                key = round(float(key))
+                                value = int(value)
+                                if key in ion_intens_dic:
+                                    ion_intens_dic[key] = max(ion_intens_dic[key], value)
+                                else:
+                                    ion_intens_dic[key] = value
+
                 else:
                     print('The format is not recognized.')
             meta[name_1] = ion_intens_dic

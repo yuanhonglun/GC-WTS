@@ -36,6 +36,50 @@ class CombineRtMsp():
         group_inf_idx.append(len(lines))
         return group_inf_idx
 
+    def del_nonstd(self, msp, error_df):
+        """Deletes nonstandard entries from an MSP file.
+
+        Args:
+            msp (file): The MSP file to process.
+            error_df (pd.DataFrame): DataFrame to store error information.
+
+        Returns:
+            tuple: A tuple containing a list of modified lines and the updated error DataFrame.
+        """
+        lines = msp.readlines()
+        new_list = [item.replace('NAME:', 'Name:') for item in lines]
+        lines = [item.replace("Num peaks:", "Num Peaks:") for item in new_list]
+        group_inf_idx = self.group_cmp_inf(lines)
+        del_list = []
+        del_none_ion_cpm_list = []
+        for j in range(len(group_inf_idx) - 1):
+            group_inf = lines[group_inf_idx[j]:group_inf_idx[j + 1]]
+            a = lines[group_inf_idx[j]].replace('Name: ', '')
+            parts = a.split('_')
+            alk_index = parts.index("ALK")
+            name = parts[alk_index + 1]
+            alk_index = lines[group_inf_idx[j]].find("_ALK_")
+            lines[group_inf_idx[j]] = 'Name: ' + lines[group_inf_idx[j]][
+                                                 alk_index + len("_ALK_"):] if alk_index != -1 else lines[
+                group_inf_idx[j]]
+
+            if "Synon: RI: 0\n" in group_inf:
+                del_none_ion_cpm_list.append(lines[group_inf_idx[j]])
+                error_df.loc[len(error_df.index)] = [name,
+                                                     'WARNING: The compound was RI: 0.']
+                del_list.extend(
+                    (
+                        group_inf_idx[j],
+                        group_inf_idx[j + 1],
+                    )
+                )
+
+        del_com = len(del_list) - 1
+        while del_com > 0:
+            del lines[del_list[del_com - 1]:del_list[del_com]]
+            del_com = del_com - 2
+        return lines, error_df
+
     def del_none_ion_cpm(self, msp, error_df):
         """
         Remove compounds without ion information from an MSP file.
@@ -524,6 +568,18 @@ class CombineRtMsp():
                                 ion_intens_dic[key] = max(ion_intens_dic[key], value)
                             else:
                                 ion_intens_dic[key] = value
+                        elif ':' in ion:
+                            pattern = re.compile(r'(\d+):(\d+)')
+                            matches = pattern.findall(ion)
+                            ion_intens_dic = {}
+                            for key, value in matches:
+                                key = round(float(key))
+                                value = int(value)
+                                if key in ion_intens_dic:
+                                    ion_intens_dic[key] = max(ion_intens_dic[key], value)
+                                else:
+                                    ion_intens_dic[key] = value
+
                 else:
                     print('WARNING: The file format cannot be recognized at the moment.')
             meta[name_1] = ion_intens_dic
@@ -602,6 +658,7 @@ class CombineRtMsp():
         with open(path_msp, "r") as msp:
             error_df = pd.DataFrame(columns=['Name', 'reason'])
             lines, error_df = self.del_none_ion_cpm(msp, error_df)
+            lines, error_df = self.del_nonstd(msp, error_df)
             new_list = [item.replace('NAME:', 'Name:') for item in lines]
             lines = [item.replace("Num peaks:", "Num Peaks:") for item in new_list]
             if check_latin:
