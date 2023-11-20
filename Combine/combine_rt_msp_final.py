@@ -36,17 +36,17 @@ class CombineRtMsp():
         group_inf_idx.append(len(lines))
         return group_inf_idx
 
-    def del_nonstd(self, msp, error_df):
-        """Deletes nonstandard entries from an MSP file.
+    def del_nonstd(self, lines, error_df):
+        """
+        Deletes nonstandard entries from a list of lines.
 
         Args:
-            msp (file): The MSP file to process.
+            lines (list): List of lines from the MSP file.
             error_df (pd.DataFrame): DataFrame to store error information.
 
         Returns:
             tuple: A tuple containing a list of modified lines and the updated error DataFrame.
         """
-        lines = msp.readlines()
         new_list = [item.replace('NAME:', 'Name:') for item in lines]
         lines = [item.replace("Num peaks:", "Num Peaks:") for item in new_list]
         group_inf_idx = self.group_cmp_inf(lines)
@@ -164,7 +164,7 @@ class CombineRtMsp():
             pd.DataFrame: Updated error information DataFrame.
 
         """
-        cas_strings = [s for s in lines if s.startswith('CAS')]
+        cas_strings = [s for s in lines if s.startswith('CAS') and 'NA' not in s]
         cas_strings_without_dash = [s.replace('-', '') for s in cas_strings]
         cas_numbers = [int(re.findall(r'\d+', s)[0]) for s in cas_strings_without_dash]
         cas_indices = [i for i, s in enumerate(lines) if s in cas_strings]
@@ -377,7 +377,7 @@ class CombineRtMsp():
         RI_df = pd.DataFrame(columns=['Name', 'RI_msp'])
         for j in range(len(group_inf_idx) - 1):
             group_inf = lines[group_inf_idx[j]:group_inf_idx[j + 1]]
-            prefixes = [r'SemiStdNP=\d+', r'RI:\d+\n', r'Any=\d+', r'RETENTIONINDEX: \d+\.\d+']
+            prefixes = [r'SemiStdNP=\d+', r'RI:\d+\n', r'Any=\d+', r'RETENTIONINDEX: \d+\.\d+', r'Synon: RI: \d+']
             pattern = "|".join(prefixes)
             for string in group_inf:
                 if 'Name:' in string:
@@ -658,7 +658,10 @@ class CombineRtMsp():
         with open(path_msp, "r") as msp:
             error_df = pd.DataFrame(columns=['Name', 'reason'])
             lines, error_df = self.del_none_ion_cpm(msp, error_df)
-            lines, error_df = self.del_nonstd(msp, error_df)
+            try:
+                lines, error_df = self.del_nonstd(lines, error_df)
+            except:
+                pass
             new_list = [item.replace('NAME:', 'Name:') for item in lines]
             lines = [item.replace("Num peaks:", "Num Peaks:") for item in new_list]
             if check_latin:
@@ -714,7 +717,7 @@ class CombineRtMsp():
 
                 window_minute_name = combine_df[
                     (combine_df.iloc[:, 0] >= rt - rt_window_unknown) & (
-                                combine_df.iloc[:, 0] <= rt + rt_window_unknown)].index
+                            combine_df.iloc[:, 0] <= rt + rt_window_unknown)].index
                 unknow_ms_df = pd.DataFrame(list(unknow_meta[name].items()), columns=['ion', 'intensity'])
                 name_index = unknow_lines.index("Name: " + name + "\n")
                 next_name_index = unknow_group_inf_idx[unknow_group_inf_idx.index(name_index) + 1]
