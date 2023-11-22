@@ -936,6 +936,7 @@ class DataAnalysis():
                                 ion_intens_dic[key] = value
                 elif '\\n' in line2[1]:
                     line3 = line2[1].split("\\n', '")[1:-2]
+                    ion_intens_dic = {}
                     for ion in line3:
                         ion1 = ion.split(" ")
                         if len(ion1) == 2 and self.is_number(ion1[0]) and self.is_number(ion1[1]):
@@ -948,7 +949,6 @@ class DataAnalysis():
                         elif ':' in ion:
                             pattern = re.compile(r'(\d+):(\d+)')
                             matches = pattern.findall(ion)
-                            ion_intens_dic = {}
                             for key, value in matches:
                                 key = round(float(key))
                                 value = int(value)
