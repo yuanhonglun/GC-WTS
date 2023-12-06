@@ -1,2 +1,2 @@
 # WTV 2.0
-WTV 2.0 is a Python library with a user-friendly graphical interface, 
+WTV 2.0 is an open-source software with a user-friendly graphical interface, which provides a one-stop solution for the entire process of gas chromatography-mass spectrometry (GC-MS) based widely targeted volatilomics. WTV 2.0 including three modules: the library builder manages the library integration and deduplication, the method generator selects characteristic qualitative ions and generates Selective Ion Monitoring (SIM) mode acquisition method, the data analyzer performs the qualitative and semi-quantitative analysis of widely-targeted data.
