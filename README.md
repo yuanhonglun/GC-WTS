@@ -9,11 +9,11 @@
 
 We provide graphical user interfaces shown as below.
 
-![软件界面](https://github.com/yuanhonglun/WTV_2.0/assets/65593710/f88ba74a-de47-4e7e-bf9b-89047c754cf5)
+<img src = "https://github.com/yuanhonglun/WTV_2.0/assets/65593710/f88ba74a-de47-4e7e-bf9b-89047c754cf5" width = "550" >
 
 ### Functions
--Library builder: Libraries integration and deduplication.
--Method generator: Develop widely-targeted acquisition method.
--Data analyzer: Qualitative and semi-quantitative analysis of widely-targeted data.
+- Library builder: Libraries integration and deduplication.
+- Method generator: Develop widely-targeted acquisition method.
+- Data analyzer: Qualitative and semi-quantitative analysis of widely-targeted data.
 
 # Depends
