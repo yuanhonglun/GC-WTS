@@ -17,4 +17,11 @@ We provide graphical user interfaces shown as below.
 - Data analyzer: Qualitative and semi-quantitative analysis of widely-targeted data.
 
 # Depends
-- Single query import (pop-up window) 
+- Python3.9
+- pandas v1.5.3
+- numpy v1.21.4
+- pyecharts v2.0.4
+- pymzml v2.5.2
+- scipy v1.8.0
+- PyQtWebEngine v5.15.6
+- qt-material v2.14
