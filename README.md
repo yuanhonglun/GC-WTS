@@ -17,3 +17,4 @@ We provide graphical user interfaces shown as below.
 - Data analyzer: Qualitative and semi-quantitative analysis of widely-targeted data.
 
 # Depends
+- Single query import (pop-up window) 
