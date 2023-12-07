@@ -3,9 +3,9 @@
 
 `WTV 2.0` is an open-source software with a user-friendly graphical interface, which provides a one-stop solution for the entire process of gas chromatography-mass spectrometry (GC-MS) based widely targeted volatilomics. `WTV 2.0` including three modules: the library builder manages the library integration and deduplication, the method generator selects characteristic qualitative ions and generates Selective Ion Monitoring (SIM) mode acquisition method, the data analyzer performs the qualitative and semi-quantitative analysis of widely-targeted data.
 
-# Quick Start
+## Quick Start
 ### Installation
-`WTV 2.0` can be freely downloaded on [this page.](https://github.com/yuanhonglun/WTV_2.0/releases/)
+`WTV 2.0` can be freely downloaded on [this page](https://github.com/yuanhonglun/WTV_2.0/releases/).
 
 We provide graphical user interfaces shown as below.
 
@@ -16,7 +16,10 @@ We provide graphical user interfaces shown as below.
 - Method generator: Develop widely-targeted acquisition method.
 - Data analyzer: Qualitative and semi-quantitative analysis of widely-targeted data.
 
-# Depends
+## User Manual
+Detailed instructions on `WTV 2.0` can be found in
+
+## Depends
 - Python3.9
 - pandas v1.5.3
 - numpy v1.21.4
