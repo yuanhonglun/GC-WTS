@@ -17,7 +17,7 @@ We provide graphical user interfaces shown as below.
 - Data analyzer: Qualitative and semi-quantitative analysis of widely-targeted data.
 
 ## User Manual
-Detailed instructions on `WTV 2.0` can be found in
+Detailed instructions on `WTV 2.0` can be found in [WTV 2.0 Manual](https://github.com/yuanhonglun/WTV_2.0/blob/main/WTV_2_manual.pdf).
 
 ## Depends
 - Python3.9
