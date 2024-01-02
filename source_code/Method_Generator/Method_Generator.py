@@ -365,18 +365,18 @@ class GetMethod():
 
         else:
             compound_list = RT_data.index.values.tolist()
-        error_df.to_excel(outpath + "/{}.xlsx".format("input_data_error_info"), index=True)
+        error_df.to_csv(outpath + "/{}.csv".format("input_data_error_info"), index=True)
         nearby_compound_dic = {}
         for name in compound_list:
             if name in RT_data.index.values.tolist():
                 rt = RT_data.at[name, "RT"]
                 nearby_compound_dic[name] = RT_data[(RT_data.iloc[:, 0] >= rt - rt_window) &
                                                     (RT_data.iloc[:, 0] <= rt + rt_window)].index.tolist()
-        combination_result_df_file = "combination_results.xlsx"
+        combination_result_df_file = "combination_results.csv"
         combination_result_df = None
 
         if os.path.exists(combination_result_df_file):
-            combination_result_df = pd.read_excel(r"./combination_results.xlsx", header=0, index_col=0)
+            combination_result_df = pd.read_csv(r"./combination_results.csv", header=0, index_col=0)
 
         if combination_result_df is None:
             combination_result_df = pd.DataFrame(
@@ -621,7 +621,7 @@ class GetMethod():
                             if flag == True:
                                 combination_result_df.loc[str(targeted_compound), "Ion_Combination"] = \
                                     combination_array[0]
-            combination_result_df.to_excel(outpath + "/combination_results.xlsx", index=True)
+            combination_result_df.to_csv(outpath + "/combination_results.csv", index=True)
 
         error_df = pd.DataFrame(columns=["Name", "Error"])
         name_list_total = []
@@ -660,7 +660,7 @@ class GetMethod():
             if row["RT"] > retention_time_max:
                 ion_rt.loc[idx, "RT"] = retention_time_max
 
-        ion_rt.to_excel(outpath + "/ion_rt_data.xlsx", index=True)
+        ion_rt.to_csv(outpath + "/ion_rt_data.csv", index=True)
         rt_index = [i * 0.5 / 60 for i in range(0, int(retention_time_max * 120) + 1, 1)]
         df = pd.DataFrame(index=rt_index, columns=[i for i in range(mz_min, mz_max + 1)])
         for i, row in ion_rt.iterrows():
@@ -787,7 +787,7 @@ class GetMethod():
 
                 df.loc[df["group_id"] == i, "dwell_time"] = min_dwell_time
 
-        df.to_excel(outpath + '/SIM_seg_result.xlsx', index=True)
+        df.to_csv(outpath + '/SIM_seg_result.csv', index=True)
         if convert_to_ag_method:
 
             from lxml import etree
