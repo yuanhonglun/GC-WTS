@@ -365,7 +365,7 @@ class GetMethod():
 
         else:
             compound_list = RT_data.index.values.tolist()
-        error_df.to_csv(outpath + "/{}.csv".format("input_data_error_info"), index=True)
+        error_df.to_csv(outpath + "/{}.csv".format("input_data_error_info"), index=True, index_label="Name")
         nearby_compound_dic = {}
         for name in compound_list:
             if name in RT_data.index.values.tolist():
@@ -621,7 +621,7 @@ class GetMethod():
                             if flag == True:
                                 combination_result_df.loc[str(targeted_compound), "Ion_Combination"] = \
                                     combination_array[0]
-            combination_result_df.to_csv(outpath + "/combination_results.csv", index=True)
+            combination_result_df.to_csv(outpath + "/combination_results.csv", index=True, index_label="Name")
 
         error_df = pd.DataFrame(columns=["Name", "Error"])
         name_list_total = []
@@ -660,7 +660,7 @@ class GetMethod():
             if row["RT"] > retention_time_max:
                 ion_rt.loc[idx, "RT"] = retention_time_max
 
-        ion_rt.to_csv(outpath + "/ion_rt_data.csv", index=True)
+        ion_rt.to_csv(outpath + "/ion_rt_data.csv", index=True, index_label="Name")
         rt_index = [i * 0.5 / 60 for i in range(0, int(retention_time_max * 120) + 1, 1)]
         df = pd.DataFrame(index=rt_index, columns=[i for i in range(mz_min, mz_max + 1)])
         for i, row in ion_rt.iterrows():
