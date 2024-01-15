@@ -12,7 +12,7 @@ import os
 import pymzml
 import gc
 import operator
-
+import netCDF4 as nc
 
 class DataAnalysis():
 
@@ -1757,7 +1757,8 @@ class DataAnalysis():
                     if filename.endswith(".mzML"):
                         df = self.read_data_mzML(filename)
                     elif filename.endswith(".cdf"):
-                        df = self.read_data(filename)
+                        data = nc.Dataset(filename)
+                        df = self.read_data(data)
                 RT_max = max(df.index) / 60
                 smooth_df = self.lwma(df, smooth_value)
                 smooth_df, noise_df = self.derivative(smooth_df, 10)
