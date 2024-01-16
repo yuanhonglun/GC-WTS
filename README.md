@@ -28,3 +28,4 @@ Detailed instructions on `WTV 2.0` can be found in [WTV 2.0 Manual](https://gith
 - scipy v1.8.0
 - PyQtWebEngine v5.15.6
 - qt-material v2.14
+- netCDF4 v1.6.0
