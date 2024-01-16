@@ -411,7 +411,7 @@
             <string notr="true">font: 16pt;</string>
            </property>
            <property name="text">
-            <string>Minimum ions number in omponent for identification:</string>
+            <string>Minimum ions number in component for identification:</string>
            </property>
            <property name="wordWrap">
             <bool>true</bool>

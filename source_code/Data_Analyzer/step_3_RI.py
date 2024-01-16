@@ -596,7 +596,7 @@ class Ui_Form_RI(object):
         self.label_14.setText(_translate("Form", "Maximum RI:"))
         self.label_2.setText(_translate("Form", "Match weight:"))
         self.label_4.setText(_translate("Form", "Reverse Match weight:"))
-        self.label_5.setText(_translate("Form", "Minimum ions number in omponent for identification:"))
+        self.label_5.setText(_translate("Form", "Minimum ions number in component for identification:"))
         self.label_16.setText(_translate("Form", "Component search score weight:"))
         self.label_17.setText(_translate("Form", "Direct search score\n"
 "weight:"))
@@ -618,7 +618,7 @@ if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     Form = QtWidgets.QWidget()
-    ui = Ui_Form_RI()
+    ui = Ui_Form()
     ui.setupUi(Form)
     Form.show()
     sys.exit(app.exec_())
