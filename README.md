@@ -31,10 +31,7 @@ Detailed instructions on `WTV 2.0` can be found in [WTV 2.0 Manual](https://gith
 - netCDF4 v1.6.0
 
 ## Contact
-Dr. Honglun Yuan
-School of Breeding and Multiplication (Sanya Institute of Breeding and Multiplication)
-Hainan University
-Sanya, Hainan, 572025, China
+Dr. Honglun Yuan, School of Breeding and Multiplication, Hainan University, Sanya, Hainan, 572025, China
 - E-mail: yuanhonglun@hotmail.com
 - WeChat: yuanhonglun0204
 - WhatsApp: Honglun Yuan
