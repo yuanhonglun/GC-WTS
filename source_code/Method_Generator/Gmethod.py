@@ -87,7 +87,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, GetMethod):
         self.mz_min = 35
         self.mz_max = 400
         self.outpath = ''
-        self.rt_window = 0.5
+        self.rt_window = 2
         self.min_ion_intensity_percent = 7
         self.min_ion_num = 2
         self.retention_time_max = 68.8
