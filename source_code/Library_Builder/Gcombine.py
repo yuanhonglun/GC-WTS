@@ -39,6 +39,7 @@ class WorkerThread(QThread):
         self.rt_window_unknown = rt_window_unknown
         self.similarity_score_threshold_unknown = similarity_score_threshold_unknown
 
+
     def run(self):
         mymainwindow = MyMainWindow()
 
@@ -83,13 +84,13 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, CombineRtMsp):
         self.rt_input = []
         self.RI_path = ''
         self.out_path = ''
-        self.RTmax = 68.8
+        self.RTmax = 69.0
         self.RTmin = 0
         self.RIalertmin = 600
         self.RIalertmax = 2000
         self.RImax = 3000
         self.RImin = 0
-        self.RI_threshold_value = 40
+        self.RI_threshold_value = 100
         self.check_latin = False
         self.check_RT = False
         self.use_unknown = False
