@@ -207,6 +207,7 @@ class DataAnalysis():
                             left = rt_list[p]
                         else:
                             left = rt_list[p]
+
                         peak_list.append(left)
 
                         for x in range(p + 1, len(f_list) - 3):
@@ -235,7 +236,6 @@ class DataAnalysis():
                                             right = rt_list[p_1]
                                             m = p_1
                                         peak_list.append(right)
-
                                         break
 
                                     elif i_list[y] < i_list[x] * 0.05:
@@ -247,7 +247,8 @@ class DataAnalysis():
                                             m = y
                                         break
                                 break
-                            elif x > len(f_list) - 6:
+                            elif x > len(f_list) - 2:
+
                                 peak_list = []
                                 m = x
                                 break
@@ -298,13 +299,12 @@ class DataAnalysis():
                                                 break
 
                                         break
-                        if peak_list != []:
+                        if peak_list != [] and len(peak_list) == 3:
                             total_list.append(peak_list)
                     else:
                         m += 1
                 else:
                     break
-
             peak_df = pd.DataFrame(total_list, columns=["left", "apex", "right"], index=index_list)
             peak_df = self.trailing_peak_filtration(peak_df, df, ion)
             fb = 'smooth_df_final' in dir()
@@ -343,7 +343,6 @@ class DataAnalysis():
             temp_df = temp_df.dropna(axis=0, how="any")
             i_list_1 = temp_df[ion].values.tolist()
             rt_list_1 = temp_df.index.values.tolist()
-
             con_peak_df = pd.DataFrame(columns=["intensity", "rt", "width", "raw_left", "raw_right"])
             for peak in peak_df.index.values:
 
@@ -399,7 +398,6 @@ class DataAnalysis():
                         m = m + 1
                     else:
                         m = m + 1
-
             con_peak_df.sort_values(by="rt", inplace=True, ascending=True)
             if not con_peak_df.empty:
                 drop_con_peak_df_list = []
@@ -411,7 +409,6 @@ class DataAnalysis():
                 con_peak_df = con_peak_df.drop(drop_con_peak_df_list)
             con_peak_dic[ion] = con_peak_df
             peak_dic[ion] = peak_df
-
         return peak_dic, con_peak_dic, smooth_df_final
 
     def trailing_peak_filtration(self, peak_df, raw_df, ion):
@@ -1762,7 +1759,8 @@ class DataAnalysis():
                 RT_max = max(df.index) / 60
                 smooth_df = self.lwma(df, smooth_value)
                 smooth_df, noise_df = self.derivative(smooth_df, 10)
-                ion_list = df.columns
+                #ion_list = df.columns
+                ion_list = [237,238,239]
                 peak_dic, con_peak_dic, smooth_df_final = self.find_peak(ion_list, smooth_df, noise_df,
                                                                          peak_filt_value, df)
                 decon_peak_dic, decon_data_df = self.decon(ion_list, smooth_df_final, con_peak_dic)
