@@ -183,7 +183,6 @@ class DataAnalysis():
             a_list = smooth_df[str(ion) + "_ad"].values.tolist()
             rt_list = smooth_df.index.values
             i_list = smooth_df[ion].values.tolist()
-
             m = 0
             total_list = []
             index_list = []
@@ -262,6 +261,7 @@ class DataAnalysis():
                                         max_index = five_elements.index(max(five_elements))
                                         n = start_index + max_index
                                         peak_list.append(rt_list[n])
+                                        t = smooth_df.loc[rt_list[n], ion]
                                         index_list.append("peak_" + str(rt_list[n]))
 
                                         for y in range(n + 1, len(f_list) - 3):
@@ -301,6 +301,8 @@ class DataAnalysis():
                                         break
                         if peak_list != [] and len(peak_list) == 3:
                             total_list.append(peak_list)
+                        elif len(peak_list) == 2:
+                            index_list.remove("peak_" + str(rt_list[n]))
                     else:
                         m += 1
                 else:
@@ -312,6 +314,8 @@ class DataAnalysis():
                 from copy import copy
                 smooth_df_final = copy(smooth_df.applymap(lambda x: x if x >= 0 else 0))
             smooth_df_final = self.baseline_correction(peak_df, smooth_df, ion, smooth_df_final)
+            t1 = list(smooth_df_final.loc[:, ion])
+            t2 = list(smooth_df_final.index)
             peak_df = self.de_redundancy_peak(smooth_df_final, smooth_df, peak_df, NF, ion)
             rt_list = rt_list.tolist()
             for peak in peak_df.index.values:
@@ -828,13 +832,16 @@ class DataAnalysis():
             lambda x: sum(np.multiply(np.asarray(x), np.asarray(sg_list)))).to_list()
         matched_wave = matched_wave.dropna(axis=0, how="any")
         peak_group_df = pd.DataFrame(columns=matched_wave.columns)
-        for n in range(1, matched_wave.shape[0] - 1):
+        for n in range(1, matched_wave.shape[0] - 2):  ##避免出现sv顶点在最后一个情况
             if matched_wave.iloc[n, 5] > 0 and matched_wave.iloc[n, 5] - matched_wave.iloc[n - 1, 5] > 0 and \
                     matched_wave.iloc[n, 5] - matched_wave.iloc[n + 1, 5] > 0:
                 n_left = n
                 n_right = n
                 while matched_wave.iloc[n_right, 5] >= matched_wave.iloc[n_right + 1, 5]:
                     n_right += 1
+                    ##避免右点刚好是最后一个点，n_right + 1索引错误
+                    if n_right >= matched_wave.shape[0] - 1:
+                        break
                 while matched_wave.iloc[n_left, 5] >= matched_wave.iloc[n_left - 1, 5]:
                     n_left -= 1
                 tmp_ions_df = pd.concat(matched_wave.iloc[n_left:n_right + 1, [4]]["ions"].tolist())
@@ -1115,9 +1122,12 @@ class DataAnalysis():
         for index, row in peak_df.iterrows():
             tmp_apex_intensity = smooth_df.loc[row["apex"], ion]
             ex_tmp_apex_intensity = smooth_df_final.loc[row["apex"], ion]
-            if (4 * NF * ((tmp_apex_intensity) ** 0.5)) < ex_tmp_apex_intensity:
+            if (4 * NF * ((tmp_apex_intensity) ** 0.5)) > ex_tmp_apex_intensity:
                 index_list.append(index)
-        peak_df.drop(index_list, axis=0)
+            elif ex_tmp_apex_intensity == 0:
+                #为了去除基线矫正后顶点丰度刚好为0的峰
+                index_list.append(index)
+        peak_df.drop(index_list, axis=0, inplace=True)
 
         return peak_df
 
@@ -1759,8 +1769,8 @@ class DataAnalysis():
                 RT_max = max(df.index) / 60
                 smooth_df = self.lwma(df, smooth_value)
                 smooth_df, noise_df = self.derivative(smooth_df, 10)
-                #ion_list = df.columns
-                ion_list = [237,238,239]
+                ion_list = df.columns
+                #ion_list = [110,111,238]
                 peak_dic, con_peak_dic, smooth_df_final = self.find_peak(ion_list, smooth_df, noise_df,
                                                                          peak_filt_value, df)
                 decon_peak_dic, decon_data_df = self.decon(ion_list, smooth_df_final, con_peak_dic)

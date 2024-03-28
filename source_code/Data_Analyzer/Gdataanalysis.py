@@ -725,6 +725,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow, DataAnalysis):
         self.timer.start(100)
         self.worker_thread = WorkerThread(*self.parm_list)
 
+
         self.worker_thread.all_df_signal.connect(self.all_df_accept)
 
         self.worker_thread.finished.connect(self.hide_progress_bar)
